@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/erikawho/rest_api#readme",
   "devDependencies": {
+    "body-parser": "^1.14.2",
     "chai": "^3.4.1",
     "chai-http": "^1.0.0",
     "eslint": "^1.10.3",
