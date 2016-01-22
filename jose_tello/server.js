@@ -3,6 +3,9 @@ const app        = express();
 const bodyParser = require('body-parser');
 const mongoose   = require('mongoose');
 
+// Schema
+const Cat = require(__dirname + '/app/models/cat');
+
 mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost/restful_api');
 
 app.use(bodyParser.urlencoded({extended: true}));
