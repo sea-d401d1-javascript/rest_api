@@ -5,6 +5,7 @@ const mongoose   = require('mongoose');
 
 // Schema
 const Cat = require(__dirname + '/app/models/cat');
+const Dog = require(__dirname + '/app/models/dog');
 
 mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost/restful_api');
 
