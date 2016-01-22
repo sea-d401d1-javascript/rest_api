@@ -15,5 +15,20 @@
   "bugs": {
     "url": "https://github.com/erikawho/rest_api/issues"
   },
-  "homepage": "https://github.com/erikawho/rest_api#readme"
+  "homepage": "https://github.com/erikawho/rest_api#readme",
+  "devDependencies": {
+    "chai": "^3.4.1",
+    "chai-http": "^1.0.0",
+    "eslint": "^1.10.3",
+    "express": "^4.13.4",
+    "gulp": "^3.9.0",
+    "gulp-eslint": "^1.1.1",
+    "gulp-mocha": "^2.2.0",
+    "mocha": "^2.3.4",
+    "mongoose": "^4.3.6"
+  },
+  "dependencies": {
+    "express": "^4.13.4",
+    "gulp-nodemon": "^2.0.6"
+  }
 }
