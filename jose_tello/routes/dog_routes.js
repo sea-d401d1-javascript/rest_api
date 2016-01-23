@@ -1,5 +1,5 @@
-const express = require('express');
-const Dog = require(__dirname + '/../app/models/dog');
+const express      = require('express');
+const Dog          = require(__dirname + '/../app/models/dog');
 const errorHandler = require(__dirname + '/../lib/error_handler');
 
 var dogRouter = module.exports = exports = express.Router();
