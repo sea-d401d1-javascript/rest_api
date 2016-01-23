@@ -14,7 +14,7 @@ dogRouter.get('/dogs', (req, res) => {
 dogRouter.post('/dogs', (req, res) => {
   var newDog = new Dog(req.body);
   Dog.save((err, data) => {
-    if (err) return errorHandler(err);
+    if (err) return errorHandler(err, res);
     res.status(200).json(data);
   });
 });

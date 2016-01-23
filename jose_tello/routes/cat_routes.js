@@ -15,7 +15,7 @@ catRouter.get('/cats', (req, res) => {
 catRouter.post('/cats', bodyParser.json(), (req, res) => {
   var newCat = new Cat(req.body);
   Cat.save((err, data) => {
-    if (err) return errorHandler(err);
+    if (err) return errorHandler(err, res);
     res.status(200).json(data);
   });
 });
