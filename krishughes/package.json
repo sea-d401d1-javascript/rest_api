@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "gulp"
+    "test": "./node_modules/mocha/bin/mocha test/**/*.spec.js"
   },
   "author": "KrisHughes <kristopher_hughes@yahoo.com>",
   "license": "MIT",
@@ -19,6 +19,9 @@
   "devDependencies": {
     "chai": "3.4.1",
     "chai-http": "1.0.0",
+    "gulp": "3.9.0",
+    "gulp-eslint": "1.1.1",
+    "gulp-mocha": "2.2.0",
     "mocha": "2.3.4"
   }
 }
