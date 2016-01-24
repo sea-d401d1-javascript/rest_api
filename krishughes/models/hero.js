@@ -1,10 +1,10 @@
 var mongoose = require('mongoose');
 
 var heroSchema = new mongoose.Schema({
-  name: String,
+  name: {type: String, required: true},
   power: {type: String, default: 'strength'},
-  costume: {type: String, default: 'blue'},
-  sidekicks: {type: Number, default: 1}
+  cape: {type: String, default: 'blue'},
+  level: {type: Number, default: 6}
 });
 
 module.exports = mongoose.model('Hero', heroSchema);
