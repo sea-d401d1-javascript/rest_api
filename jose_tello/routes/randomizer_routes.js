@@ -1,16 +1,21 @@
 const express = require('express');
-const random = require('mongoose-random');
-const errorHandler = require(__dirname + '/../lib/error_handler');
-const Cat = require(__dirname + '/../app/models/cat');
-const Dog = require(__dirname + '/../app/models/dog');
+const jsonParser = require('body-parser').json();
+const Dog = require(__dirname + '/../models/dog');
+const Cat = require(__dirname + '/../models/cat');
+const handleDBError = require(__dirname + '/../lib/handle_db_error');
 
-var randomizer = module.exports = exports = express.Router();
+var randomizerRouter = module.exports = exports = express.Router();
 
-randomizer.get('/cats', (req, res) => {
-  Cat.findRandom().limit(1).exec((err, doc) => {
-    res.status(200).json(doc);
+randomizerRouter.get('/randomizer/cats', (req, res) => {
+  Cat.findRandom().limit(1).exec((err, data) => {
+    if (err) return handleDBError(err, res);
+    res.status(200).json(data);
   });
 });
-// Dog.findRandom().limit(1).exec((err, res) => {
-//   res.status(200).json(doc);
-// });
+
+randomizerRouter.get('/randomizer/dogs', (req, res) => {
+  Dog.findRandom().limit(1).exec((err, data) => {
+    if (err) return handleDBError(err, res);
+    res.status(200).json(data);
+  });
+});

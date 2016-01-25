@@ -3,7 +3,7 @@ var gulp = require('gulp'),
   eslint = require('gulp-eslint');
 
 gulp.task('lint', () => {
-  return gulp.src(['./*.js', './test/*.js', './routes/*.js', './lib/*.js', './app/models/*.js'])
+  return gulp.src(['./*.js', './test/*.js', './routes/*.js', './models/*.js', './lib/*.js'])
     .pipe(eslint())
     .pipe(eslint.format());
 });
@@ -14,7 +14,7 @@ gulp.task('test', () => {
 });
 
 gulp.task('watch', () => {
-  return gulp.watch(['./*.js', './test/*.js', '!node_modules/**', '!package.json']);
+  return gulp.watch(['./*.js', './test/*.js', './models/*.js', './lib/*.js', './routes/*.js', '!node_modules/**', '!package.json']);
 });
 
 gulp.task('default', ['lint', 'test', 'watch']);
