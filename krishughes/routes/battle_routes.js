@@ -2,13 +2,45 @@ var express = require('express');
 var Hero = require(__dirname + '/../models/hero');
 var Villain = require(__dirname + '/../models/villain');
 var handleError = require(__dirname + '/../lib/handleServerError');
-var EE = require('events').EventEmitter;
-
-var ee = new EE();
-
 var battleRouter = module.exports = exports = express.Router();
 
 battleRouter.get('/battle', function(req, res) {
+  var heroTotal;
+  var villainTotal;
+  //sum hero levels
+  Hero.aggregate(
+  	[
+  	  {$group: {_id: null, total: {$sum: "$level"}}}
+  	], function(err, data) {
+          if(err) return handleError(err, res);
+          heroTotal = data[0].total;
+          console.log(heroTotal);
+          //sum villain levels
+          Villain.aggregate(
+  	        [
+  	          {$group: {_id: null, total: {$sum: "$level"}}}
+  	        ], function(err, data) {
+                if(err) return handleError(err, res);
+                  var villainTotal = data[0].total;
+                  console.log(villainTotal);
+                  if(heroTotal > villainTotal) {
+                    res.send('Heroes win the Battle!');
+  	              } else if (villainTotal > heroTotal) {
+  		              res.send('Villains win the Battle!');
+  	              } else if (villainTotal === heroTotal) {
+  		              res.send('It was a tie!');
+  	              }
+          });
+  });
+});
+
+//Below is an alternate solution using event emitters.
+
+/*
+var EE = require('events').EventEmitter;
+
+battleRouter.get('/battle', function(req, res) {
+  var ee = new EE();
   var heroTotal;
   var villainTotal;
 
@@ -16,9 +48,9 @@ battleRouter.get('/battle', function(req, res) {
   Hero.aggregate(
   	[
   	  {$group: {_id: null, total: {$sum: "$level"}}}
-  	], function(err, res) {
+  	], function(err, data) {
           if(err) return handleError(err, res);
-          heroTotal = res[0].total;
+          heroTotal = data[0].total;
           console.log(heroTotal);
           ee.emit('hero complete');
   });
@@ -28,9 +60,9 @@ battleRouter.get('/battle', function(req, res) {
   	Villain.aggregate(
   	  [
   	    {$group: {_id: null, total: {$sum: "$level"}}}
-  	  ], function(err, res) {
+  	  ], function(err, data) {
           if(err) return handleError(err, res);
-          villainTotal = res[0].total;
+          villainTotal = data[0].total;
           console.log(villainTotal);
           ee.emit('villain complete');
     });
@@ -40,13 +72,50 @@ battleRouter.get('/battle', function(req, res) {
   ee.on('villain complete', function() {
     if(heroTotal > villainTotal) {
       res.send('Heroes win the Battle!');
-    	res.end();
+    	//res.end();
   	} else if (villainTotal > heroTotal) {
   		res.send('Villains win the Battle!');
-  		res.end();
+  		//res.end();
   	} else if (villainTotal === heroTotal) {
   		res.send('It was a tie!' + heroTotal + '...' + villainTotal);
-  		res.end();
+  		//res.end();
   	}
   });
 });
+
+*/
+
+
+
+
+battleRouter.get('/battle', function(req, res) {
+  var heroTotal;
+  var villainTotal;
+  //sum hero levels
+  Hero.aggregate(
+  	[
+  	  {$group: {_id: null, total: {$sum: "$level"}}}
+  	], function(err, data) {
+          if(err) return handleError(err, res);
+          heroTotal = data[0].total;
+          console.log(heroTotal);
+          //sum villain levels
+          Villain.aggregate(
+  	        [
+  	          {$group: {_id: null, total: {$sum: "$level"}}}
+  	        ], function(err, data) {
+                if(err) return handleError(err, res);
+                  var villainTotal = data[0].total;
+                  console.log(villainTotal);
+                  if(heroTotal > villainTotal) {
+                    res.send('Heroes win the Battle!');
+  	              } else if (villainTotal > heroTotal) {
+  		              res.send('Villains win the Battle!');
+  	              } else if (villainTotal === heroTotal) {
+  		              res.send('It was a tie!' + heroTotal + '...' + villainTotal);
+  	              }
+          });
+  });
+});
+
+

@@ -25,7 +25,7 @@ describe('battle route', function() {
     });
   });
 
-  it('should be able to respond with winner', function(done) {
+  it('should be able to respond with winner Heroes', function(done) {
     chai.request('localhost:3000')
       .get('/api/battle')
       .end(function(err, res) {
@@ -34,4 +34,31 @@ describe('battle route', function() {
         done();
       });
   });
+
+  it('should be able to respond with winner Villains', function(done) {
+    Villain.create({ name: 'test villain' }, function(err, data) {
+      this.testVillain = data;
+      chai.request('localhost:3000')
+      .get('/api/battle')
+      .end(function(err, res) {
+        expect(err).to.eql(null);
+        expect(res.text).to.eql('Villains win the Battle!');
+        done();
+      });
+    });
+  });
+
+    it('should be able to respond with tie', function(done) {
+    Hero.create({ name: 'test hero', level: 4 }, function(err, data) {
+      this.testHero = data;
+      chai.request('localhost:3000')
+      .get('/api/battle')
+      .end(function(err, res) {
+        expect(err).to.eql(null);
+        expect(res.text).to.eql('It was a tie!');
+        done();
+      });
+    });
+  });
 });
+
