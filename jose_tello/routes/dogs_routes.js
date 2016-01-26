@@ -18,3 +18,18 @@ dogRouter.post('/dogs', jsonParser, (req, res) => {
     res.status(200).json(data);
   });
 });
+dogRouter.put('/dogs/:id', jsonParser, (req, res) => {
+  var dogsData = req.body;
+  delete dogsData._id;
+
+  Dog.update({ _id: req.params.id }, dogsData, err => {
+    if (err) return handleDBError(err, res);
+    res.status(200).json({ msg: 'success' });
+  });
+});
+dogRouter.delete('/dogs/:id', (req, res) => {
+  Dog.remove({ id: req.params.id }, err => {
+    if (err) return handleDBError(err, res);
+    res.status(200).json({ msg: 'success' });
+  });
+});

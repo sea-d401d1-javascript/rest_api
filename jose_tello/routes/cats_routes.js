@@ -18,3 +18,18 @@ catRouter.post('/cats', jsonParser, (req, res) => {
     res.status(200).json(data);
   });
 });
+catRouter.put('/cats/:id', jsonParser, (req, res) => {
+  var catsData = req.body;
+  delete catsData._id;
+
+  Cat.update({ _id: req.params.id }, catsData, err => {
+    if (err) return handleDBError(err, res);
+    res.status(200).json({ msg: 'success' });
+  });
+});
+catRouter.delete('/cats/:id', (req, res) => {
+  Cat.remove({ id: req.params.id }, err => {
+    if (err) return handleDBError(err, res);
+    res.status(200).json({ msg: 'success' });
+  });
+});
