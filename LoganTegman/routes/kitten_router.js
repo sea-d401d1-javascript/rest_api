@@ -1,7 +1,7 @@
 'use strict';
 
 const express = require('express');
-const bodyParser = require('body-parser');
+const jsonParser = require('body-parser').json();
 const Kitten = require(__dirname + '/../models/kitten');
 const handleDBError = require(__dirname + '/../lib/handleDBError');
 
@@ -15,20 +15,20 @@ kittenRouter.get('/kittens', (req, res) => {
   });
 });
 
-kittenRouter.post('/kittens', bodyParser.json(), (req, res) => {
+kittenRouter.post('/kittens', jsonParser, (req, res) => {
   const newKitten = new Kitten(req.body);
   newKitten.save((err, data) => {
-    if (err) return handleDBError(err);
+    if (err) return handleDBError(err, res);
     res.status(200).json(data);
   });
 });
 
-kittenRouter.put('/kittens/:id', bodyParser.json(), (req, res) => {
+kittenRouter.put('/kittens/:id', jsonParser, (req, res) => {
   const kittenData = req.body;
   delete kittenData._id;
 
   Kitten.update({ _id: req.params.id }, kittenData, err => {
-    if (err) return handleDBError(err);
+    if (err) return handleDBError(err, res);
 
     res.status(200).json({ msg: 'success' });
   });
@@ -36,7 +36,7 @@ kittenRouter.put('/kittens/:id', bodyParser.json(), (req, res) => {
 
 kittenRouter.delete('/kittens/:id', (req, res) => {
   Kitten.remove({ _id: req.params.id }, err => {
-    if (err) return handleDBError(err);
+    if (err) return handleDBError(err, res);
 
     res.status(200).json({ msg: 'success' });
   });
