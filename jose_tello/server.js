@@ -6,10 +6,12 @@ mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost/cats_and_dogs'
 
 const catsRouter = require(__dirname + '/routes/cats_routes');
 const dogsRouter = require(__dirname + '/routes/dogs_routes');
+const authRouter = require(__dirname + '/routes/auth_routes');
 const randomizerRouter = require(__dirname + '/routes/randomizer_routes');
 
 app.use('/app', catsRouter);
 app.use('/app', dogsRouter);
+app.use('/app', authRouter);
 app.use('/app', randomizerRouter);
 
 var PORT = process.env.PORT || 3000;
