@@ -9,7 +9,7 @@ var authRouter = module.exports = exports = express.Router();
 
 authRouter.post('/signup', jsonParser, (req, res) => {
 
-  if(!(req.body.email || '').length) return res.status(200).json({msg:'Please enter a valie email'});
+  if(!(req.body.email || '').length) return res.status(200).json({msg:'Please enter a email'});
   // include email validation in a module and export true or false
 
   if(!(req.body.username || '').length) return res.status(200).json({msg: 'Please enter a user name'});
@@ -33,7 +33,7 @@ authRouter.get('/signin', basicHTTP, (req, res) => {
 
     if(!user.comparePassword(req.basicHTTP.password)) return res.status(200).json({msg: 'incorrect passwor. please enter again'});
 
-    res.json({token: user.generateToken()});
+    res.status(200).json({token: user.generateToken()});
 
   });
 
