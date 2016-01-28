@@ -3,6 +3,7 @@ const jsonParser = require('body-parser').json();
 const Request = require(__dirname + '/../models/request');
 const handleDBError = require(__dirname + '/../lib/handle_db_error');
 const handleUnavailError = require(__dirname + '/../lib/handle_unavailable');
+const jwtAuth = require(__dirname + '/../lib/jwt-auth');
 
 var requestsRouter = module.exports = exports = express.Router();
 
@@ -27,10 +28,26 @@ requestsRouter.get('/totalUnclaimed', (req, res) => {
   });
 });
 
+requestsRouter.get('/myRequests', jwtAuth, (req, res) => {
+  Request.find({claimedBy: req.user._id}, (err, data) => {
+    if (err) return handleDBError(err, res);
+    res.status(200).json(data);
+  });
+});
+
 requestsRouter.post('/requests', jsonParser, (req, res) => {
   var newRequest = new Request(req.body);
   newRequest.save((err, data) => {
     if (err) return handleUnavailError(err, res);
+    res.status(200).json(data);
+  });
+});
+
+requestsRouter.post('/claimRequest', jwtAuth, jsonParser, (req, res) => {
+  var newRequest = new Request(req.body);
+  newRequest.claimedBy = req.user._id;
+  newRequest.save((err, data) => {
+    if (err) return handleDBError(err, res);
     res.status(200).json(data);
   });
 });
