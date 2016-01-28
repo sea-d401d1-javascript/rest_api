@@ -24,3 +24,17 @@ authRouter.post('/signup', jsonParser, (req, res) => {
   });
 
 });
+
+authRouter.get('/signin', basicHTTP, (req, res) => {
+  User.findOne({'authentication.email':req.basicHTTP.email}, (err, user) => {
+    if (err) {return res.status(200).json({msg: 'invalid basic http'});}
+
+    if(!user) return res.status(200).json({msg: 'user does not exist; please sign up this site first'});
+
+    if(!user.comparePassword(req.basicHTTP.password)) return res.status(200).json({msg: 'incorrect passwor. please enter again'});
+
+    res.json({token: user.generateToken()});
+
+  });
+
+});
