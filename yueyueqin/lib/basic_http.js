@@ -7,7 +7,8 @@ module.exports = exports = function(req, res, next){
     var authBuf = new Buffer(base64String,'base64');
     var utf8AuthString = authBuf.toString();
     var authArr = utf8AuthString.split(':');
-    zeroBuffer(authArr); //security concern so make buffer 0
+    console.log(authArr);
+    zeroBuffer(authBuf); //security concern so make buffer 0
     if(authArr[0].length && authArr[1].length){
       req.basicHTTP = {
         email:authArr[0],
