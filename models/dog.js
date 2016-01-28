@@ -1,8 +1,10 @@
 const mongoose = require('mongoose');
 
-var dogSchema - new.mongoose.Schema({
+var dogSchema = new.mongoose.Schema({
   name: String,
-  flavor: String,
+  favoriteToy: String,
+  fixed: Boolean,
+  age: Number,
   kibblePreference: {type: String, default: 'fish'}
 });
 

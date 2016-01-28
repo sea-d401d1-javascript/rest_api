@@ -1,3 +1,5 @@
+'use strict';
+
 const express = require('express');
 const jsonParser = require('body-parser').json();
 const Dog = require(__dirname + '/../models/dog');
@@ -25,17 +27,17 @@ dogRouter.post('/dogs', jsonParser, (req, res) => {
 dogRouter.put('/dogs/:id', jsonParser, (req, res) => {
   var dogData = req.body;
   delete dogData._id;
-  Dog.update({_id: req.params.id}, dogData, (err) => {
+  Dog.update({ _id: req.params.id }, dogData, (err) => {
     if (err) return handleDBError(err, res);
 
-    res.status(200).json({msg: 'success'});
+    res.status(200).json({ msg: 'success' });
   });
 });
 
 dogRouter.delete('/dogs/:id', (req, res) => {
-  Dog.remove({_id: req.params.id}, (err) => {
+  Dog.remove({ _id: req.params.id }, (err) => {
     if (err) return handleDBError(err, res);
 
-    res.status(200).json({msg: 'success'});
+    res.status(200).json({ msg: 'success' });
   });
 });
