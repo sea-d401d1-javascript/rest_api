@@ -6,6 +6,7 @@ module.exports = exports = function(req,res,next) {
   try{
     decoded = jwt.verify(req.headers.token, process.env.APP_SECRET || 'changethis');
   }catch(e){
+    console.log(e);
     return res.status(401).json({msg:'invalid token'});
   }
 
