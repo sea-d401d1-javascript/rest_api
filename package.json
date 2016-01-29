@@ -29,7 +29,10 @@
     "mongoose": "^4.3.6"
   },
   "dependencies": {
+    "bcrypt": "^0.8.5",
     "express": "^4.13.4",
-    "gulp-nodemon": "^2.0.6"
+    "gulp-nodemon": "^2.0.6",
+    "jsonwebtoken": "^5.5.4",
+    "validator": "^4.5.2"
   }
 }
