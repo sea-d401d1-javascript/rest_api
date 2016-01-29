@@ -39,7 +39,7 @@ movieRouter.get('/movies/:type', (req,res) => {
   });
 });
 
-movieRouter.put('/movies/:id', jsonParser, (req,res) => {
+movieRouter.put('/movies/:id', jwtAuth, jsonParser, (req,res) => {
   var movieData = req.body;
   delete movieData._id;
   Movie.update({_id:req.params.id}, movieData, {runValidators:true},(err) => {
@@ -49,7 +49,7 @@ movieRouter.put('/movies/:id', jsonParser, (req,res) => {
   });
 });
 
-movieRouter.delete('/movies/:id', (req,res) => {
+movieRouter.delete('/movies/:id', jwtAuth,(req,res) => {
   Movie.remove({_id:req.params.id},(err) => {
     if(err) return handleError;
     res.status(200).json({msg:'success'});
