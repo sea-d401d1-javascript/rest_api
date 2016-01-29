@@ -9,12 +9,9 @@ const unique = require(__dirname + '/../lib/uniqueUsername');
 
 var authRouter = module.exports = exports = express.Router();
 
-authRouter.post('/signup', jsonParser, (req, res) => {
+authRouter.post('/signup', jsonParser, unique, (req, res) => {
   if (!((req.body.email || '').length && (req.body.password || '').length > 7)) {
     return res.status(400).json({msg: 'invalid username or password'});
-  }
-  if (unique.email(req.body.email) && unique.username(req.body.username || req.body.email) ){
-    return res.status(400).json({msg: 'email or username already exists'});
   }
   var newUser = new User();
   newUser.username = req.body.username || req.body.email;
@@ -36,6 +33,6 @@ authRouter.get('/signin', basicHTTP, (req, res) => {
     if (!user.comparePassword(req.basicHTTP.password)) {
       return res.status(400).json({msg: 'you are not authentic, dude'});
     }
-    res.json({token: user.generateToken()});
+    res.json({ token: user.generateToken() });
   });
 });
