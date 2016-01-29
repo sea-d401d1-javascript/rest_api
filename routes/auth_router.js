@@ -1,43 +1,50 @@
 'use strict';
 
 const express = require('express');
-const jsonParser = require('body-parser').json();
-const Dog = require(__dirname + '/models/dog');
-const handleDBError = require(__dirname + '/../lib/handle_db_error');
+const bodyParser = require('body-parser').json();
+const validator = require('validator');
+const User = require(__dirname + '/../models/user');
+const handleDBError = require(__dirname + '/../lib/handleDBError');
+const basicHTTP = require(__dirname + '/../lib/basic_http');
 
-var dogRouter = module.exports = exports = express.Router();
+const userRouter = module.exports = exports = express.Router();
 
-dogRouter.get('/dogs', (req, res) => {
-  Dog.find({}, (err, data) => {
+userRouter.post('/signup', bodyParser, (req, res) => {
+  const password = req.body.password;
+  const email = req.body.email;
+
+  if (!email || password.length < 6 || !validator.isEmail(email)) {
+    return res.status(400).json({ msg: 'invalid username or password' });
+  }
+
+  User.findOne({ 'authentication.email': email }, (err, user) => {
     if (err) return handleDBError(err, res);
 
-    res.status(200).json(data);
+    if (user) return res.status(400).json({ msg: 'email already used' });
+
+    const newUser = new User();
+
+    newUser.username = req.body.username || email;
+    newUser.authentication.email = email;
+    newUser.hashPassword(password);
+    newUser.save((err, data) => {
+      if (err) return handleDBError(err, res);
+      res.status(200).json({ token: data.generateToken() });
+    });
   });
 });
 
-dogRouter.post('/dogs', jsonParser, (req, res) => {
-  var newDog = new Dog(req.body);
-  newDog.save((err, data) => {
+userRouter.get('/signin', basicHTTP, (req, res) => {
+  const password = req.basicHTTP.password;
+  const email = req.basicHTTP.email;
+
+  User.findOne({ 'authentication.email': email }, (err, user) => {
     if (err) return handleDBError(err, res);
+    if (!user) return res.status(401).json({ msg: 'user does not exist' });
+    if (!user.comparePassword(password)) {
+      return res.status(401).json({ msg: 'incorrect password' });
+    }
 
-    res.status(200).json(data);
-  });
-});
-
-dogRouter.put('/dogs/:id', jsonParser, (req, res) => {
-  var dogData = req.body;
-  delete dogData._id;
-  Dog.update({ _id: req.params.id }, dogData, (err) => {
-    if (err) return handleDBError(err, res);
-
-    res.status(200).json({ msg: 'success' });
-  });
-});
-
-dogRouter.delete('/dogs/:id', (req, res) => {
-  Dog.remove({ _id: req.params.id }, (err) => {
-    if (err) return handleDBError(err, res);
-
-    res.status(200).json({ msg: 'success' });
+    res.status(200).json({ token: user.generateToken() });
   });
 });
