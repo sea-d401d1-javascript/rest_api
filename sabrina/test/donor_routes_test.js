@@ -33,18 +33,6 @@ describe('the donors api', () => {
     });
   });
 
-  it('should create/signup a donor with a POST', (done) => {
-    request(origin)
-      .post('/signup')
-      .send({email: 'test@gmail.com', password: 'abc123456'})
-      .end((err, res) => {
-        expect(err).to.eql(null);
-        expect(res).to.have.status(200);
-        expect(res.body).to.have.property('token');
-        done();
-      });
-  });
-
   describe('rest requests that require a donor already in db', () => {
     before((done) => {
       Donor.create({username: 'testtest', authentication: {email: 'test@gmail.com', password: 'abc123456'}}, (err, data) => {
