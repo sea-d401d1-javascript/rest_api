@@ -6,10 +6,13 @@ Authentication has been added using BasicHTTP and Tokens to the double resource.
 
 ##Rubric
 ###Use of Express: 3pts
-- U+2611 complete
-###Use of Mongo: 3pts
-- U+2611 complete
-###Tests: 2pts ☑
-- U+2611 complete ☑
+☑ complete!
+
+###☑Use of Mongo: 3pts 
+☑ complete!
+
+###Tests: 2pts
+☑ complete!
+
 ###Project Organization: 2pts
-- U+2611 complete 'very organized in directories'
+☑ complete!
