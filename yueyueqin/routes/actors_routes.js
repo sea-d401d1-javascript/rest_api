@@ -35,7 +35,7 @@ actorRouter.post('/actors', jwtAuth, jsonParser, (req,res) => {
   });
 });
 
-actorRouter.put('/actors/:id', jsonParser, (req,res) => {
+actorRouter.put('/actors/:id', jwtAuth, jsonParser, (req,res) => {
   var actorUpdate = req.body;
   delete actorUpdate._id;
   Actor.update({_id:req.params.id},{actorUpdate},(err) => {
@@ -44,7 +44,7 @@ actorRouter.put('/actors/:id', jsonParser, (req,res) => {
   });
 });
 
-actorRouter.delete('/actors/:id', (req,res) => {
+actorRouter.delete('/actors/:id', jwtAuth, (req,res) => {
   Actor.remove({_id:req.params.id}, (err) => {
     if(err) return handleError(err);
     res.status(200).json({msg:'success'});
