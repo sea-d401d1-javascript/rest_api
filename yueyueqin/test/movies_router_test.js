@@ -55,7 +55,6 @@ describe('the movie app', () => {
       .get('/api/mymovies')
       .set('token', this.token)
       .end((err, res) => {
-        console.log(this.token);
         expect(err).to.eql(null);
         expect(res).to.have.status(200);
         expect(res.body[0].name).to.eql('test');
@@ -90,6 +89,7 @@ describe('the movie app', () => {
   describe('res requests that require a movie already in db', () => {
     beforeEach((done) => {
       var testMovie = new Movie({name: 'test1', type: 'type1'});
+      testMovie.wranglerId = jwt.verify(this.token,process.env.APP_SECRET || 'changethis').id;
       testMovie.save((err,data) => {
         this.testMovie = data;
         done();
@@ -100,6 +100,7 @@ describe('the movie app', () => {
       chai.request('localhost:3000')
         .put('/api/movies/' + this.testMovie._id)
         .send({name: 'test3', type:'type3'})
+        .set('token', this.token)
         .end((err,res) => {
           expect(err).to.equal(null);
           expect(res).to.have.status(200);
@@ -111,6 +112,7 @@ describe('the movie app', () => {
     it('should be able to delete a movie', (done) => {
       chai.request(origin)
         .del(uri + '/' + this.testMovie._id)
+        .set('token',this.token)
         .end((err,res) => {
           expect(err).to.equal(null);
           expect(res).to.have.status(200);
