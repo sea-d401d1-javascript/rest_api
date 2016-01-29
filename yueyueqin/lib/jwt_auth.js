@@ -13,7 +13,7 @@ module.exports = exports = function(req,res,next) {
   User.findOne({_id: decoded.id}, (err, user) => {
     if(err) {
       console.log(err);
-      return res.status(401).json({msg: 'database error'});
+      return res.status(500).json({msg: 'database error'});
     }
 
     if(!user) return res.status(401).json({msg:'no user exist'});
