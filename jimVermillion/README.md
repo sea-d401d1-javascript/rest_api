@@ -8,7 +8,7 @@ Authentication has been added using BasicHTTP and Tokens to the double resource.
 ###Use of Express: 3pts
 ☑ complete!
 
-###☑Use of Mongo: 3pts 
+###Use of Mongo: 3pts 
 ☑ complete!
 
 ###Tests: 2pts
