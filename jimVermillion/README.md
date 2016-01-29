@@ -1,7 +1,7 @@
-#Add Authentication to your Two Resource App
+#Add Authentication to your Two Resource App for Codefellows 401 js
 
 ##Description
-Authentication has been added using BasicHTTP and Tokens to the double resource. Validation has been added to make sure all incoming usernames are unique. Submit as a PR to your original Two Resource REST API App assignment.
+Authentication has been added using BasicHTTP and Tokens to the double resource. Validation has been added to make sure all incoming usernames are unique. Thanks for viewing.
 
 
 ##Rubric
