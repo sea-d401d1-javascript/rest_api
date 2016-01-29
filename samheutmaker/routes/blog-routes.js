@@ -20,13 +20,25 @@ userRouter.post('/register', jsonParser, (req, res) => {
     newUser.authentication.email = req.body.authentication.email;
     newUser.hashPassword(req.body.authentication.password);
 
-    newUser.save((err, data) => {
-      if (err) return console.log(err);
+    // Check for already existing user
+    User.findOne({
+      'authentication.email': req.body.authentication.email
+    }, (err, user) => {
+      if (err || user) {
+        return res.status(400).json({
+          msg: 'Error. User may already exist'
+        })
+      } else {
+        newUser.save((err, data) => {
+          if (err) return console.log(err);
 
-      res.status(200).json({
-        msg: 'User Created',
-        token: newUser.generateToken()
-      });
+          res.status(200).json({
+            msg: 'User Created',
+            token: newUser.generateToken()
+          });
+        });
+
+      }
     });
   }
 });
