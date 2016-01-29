@@ -13,6 +13,7 @@ const User = mongoose.Schema({
     password: String
   }
 });
+
 User.methods.hashPassword = function(password) {
   this.authentication.password = bcrypt.hashSync(password, 8);
 }

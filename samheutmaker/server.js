@@ -1,7 +1,7 @@
 const express = require('express');
 const jsonParser = require('body-parser').json();
 const mongoose = require('mongoose');
-const blogRoute = require(__dirname + '/routes/profile-route');
+const blogRoute = require(__dirname + '/routes/blog-routes');
 const app = express();
 
 const PORT = process.env.PORT || 8080;
@@ -19,4 +19,4 @@ app.use('/user', blogRoute);
 
 app.listen(PORT, () => {
   console.log('Server live on ' + PORT);
-})
+});
