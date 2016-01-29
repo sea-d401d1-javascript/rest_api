@@ -28,15 +28,16 @@ describe('the donors api', () => {
     .get('/donors')
     .end((err, res) => {
       expect(err).to.eql(null);
+      expect(res).to.have.status(200);
       expect(Array.isArray(res.body)).to.eql(true);
       done();
     });
   });
 
-  describe('rest requests that require a donor already in db', () => {
+  describe('tests that require a donor in database', () => {
     before((done) => {
-      Donor.create({username: 'testtest', authentication: {email: 'test@gmail.com', password: 'abc123456'}}, (err, data) => {
-        if (err) throw err;
+      Donor.create({authentication: {email: 'donor@test.com', password: 'password'}}, (err, data) => {
+        if (err) return console.log(err);
         this.testDonor = data;
         done();
       });
@@ -45,7 +46,7 @@ describe('the donors api', () => {
     it('should be able to UPDATE a donor', (done) => {
       request(origin)
         .put('/donors/' + this.testDonor._id)
-        .send({firstName: 'new donor name'})
+        .send({username: 'new donor name'})
         .end((err, res) => {
           expect(err).to.eql(null);
           expect(res.body.msg).to.eql('Successly updated donor');

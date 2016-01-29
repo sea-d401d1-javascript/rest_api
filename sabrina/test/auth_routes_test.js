@@ -58,7 +58,6 @@ describe('the auth routes', () => {
       .get('/signin')
       .set('Authorization', 'Basic ' + new Buffer('test@signin.com:password').toString('base64'))
       .end((err, res) => {
-        console.log(res);
         expect(err).to.eql(null);
         expect(res).to.have.status(200);
         expect(res.body).to.have.property('token');

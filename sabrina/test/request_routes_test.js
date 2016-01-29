@@ -13,7 +13,14 @@ var origin = 'localhost:3000/api';
 describe('the requests api', () => {
   before((done) => {
     server.listen(3000);
-    done();
+    request('localhost:3000')
+    .post('/signup')
+    .send({'email': 'request@test.com', 'password': 'password'})
+    .end((err, res) => {
+      if (err) return console.log(err);
+      this.token = res.body.token;
+      done();
+    });
   });
 
   after((done) => {
@@ -29,6 +36,7 @@ describe('the requests api', () => {
     .end((err, res) => {
       expect(err).to.eql(null);
       expect(Array.isArray(res.body)).to.eql(true);
+      expect(res).to.have.status(200);
       done();
     });
   });
@@ -38,6 +46,19 @@ describe('the requests api', () => {
     .get('/requestsUnclaimed')
     .end((err, res) => {
       expect(err).to.eql(null);
+      expect(Array.isArray(res.body)).to.eql(true);
+      expect(res).to.have.status(200);
+      done();
+    });
+  });
+
+  it('should be able to GET specific donor claimed requests', (done) => {
+    request(origin)
+    .get('/myRequests')
+    .set('token', this.token)
+    .end((err, res) => {
+      expect(err).to.eql(null);
+      expect(res).to.have.status(200);
       expect(Array.isArray(res.body)).to.eql(true);
       done();
     });
@@ -56,10 +77,10 @@ describe('the requests api', () => {
       });
   });
 
-  describe('rest requests that require a request already in db', () => {
+  describe('tests that require a request in database', () => {
     beforeEach((done) => {
       Requests.create({firstName: 'test request'}, (err, data) => {
-        if (err) throw err;
+        if (err) return console.log(err);
         this.testRequest = data;
         done();
       });
@@ -77,7 +98,7 @@ describe('the requests api', () => {
         });
     });
 
-    it('should be able to CLAIM a request', (done) => {
+    it('should be able to claim a request with PUT', (done) => {
       this.testRequest.claimedBy = 'newDonorId';
       request(origin)
         .put('/requests/' + this.testRequest._id + '/' + this.testRequest.claimedBy)
