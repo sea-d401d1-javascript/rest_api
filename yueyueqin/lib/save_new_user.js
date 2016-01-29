@@ -8,7 +8,7 @@ module.exports = exports = function(req,res) {
   newUser.authentication.password = newUser.hashPassword(req.body.password);
   newUser.save((err, data) => {
     if(err)  return handleError(err);
-
+    console.log(data._id);
     return res.status(200).json({token: data.generateToken()});
   });
 

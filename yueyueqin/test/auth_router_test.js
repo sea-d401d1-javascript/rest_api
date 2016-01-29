@@ -61,6 +61,7 @@ describe('User Authentication: ', () => {
 
   describe('User signin test: ', () => {
     var signinuser = {email:'signinuser@gmail.com', username: 'signinuser', password: '12345678'};
+    var token = {};
     before(function(done) {
       chai.request('localhost:3000')
         .post('/api/signup')
@@ -68,7 +69,7 @@ describe('User Authentication: ', () => {
         .end(function(err, res) {
           expect(err).to.eql(null);
           expect(res.body).to.have.property('token');
-          this.token = res.body;
+          token.token1 = res.body;
           done();
         });
     });
@@ -80,6 +81,30 @@ describe('User Authentication: ', () => {
           expect(err).to.eql(null);
           expect(res).to.have.status(200);
           expect(res.body).have.property('token');
+          token.token2 = res.body;
+          expect(token.token1.token).to.eql(token.token2.token);
+          done();
+        });
+    });
+    it('should be able to avoid user to login if user doesn not exist', (done) => {
+      chai.request(origin)
+        .get('/api/signin')
+        .auth('nouser@gmail.com','12345678')
+        .end((err, res) => {
+          expect(err).to.eql(null);
+          expect(res).to.have.status(200);
+          expect(res.body.msg).to.eql('user does not exist; please sign up this site first');
+          done();
+        });
+    });
+    it('should be able to avoid user to login if password is incorrect', (done) => {
+      chai.request(origin)
+        .get('/api/signin')
+        .auth('signinuser@gmail.com','12345679')
+        .end((err, res) => {
+          expect(err).to.eql(null);
+          expect(res).to.have.status(200);
+          expect(res.body.msg).to.eql('incorrect passwor. please enter again');
           done();
         });
     });

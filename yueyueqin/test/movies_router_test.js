@@ -12,6 +12,21 @@ var uri = '/api/movies';
 
 
 describe('the movie app', () => {
+  before((done) => {
+    var newUser = {email:'newuser@gmail.com',username:'newuser',password:'12345678'};
+    chai.request(origin)
+      .post('/api/signup')
+      .send(newUser)
+      .end((err, res) => {
+        expect(err).to.eql(null);
+        expect(res).have.status(200);
+        expect(res.body).to.have.property('token');
+        console.log(res.body.token);
+        this.token = res.body.token;
+        done();
+      });
+
+  });
   after((done) => {
     mongoose.connection.db.dropDatabase(() => {
       done();
@@ -22,12 +37,30 @@ describe('the movie app', () => {
     chai.request(origin)
       .post(uri)
       .send({name:'test',type:'type1'})
+      .set('token', this.token)
       .end((err,res) => {
-        // expect(err).to.equal(null);
-        // expect(res.body.name).to.equal('test');
-        // expect(res.body.type).to.equal('type1');
-        // expect(res).to.have.status(200);
-        // expect(res.body).to.have.property('_id');
+        console.log(this.token);
+        expect(err).to.eql(null);
+        expect(res).to.have.status(200);
+        expect(res.body.name).to.equal('test');
+        expect(res.body.type).to.equal('type1');
+        expect(jwt.verify(this.token,process.env.APP_SECRET || 'changethis').id).to.equal(res.body.wranglerId);
+        expect(res.body).to.have.property('_id');
+        done();
+      });
+  });
+
+  it('should be able to retrieve the movies for specific user', (done) => {
+    chai.request(origin)
+      .get('/api/mymovies')
+      .set('token', this.token)
+      .end((err, res) => {
+        console.log(this.token);
+        expect(err).to.eql(null);
+        expect(res).to.have.status(200);
+        expect(res.body[0].name).to.eql('test');
+        expect(res.body[0].type).to.eql('type1');
+        expect(res.body[0]).to.have.property('_id');
         done();
       });
   });

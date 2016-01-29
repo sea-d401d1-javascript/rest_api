@@ -27,7 +27,6 @@ movieRouter.get('/movies',(req,res) => {
 movieRouter.get('/mymovies', jwtAuth, (req,res) => {
   Movie.find({wranglerId: req.user._id }, (err,data) => {
     if(err) return handleError(err,res);
-
     res.status(200).json(data);
   });
 });
@@ -36,7 +35,6 @@ movieRouter.get('/mymovies', jwtAuth, (req,res) => {
 movieRouter.get('/movies/:type', (req,res) => {
   Movie.find({type:req.params.type}, (err, data) => {
     if (err)  return handleError(err,res);
-
     res.status(200).json(data);
   });
 });
