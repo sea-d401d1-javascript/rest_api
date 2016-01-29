@@ -8,7 +8,7 @@ process.env.MONGOLAB_URI = 'mongodb://localhost/donors_test';
 
 const server = require(__dirname + '/../server');
 const Donor = require(__dirname + '/../models/donor');
-var origin = 'localhost:3000';
+var origin = 'localhost:3000/api';
 
 describe('the donors api', () => {
   before((done) => {
@@ -33,22 +33,21 @@ describe('the donors api', () => {
     });
   });
 
-  it('should create a donor with a POST', (done) => {
+  it('should create/signup a donor with a POST', (done) => {
     request(origin)
-      .post('/donors')
-      .send({firstName: 'test donor'})
+      .post('/signup')
+      .send({email: 'test@gmail.com', password: 'abc123456'})
       .end((err, res) => {
         expect(err).to.eql(null);
         expect(res).to.have.status(200);
-        expect(res.body.firstName).to.eql('test donor');
-        expect(res.body).to.have.property('_id');
+        expect(res.body).to.have.property('token');
         done();
       });
   });
 
   describe('rest requests that require a donor already in db', () => {
-    beforeEach((done) => {
-      Donor.create({firstName: 'test donor'}, (err, data) => {
+    before((done) => {
+      Donor.create({username: 'testtest', authentication: {email: 'test@gmail.com', password: 'abc123456'}}, (err, data) => {
         if (err) throw err;
         this.testDonor = data;
         done();

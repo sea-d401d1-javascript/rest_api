@@ -8,7 +8,7 @@ process.env.MONGOLAB_URI = 'mongodb://localhost/requests_test';
 
 const server = require(__dirname + '/../server');
 const Requests = require(__dirname + '/../models/request');
-var origin = 'localhost:3000';
+var origin = 'localhost:3000/api';
 
 describe('the requests api', () => {
   before((done) => {
