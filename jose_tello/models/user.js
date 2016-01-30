@@ -19,8 +19,8 @@ userSchema.methods.comparePassword = function(password) {
   return bcrypt.compareSync(password, this.authentication.password);
 };
 
-userSchema.method.generateToken = function() {
-  jwt.sign({ id: this._id }, process.env.APP_SECRET || 'changethis');
+userSchema.methods.generateToken = function() {
+  return jwt.sign({ id: this._id }, process.env.APP_SECRET || 'changethis');
 };
 
 module.exports = exports = mongoose.model('User', userSchema);

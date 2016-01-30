@@ -3,20 +3,20 @@ const jsonParser = require('body-parser').json();
 const User = require(__dirname + '/../models/user');
 const handleDBError = require(__dirname + '/../lib/handle_db_error');
 const basicHTTP = require(__dirname + '/../lib/basic_http');
+const userQuery = require(__dirname + '/../lib/user_query');
+const mongoose = require('mongoose');
 
 var authRouter = module.exports = exports = express.Router();
 
-authRouter.post('/signup', jsonParser, (req, res) => {
+authRouter.post('/signup', jsonParser, userQuery, (req, res) => {
   var newUser = new User();
-  if(!((req.body.email || '').length && (req.body.password || '').length > 7)) {
-    return res.status(400).json({ token: 'invalid username or password' });
-  }
-  newUser.username = req.body.username || req.body.email;
+  newUser.username = req.body.username;
   newUser.authentication.email = req.body.email;
   newUser.hashPassword(req.body.password);
   newUser.save((err, data) => {
+    debugger;
     if (err) return handleDBError(err, res);
-    res.status(200).json({ msg: data.generateToken() }); // to be replace with token
+    res.status(200).json({ token: data.generateToken() }); // to be replace with token
   });
 });
 
