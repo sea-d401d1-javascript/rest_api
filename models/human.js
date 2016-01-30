@@ -8,4 +8,10 @@ var humanSchema = new mongoose.Schema({
   dogPreference: { type: String, default: 'Akita' }
 });
 
+var Human = mongoose.model('Human', humanSchema);
+
+Human.schema.path('dogPreference').validate(function(value) {
+  return /Akita|Corgi|Terrier|Lab/i.test(value);
+}, 'Unavailable dog match');
+
 module.exports = exports = mongoose.model('Human', humanSchema);

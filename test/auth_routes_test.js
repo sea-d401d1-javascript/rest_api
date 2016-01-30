@@ -1,16 +1,21 @@
 'use strict';
 
 const chai = require('chai');
+chai.use(chai-http);
 const expect = chai.expect;
 const mongoose = require('mongoose');
-process.env.MONGOLAB_URI = 'mongodb://localhost/internetz_app_test';
+process.env.MONGOLAB_URI = 'mongodb://localhost/dog_app_test';
 /* eslint-disable no-unused-vars */
 const server = require(__dirname + '/../server');
 /* eslint-enable no-unused-vars */
-const User = require(__dirname + '/../models/user');
-chai.use(require('chai-http'));
+const Dog = require(__dirname + '/../models/dog');
 
 describe('auth routes', () => {
+  before((done) => {
+    server.listen(3000);
+    done();
+  });
+
   it('should respond to valid signup POST requests', done => {
     chai.request('localhost:3000')
       .post('/signup')
@@ -28,13 +33,19 @@ describe('auth routes', () => {
 
   describe('tests that require a user in the DB', () => {
     beforeEach(done => {
-      const newUser = new User();
+      const newDog = new Dog();
 
-      newUser.username = 'test@example.com';
-      newUser.authentication.email = 'test@example.com';
-      newUser.hashPassword('foobar123');
-      newUser.save((err) => {
+      newDog.username = 'test@example.com';
+      newDog.authentication.email = 'test@example.com';
+      newDog.hashPassword('foobar123');
+      newDog.save((err) => {
         if (err) return console.log(err);
+        done();
+      });
+    });
+
+    afterEach((done) => {
+      Dog.remove({}, () => {
         done();
       });
     });
@@ -54,14 +65,9 @@ describe('auth routes', () => {
     });
   });
 
-  afterEach(done => {
-    User.remove({}, () => {
-      done();
-    });
-  });
-
   after(done => {
     mongoose.connection.db.dropDatabase(() => {
+      server.close();
       done();
     });
   });

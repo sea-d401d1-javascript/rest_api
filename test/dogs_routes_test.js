@@ -47,10 +47,10 @@ describe('dogs API', () => {
         });
     });
 
-    describe('require a dog already in db', () => {
+    describe('tests that require a dog in db', () => {
       beforeEach((done) => {
-        Dog.create({ dogName: 'test dog' }, (err, data) => {
-          if (err) throw err;
+        Dog.create({ authentication: {email: 'test@example.com', password: 'foobar123' }}), (err, data) => {
+          if (err) return console.log(err);
           this.testDog = data;
           done();
         });
