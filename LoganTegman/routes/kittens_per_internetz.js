@@ -12,5 +12,5 @@ ratioRouter.get('/ratio', (req, res) => {
     .then(data => {
       res.status(200).json({ 'KPIratio': data[0].length / data[1].length });
     })
-    .catch(err => handleDBError(err));
+    .catch(err => handleDBError(err, res));
 });
