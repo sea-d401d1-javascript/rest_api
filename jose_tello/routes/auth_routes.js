@@ -14,20 +14,19 @@ authRouter.post('/signup', jsonParser, userQuery, (req, res) => {
   newUser.authentication.email = req.body.email;
   newUser.hashPassword(req.body.password);
   newUser.save((err, data) => {
-    debugger;
     if (err) return handleDBError(err, res);
-    res.status(200).json({ token: data.generateToken() }); // to be replace with token
+    res.status(200).json({ token: data.generateToken() });
   });
 });
 
 authRouter.get('/signin', basicHTTP, (req, res) => {
-  User.findOne({ 'authentication.email': req.basicHTTP.username }, (err, user) => {
+  User.findOne({ 'authentication.email': req.basicHTTP.email }, (err, user) => {
     if (err) {
       console.log(err);
-      res.status(400).json({ msg: 'authenticat says no' });
+      res.status(400).json({ msg: 'error with db query' });
     }
-    if (!user) return res.status(401).json({ msg: 'authenticat says no' });
-    if (!user.comparePassword(req.basicHTTP.password)) return res.status(401).json({ msg: 'authenticat says no' });
+    if (!user) return res.status(401).json({ msg: 'user not found' });
+    if (!user.comparePassword(req.basicHTTP.password)) return res.status(401).json({ msg: 'incorrect password' });
     res.json({ token: user.generateToken() });
   });
 });

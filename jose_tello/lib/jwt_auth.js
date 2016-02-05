@@ -11,9 +11,9 @@ module.exports = exports = function(req, res, next) {
   User.findOne({ _id: decoded.id }, (err, user) => {
     if (err) {
       console.log(err);
-      res.status(401).json({ msg: 'authenticat says meow' });
+      res.status(401).json({ msg: 'authenticat says no' });
     }
-    if (!user) return res.status(401).json({ msg: 'authenticat says meow' });
+    if (!user) return res.status(401).json({ msg: 'authenticat says no' });
     req.user = user;
     next();
   });

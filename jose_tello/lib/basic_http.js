@@ -7,7 +7,7 @@ module.exports = exports = function(req, res, next) {
     var authBuf = new Buffer(base64String, 'base64');
     var utf8AuthString = authBuf.toString();
     var authArr = utf8AuthString.split(':');
-    zeroBuf(authBuf);
+    zeroBuffer(authBuf);
     if (authArr[0].length && authArr[1].length) {
       req.basicHTTP = {
         email: authArr[0],
@@ -18,5 +18,5 @@ module.exports = exports = function(req, res, next) {
   } catch(e) {
     console.log(e);
   }
-  res.status(401).json({ msg: 'could not authenticat' });
+  res.status(401).json({ msg: 'unable to authenticate' });
 };

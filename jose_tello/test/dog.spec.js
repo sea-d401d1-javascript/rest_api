@@ -13,6 +13,17 @@ const Dog = require(__dirname + '/../models/dog');
 process.env.MONGOLAB_URI = 'mongodb://localhost/test_db';
 
 describe('CRUD: tests the GET & POST dog routes', () => {
+  let _token = null;
+  before(done => {
+    chai.request('localhost:3000')
+    .post('/app/signup')
+    .send({ 'email':'woof@test.com', 'password':'testpass' })
+    .end((err, res) => {
+      if (err) return console.log(err);
+      _token = res.body.token;
+      done();
+    });
+  });
   it('should be able to retrieve all our dogs', (done) => {
     chai.request('localhost:3000')
     .get('/app/dogs')
@@ -25,6 +36,7 @@ describe('CRUD: tests the GET & POST dog routes', () => {
   it('should create with a new dog with a POST request', (done) => {
     chai.request('localhost:3000')
     .post('/app/dogs')
+    .set('token', _token)
     .send({name: 'test dog'})
     .end((err, res) => {
       expect(err).to.eql(null);
@@ -47,6 +59,7 @@ describe('CRUD: tests the GET & POST dog routes', () => {
     it('should update a dog with PUT', (done) => {
       chai.request('localhost:3000')
       .put('/app/dogs/' + this.dog._id)
+      .set('token', _token)
       .send({ name: 'renamed dog' })
       .end((err, res) => {
         expect(err).to.eql(null);

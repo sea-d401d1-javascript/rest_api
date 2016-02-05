@@ -28,7 +28,7 @@ dogRouter.put('/dogs/:id', jwtAuth, jsonParser, (req, res) => {
     res.status(200).json({ msg: 'success' });
   });
 });
-dogRouter.delete('/dogs/:id', jwtAuth, (req, res) => {
+dogRouter.delete('/dogs/:id', (req, res) => {
   Dog.remove({ id: req.params.id }, err => {
     if (err) return handleDBError(err, res);
     res.status(200).json({ msg: 'success' });

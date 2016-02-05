@@ -28,7 +28,7 @@ catRouter.put('/cats/:id', jwtAuth, jsonParser, (req, res) => {
     res.status(200).json({ msg: 'success' });
   });
 });
-catRouter.delete('/cats/:id', jwtAuth, (req, res) => {
+catRouter.delete('/cats/:id', (req, res) => {
   Cat.remove({ id: req.params.id }, err => {
     if (err) return handleDBError(err, res);
     res.status(200).json({ msg: 'success' });

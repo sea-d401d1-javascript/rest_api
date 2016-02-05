@@ -13,6 +13,17 @@ const Cat = require(__dirname + '/../models/cat');
 process.env.MONGOLAB_URI = 'mongodb://localhost/test_db';
 
 describe('CRUD: tests the GET & POST cat routes', () => {
+  let _token = null;
+  before(done => {
+    chai.request('localhost:3000')
+    .post('/app/signup')
+    .send({ email: 'meow@test.com', password: 'testpass' })
+    .end((err, res) => {
+      if (err) return console.log(err);
+      _token = res.body.token;
+      done();
+    });
+  });
   it('should be able to retrieve all our cats', (done) => {
     chai.request('localhost:3000')
     .get('/app/cats')
@@ -25,6 +36,7 @@ describe('CRUD: tests the GET & POST cat routes', () => {
   it('should create with a new cat with a POST request', (done) => {
     chai.request('localhost:3000')
     .post('/app/cats')
+    .set('token', _token)
     .send({ name: 'test cat' })
     .end((err, res) => {
       expect(err).to.eql(null);
@@ -47,6 +59,7 @@ describe('CRUD: tests the GET & POST cat routes', () => {
     it('should update a cat with PUT', (done) => {
       chai.request('localhost:3000')
       .put('/app/cats/' + this.cat._id)
+      .set('token', _token)
       .send({ name: 'renamed cat' })
       .end((err, res) => {
         expect(err).to.eql(null);
