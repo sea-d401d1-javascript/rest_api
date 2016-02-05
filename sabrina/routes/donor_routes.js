@@ -2,6 +2,8 @@ const express = require('express');
 const jsonParser = require('body-parser').json();
 const Donor = require(__dirname + '/../models/donor');
 const handleDBError = require(__dirname + '/../lib/handle_db_error');
+const basicHTTP = require(__dirname + '/../lib/basic-http');
+const jwtAuth = require(__dirname + '/../lib/jwt-auth');
 
 var donorRouter = module.exports = exports = express.Router();
 
@@ -19,14 +21,6 @@ donorRouter.get('/donors', (req, res) => {
 
 donorRouter.get('/totalDonors', (req, res) => {
   Donor.count({}, (err, data) => {
-    if (err) return handleDBError(err, res);
-    res.status(200).json(data);
-  });
-});
-
-donorRouter.post('/donors', jsonParser, (req, res) => {
-  var newDonor = new Donor(req.body);
-  newDonor.save((err, data) => {
     if (err) return handleDBError(err, res);
     res.status(200).json(data);
   });

@@ -3,6 +3,7 @@ const jsonParser = require('body-parser').json();
 const Request = require(__dirname + '/../models/request');
 const handleDBError = require(__dirname + '/../lib/handle_db_error');
 const handleUnavailError = require(__dirname + '/../lib/handle_unavailable');
+const jwtAuth = require(__dirname + '/../lib/jwt-auth');
 
 var requestsRouter = module.exports = exports = express.Router();
 
@@ -22,6 +23,13 @@ requestsRouter.get('/requestsUnclaimed', (req, res) => {
 
 requestsRouter.get('/totalUnclaimed', (req, res) => {
   Request.count({claimedBy: {$in: ['null']}}, (err, data) => {
+    if (err) return handleDBError(err, res);
+    res.status(200).json(data);
+  });
+});
+
+requestsRouter.get('/myRequests', jwtAuth, (req, res) => {
+  Request.find({claimedBy: req.user._id}, (err, data) => {
     if (err) return handleDBError(err, res);
     res.status(200).json(data);
   });

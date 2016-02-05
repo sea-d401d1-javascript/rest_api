@@ -8,7 +8,7 @@ process.env.MONGOLAB_URI = 'mongodb://localhost/donors_test';
 
 const server = require(__dirname + '/../server');
 const Donor = require(__dirname + '/../models/donor');
-var origin = 'localhost:3000';
+var origin = 'localhost:3000/api';
 
 describe('the donors api', () => {
   before((done) => {
@@ -28,28 +28,16 @@ describe('the donors api', () => {
     .get('/donors')
     .end((err, res) => {
       expect(err).to.eql(null);
+      expect(res).to.have.status(200);
       expect(Array.isArray(res.body)).to.eql(true);
       done();
     });
   });
 
-  it('should create a donor with a POST', (done) => {
-    request(origin)
-      .post('/donors')
-      .send({firstName: 'test donor'})
-      .end((err, res) => {
-        expect(err).to.eql(null);
-        expect(res).to.have.status(200);
-        expect(res.body.firstName).to.eql('test donor');
-        expect(res.body).to.have.property('_id');
-        done();
-      });
-  });
-
-  describe('rest requests that require a donor already in db', () => {
-    beforeEach((done) => {
-      Donor.create({firstName: 'test donor'}, (err, data) => {
-        if (err) throw err;
+  describe('tests that require a donor in database', () => {
+    before((done) => {
+      Donor.create({authentication: {email: 'donor@test.com', password: 'password'}}, (err, data) => {
+        if (err) return console.log(err);
         this.testDonor = data;
         done();
       });
@@ -58,7 +46,7 @@ describe('the donors api', () => {
     it('should be able to UPDATE a donor', (done) => {
       request(origin)
         .put('/donors/' + this.testDonor._id)
-        .send({firstName: 'new donor name'})
+        .send({username: 'new donor name'})
         .end((err, res) => {
           expect(err).to.eql(null);
           expect(res.body.msg).to.eql('Successly updated donor');
