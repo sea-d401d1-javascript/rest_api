@@ -26,11 +26,11 @@ authRouter.post('/signup', jsonParser, (req, res) => {
       if(err) {
         console.log(err);
         return res.status(400).json({msg: 'Sorry'});
-    }
-    //Check if username is taken
+      }
+      //Check if username is taken
       if (countU > 0) {
         return res.status(401).json({msg: 'Username already exists'});
-    }
+      }
 
       newUser.username = req.body.username || req.body.email;
       newUser.authentication.email = req.body.email;

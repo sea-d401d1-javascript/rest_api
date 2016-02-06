@@ -39,3 +39,9 @@ heroesRouter.delete('/heroes/:id', jwtAuth, function(req, res) {
     res.json({msg: 'success'});
   });
 });
+
+
+'/profile/:username'
+
+
+{'authentication.username': req.params.username}

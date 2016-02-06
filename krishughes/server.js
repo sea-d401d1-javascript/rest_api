@@ -12,6 +12,8 @@ app.use('/api', villainsRouter);
 app.use('/api', battleRouter);
 app.use('/api', authRouter);
 
+
+
 app.listen(process.env.PORT || 3000, function() {
 	console.log('server up');
 });
