@@ -2,12 +2,12 @@
 
 const express = require('express');
 const jsonParser = require('body-parser').json();
-const Dog = require(__dirname + '/models/dog');
+const Dog = require(__dirname + '/../models/dog');
 const handleDBError = require(__dirname + '/../lib/handle_db_error');
 
 var dogRouter = module.exports = exports = express.Router();
 
-dogRouter.get('/dogs', (req, res) => {
+dogRouter.get('/dog', (req, res) => {
   Dog.find({}, (err, data) => {
     if (err) return handleDBError(err, res);
 
@@ -15,7 +15,7 @@ dogRouter.get('/dogs', (req, res) => {
   });
 });
 
-dogRouter.post('/dogs', jsonParser, (req, res) => {
+dogRouter.post('/dog', jsonParser, (req, res) => {
   var newDog = new Dog(req.body);
   newDog.save((err, data) => {
     if (err) return handleDBError(err, res);
@@ -24,7 +24,7 @@ dogRouter.post('/dogs', jsonParser, (req, res) => {
   });
 });
 
-dogRouter.put('/dogs/:id', jsonParser, (req, res) => {
+dogRouter.put('/dog/:id', jsonParser, (req, res) => {
   var dogData = req.body;
   delete dogData._id;
   Dog.update({ _id: req.params.id }, dogData, (err) => {
@@ -34,7 +34,7 @@ dogRouter.put('/dogs/:id', jsonParser, (req, res) => {
   });
 });
 
-dogRouter.delete('/dogs/:id', (req, res) => {
+dogRouter.delete('/dog/:id', (req, res) => {
   Dog.remove({ _id: req.params.id }, (err) => {
     if (err) return handleDBError(err, res);
 

@@ -9,9 +9,9 @@ const mongoose = require('mongoose');
 process.env.MONGOLABL_URI = 'mongodb://localhost/humans_app_test';
 
 const server = require(__dirname + '/../server');
-const Human = require(__dirname + '/../models/humans');
+const Human = require(__dirname + '/../models/human');
 
-describe('humans API', () => {
+describe('human API', () => {
   before((done) => {
     server.listen(3000);
     done();
@@ -26,7 +26,7 @@ describe('humans API', () => {
 
   it('should be able to GET all humans', (done) => {
     request('localhost:3000')
-      .get('/humans')
+      .get('/human/')
       .end((err, res) => {
         expect(err).to.eql(null);
         expect(Array.isArray(res.body)).to.eql(true);
@@ -58,7 +58,7 @@ describe('humans API', () => {
 
       it('should be able to UPDATE a human', (done) => {
         request('localhost:3000')
-          .put('/humans/' + this.testHuman._id)
+          .put('/human/' + this.testHuman._id)
           .send({ firstName: 'new human name' })
           .end((err, res) => {
             expect(err).to.eql(null);
@@ -70,7 +70,7 @@ describe('humans API', () => {
 
       it('should be able to DELETE a human', (done) => {
         request('localhost:3000')
-          .delete('/humans/' + this.testHuman._id)
+          .delete('/human/' + this.testHuman._id)
           .end((err, res) => {
             expect(err).to.eql(null);
             expect(res.body.msg).to.eql('Successly deleted human');

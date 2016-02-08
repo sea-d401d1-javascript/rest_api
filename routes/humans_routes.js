@@ -2,12 +2,12 @@
 
 const express = require('express');
 const jsonParser = require('body-parser').json();
-const Dog = require(__dirname + '/../models/humans');
+const Human = require(__dirname + '/../models/human');
 const handleDBError = require(__dirname + '/../lib/handle_db_error');
 
 var humanRouter = module.exports = exports = express.Router();
 
-humanRouter.get('/humans', (req, res) => {
+humanRouter.get('/human', (req, res) => {
   Human.find({}, (err, data) => {
     if (err) return handleDBError(err, res);
 
@@ -15,7 +15,7 @@ humanRouter.get('/humans', (req, res) => {
   });
 });
 
-humanRouter.post('/humans', jsonParser, (req, res) => {
+humanRouter.post('/human', jsonParser, (req, res) => {
   var newHuman = new Human(req.body);
   newHuman.save((err, data) => {
     if (err) return handleDBError(err, res);
@@ -24,7 +24,7 @@ humanRouter.post('/humans', jsonParser, (req, res) => {
   });
 });
 
-humanRouter.put('/humans/:id', (req, res) => {
+humanRouter.put('/human/:id', (req, res) => {
   var humanData = req.body;
   delete humanData._id;
   Human.update({ _id: req.params.id }, humanData, (err) => {
@@ -34,7 +34,7 @@ humanRouter.put('/humans/:id', (req, res) => {
   });
 });
 
-humanRouter.delete('/humans/:id', (req, res) => {
+humanRouter.delete('/human/:id', (req, res) => {
   Human.remove({ _id: req.params.id }, (err) => {
     if (err) return handleDBError(err, res);
 

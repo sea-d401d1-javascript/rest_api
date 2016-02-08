@@ -9,9 +9,9 @@ const mongoose = require('mongoose');
 process.env.MONGOLABL_URI = 'mongodb://localhost/dogs_app_test';
 
 const server = require(__dirname + '/../server');
-const Dog = require(__dirname + '/../models/dogs');
+const Dog = require(__dirname + '/../models/dog');
 
-describe('dogs API', () => {
+describe('dog API', () => {
   before((done) => {
     server.listen(3000);
     done();
@@ -26,7 +26,7 @@ describe('dogs API', () => {
 
   it('should be able to GET all dogs', (done) => {
     request('localhost:3000')
-      .get('/dogs')
+      .get('/dog/')
       .end((err, res) => {
         expect(err).to.eql(null);
         expect(Array.isArray(res.body)).to.eql(true);
@@ -58,7 +58,7 @@ describe('dogs API', () => {
 
       it('should be able to UPDATE a dog', (done) => {
         request('localhost:3000')
-          .put('/dogs/' + this.testDog._id)
+          .put('/dog/' + this.testDog._id)
           .send({ dogName: 'new dog name' })
           .end((err, res) => {
             expect(err).to.eql(null);
@@ -70,7 +70,7 @@ describe('dogs API', () => {
 
       it('should be able to DELETE a dog', (done) => {
         request('localhost:3000')
-          .delete('/dogs/' + this.testDog._id)
+          .delete('/dog/' + this.testDog._id)
           .end((err, res) => {
             expect(err).to.eql(null);
             expect(res.body.msg).to.eql('Successly deleted dog');
