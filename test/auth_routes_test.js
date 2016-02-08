@@ -1,7 +1,8 @@
 'use strict';
 
 const chai = require('chai');
-chai.use(chai-http);
+const chaihttp = require('chai-http');
+chai.use(chaihttp);
 const expect = chai.expect;
 const mongoose = require('mongoose');
 process.env.MONGOLAB_URI = 'mongodb://localhost/dog_app_test';

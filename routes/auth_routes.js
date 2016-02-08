@@ -25,7 +25,7 @@ authRouter.post('/signup', jsonParser, (req, res) => {
     return res.status(400).json({ msg: 'Invalid email' });
   }
   if (!((req.body.password || '').length > 7)) {
-    return res.status(400).json({ msg: 'Please enter a password larger than 7 characters' });
+    return res.status(400).json({ msg: 'Please enter a password longer than 7 characters' });
   }
   Dog.findOne({ 'authentication.email': req.body.email }, (err, email) => {
     if (err) return handleDBError(err, res);
