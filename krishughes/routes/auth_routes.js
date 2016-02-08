@@ -1,7 +1,7 @@
 const express = require('express');
 const User = require(__dirname + '/../models/user');
 const jsonParser = require('body-parser').json();
-const handleError = require(__dirname + '/../lib/handleServerError');
+const handleError = require(__dirname + '/../lib/handle_server_error');
 const basicHTTP = require(__dirname + '/../lib/basic_http');
 
 var authRouter = module.exports = exports = express.Router();

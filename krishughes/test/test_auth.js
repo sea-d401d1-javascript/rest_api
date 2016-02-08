@@ -13,15 +13,15 @@ describe('hero routes', function() {
   var token;
   before(function(done) {
     //Sign up
-		var user =  new User();
-		user.authentication.email = 'test@test.com';
-		var hashed = user.hashPassword('foobar123');
-		user.authentication.password = hashed;
-		user.save(function(err, data) {
+    var user =  new User();
+    user.authentication.email = 'test@test.com';
+    var hashed = user.hashPassword('foobar123');
+    user.authentication.password = hashed;
+    user.save(function(err, data) {
       if(err) throw err;
       this.user = data;
       done();
-		});
+    });
   });
   //Tear down
   after(function(done) {

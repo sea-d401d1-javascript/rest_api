@@ -1,7 +1,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var Villain = require(__dirname + '/../models/villain');
-var handleError = require(__dirname + '/../lib/handleServerError');
+var handleError = require(__dirname + '/../lib/handle_server_error');
 var jwtAuth = require(__dirname + '/../lib/jwt_auth');
 
 var villainsRouter = module.exports = exports = express.Router();

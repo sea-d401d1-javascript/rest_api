@@ -9,8 +9,8 @@ module.exports = exports = function(req, res, next) {
     zeroBuffer(authBuf);
     if(authArr[0].length && authArr[1].length) {
       req.basicHTTP = {
-    	 email: authArr[0],
-    	 password: authArr[1]
+    	  email: authArr[0],
+    	  password: authArr[1]
       };
       return next();
     }

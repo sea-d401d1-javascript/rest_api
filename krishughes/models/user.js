@@ -5,8 +5,8 @@ const jwt = require('jsonwebtoken');
 var userSchema = new mongoose.Schema({
   username: String,
   authentication: {
-  	email: String,
-  	password: String
+    email: String,
+    password: String
   }
 });
 
@@ -16,12 +16,12 @@ userSchema.methods.hashPassword = function(password) {
 };
 
 userSchema.methods.comparePassword = function(password) {
-	return bcrypt.compareSync(password, this.authentication.password);
+  return bcrypt.compareSync(password, this.authentication.password);
 };
 
 userSchema.methods.generateToken = function() {
-	return jwt.sign({id: this._id}, (process.env.APP_SECRET || 'changethis'), ({expiresIn: "1h"}));
-	//expire token
+  return jwt.sign({id: this._id}, (process.env.APP_SECRET || 'changethis'), ({expiresIn: "1h"}));
+  //expire token
 }
 
 module.exports = exports = mongoose.model('User', userSchema);
