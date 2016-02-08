@@ -6,10 +6,10 @@ chai.use(chaiHttp);
 const expect = chai.expect;
 const request = chai.request;
 const mongoose = require('mongoose');
-process.env.MONGOLABL_URI = 'mongodb://localhost/dogs_app_test';
+process.env.MONGOLABL_URI = 'mongodb://localhost/humans_app_test';
 
 const server = require(__dirname + '/../server');
-const Dog = require(__dirname + '/../models/dog');
+const Human = require(__dirname + '/../models/human');
 
 describe('dog API', () => {
   before((done) => {
@@ -34,18 +34,18 @@ describe('dog API', () => {
       });
   });
 
-  it('should create a dog with a POST', (done) => {
-      request('localhost:3000')
-        .post('localhost:3000')
-        .send({ dogName: 'test dog' })
-        .end((err, res) => {
-          expect(err).to.eql(null);
-          expect(res).to.have.status(200);
-          expect(res.body.dogName).to.eql('test dog');
-          expect(res.body).to.have.property('_id');
-          done();
-        });
-    });
+  // it('should create a dog with a POST', (done) => {
+  //     request('localhost:3000')
+  //       .post('localhost:3000')
+  //       .send({ dogName: 'test dog' })
+  //       .end((err, res) => {
+  //         expect(err).to.eql(null);
+  //         expect(res).to.have.status(200);
+  //         expect(res.body.dogName).to.eql('test dog');
+  //         expect(res.body).to.have.property('_id');
+  //         done();
+  //       });
+  //   });
 
     describe('tests that require a dog in db', () => {
       beforeEach((done) => {

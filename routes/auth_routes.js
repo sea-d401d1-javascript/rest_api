@@ -6,7 +6,7 @@ const Dog = require(__dirname + '/../models/dog');
 const handleDBError = require(__dirname + '/../lib/handleDBError');
 const basicHTTP = require(__dirname + '/../lib/basic_http');
 
-const userRouter = module.exports = exports = express.Router();
+const authRouter = module.exports = exports = express.Router();
 
 authRouter.get('/signin', basicHTTP, (req, res) => {
   Dog.findOne({ 'authentication.email': req.basicHTTP.email }, (err, user) => {
@@ -14,13 +14,13 @@ authRouter.get('/signin', basicHTTP, (req, res) => {
 
     if (!user) return res.status(401).json({ msg: 'Invalid username/password' });
 
-    if (!user.comparePassword(req.basicHTTP.password)) return res.status(401).json({msg: 'Invalid username/password'});
+    if (!user.comparePassword(req.basicHTTP.password)) return res.status(401).json({ msg: 'Invalid username/password' });
 
-    res.json({token: user.generateToken()});
+    res.json({ token: user.generateToken() });
   });
 });
 
-authRouter.post('/signup', jsonParser, (req, res) => {
+authRouter.post('/signup', bodyParser, (req, res) => {
   if (!(req.body.email || '').length) {
     return res.status(400).json({ msg: 'Invalid email' });
   }

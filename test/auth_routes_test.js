@@ -17,6 +17,13 @@ describe('auth routes', () => {
     done();
   });
 
+  after(done => {
+    mongoose.connection.db.dropDatabase(() => {
+      server.close();
+      done();
+    });
+  });
+
   it('should respond to valid signup POST requests', done => {
     chai.request('localhost:3000')
       .post('/signup')
@@ -63,13 +70,6 @@ describe('auth routes', () => {
           expect(res.body).to.have.property('token');
           done();
         });
-    });
-  });
-
-  after(done => {
-    mongoose.connection.db.dropDatabase(() => {
-      server.close();
-      done();
     });
   });
 });
