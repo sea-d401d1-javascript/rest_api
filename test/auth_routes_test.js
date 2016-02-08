@@ -12,14 +12,13 @@ const server = require(__dirname + '/../server');
 const Dog = require(__dirname + '/../models/dog');
 
 describe('auth routes', () => {
-  before((done) => {
-    server.listen(3000);
-    done();
-  });
+  // before((done) => {
+  //   server.listen(3000);
+  //   done();
+  // });
 
-  after(done => {
+  after((done) => {
     mongoose.connection.db.dropDatabase(() => {
-      server.close();
       done();
     });
   });
@@ -40,7 +39,7 @@ describe('auth routes', () => {
   });
 
   describe('tests that require a user in the DB', () => {
-    beforeEach(done => {
+    beforeEach((done) => {
       const newDog = new Dog();
 
       newDog.username = 'test@example.com';

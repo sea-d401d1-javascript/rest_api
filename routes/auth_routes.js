@@ -3,7 +3,7 @@
 const express = require('express');
 const bodyParser = require('body-parser').json();
 const Dog = require(__dirname + '/../models/dog');
-const handleDBError = require(__dirname + '/../lib/handleDBError');
+const handleDBError = require(__dirname + '/../lib/handle_db_error');
 const basicHTTP = require(__dirname + '/../lib/basic_http');
 
 const authRouter = module.exports = exports = express.Router();

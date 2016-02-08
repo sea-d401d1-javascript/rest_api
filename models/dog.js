@@ -9,11 +9,11 @@ var dogSchema = new mongoose.Schema({
   favoriteToy: String,
   fixed: Boolean,
   age: Number,
-  kibblePreference: { type: String, default: 'fish' }
-  // authentication: {
-  //   email: {type: String, required: true},
-  //   password: {type: String, required: true}
-  // }
+  kibblePreference: { type: String, default: 'fish' },
+  authentication: {
+    email: { type: String, required: true },
+    password: { type: String, required: true }
+  }
 });
 
 dogSchema.methods.hashPassword = function(password) {

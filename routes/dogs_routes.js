@@ -10,7 +10,7 @@ const jwtAuth = require(__dirname + '/../lib/jwt_auth');
 var dogRouter = module.exports = exports = express.Router();
 
 dogRouter.use(function login(req, res, next) {
-  console.log('Database accessed at: ' + (newDate()));
+  console.log('Database accessed at: ' + new Date() + '');
   next();
 });
 
@@ -42,13 +42,13 @@ dogRouter.put('/dog/:id', bodyParser, (req, res) => {
   delete dogData._id;
   Dog.update({ _id: req.params.id }, dogData, (err, data) => {
     if (err) return handleDBError(err, res);
-    res.status(200).json({ msg: 'success' });
+    res.status(200).json({ msg: 'Successfully updated dog' });
   });
 });
 
 dogRouter.delete('/dog/:id', (req, res) => {
   Dog.remove({ _id: req.params.id }, (err) => {
     if (err) return handleDBError(err, res);
-    res.status(200).json({ msg: 'success' });
+    res.status(200).json({ msg: 'Successfully deleted dog' });
   });
 });

@@ -9,24 +9,19 @@ const mongoose = require('mongoose');
 process.env.MONGOLABL_URI = 'mongodb://localhost/humans_app_test';
 
 const server = require(__dirname + '/../server');
-const Human = require(__dirname + '/../models/human');
+const Dog = require(__dirname + '/../models/dog');
 
 describe('dog API', () => {
-  before((done) => {
-    server.listen(3000);
-    done();
-});
 
   after((done) => {
     mongoose.connection.db.dropDatabase(() => {
-      server.close();
       done();
     });
   });
 
   it('should be able to GET all dogs', (done) => {
     request('localhost:3000')
-      .get('/dog/')
+      .get('/api/dog/')
       .end((err, res) => {
         expect(err).to.eql(null);
         expect(Array.isArray(res.body)).to.eql(true);
@@ -49,7 +44,7 @@ describe('dog API', () => {
 
     describe('tests that require a dog in db', () => {
       beforeEach((done) => {
-        Dog.create({ authentication: {email: 'test@example.com', password: 'foobar123' }}), (err, data) => {
+        Dog.create({ authentication: {email: 'test@example.com', password: 'foobar123' }}, (err, data) => {
           if (err) return console.log(err);
           this.testDog = data;
           done();
@@ -58,11 +53,11 @@ describe('dog API', () => {
 
       it('should be able to UPDATE a dog', (done) => {
         request('localhost:3000')
-          .put('/dog/' + this.testDog._id)
+          .put('/api/dog/' + this.testDog._id)
           .send({ dogName: 'new dog name' })
           .end((err, res) => {
             expect(err).to.eql(null);
-            expect(res.body.msg).to.eql('Successly updated dog');
+            expect(res.body.msg).to.eql('Successfully updated dog');
             expect(res).to.have.status(200);
             done();
           });
@@ -70,10 +65,10 @@ describe('dog API', () => {
 
       it('should be able to DELETE a dog', (done) => {
         request('localhost:3000')
-          .delete('/dog/' + this.testDog._id)
+          .delete('/api/dog/' + this.testDog._id)
           .end((err, res) => {
             expect(err).to.eql(null);
-            expect(res.body.msg).to.eql('Successly deleted dog');
+            expect(res.body.msg).to.eql('Successfully deleted dog');
             expect(res).to.have.status(200);
             done();
           });
