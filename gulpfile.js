@@ -3,7 +3,7 @@
 const gulp = require('gulp');
 const eslint = require('gulp-eslint');
 const mocha = require('gulp-mocha');
-const nodemon = require('gulp-nodemon');
+// const nodemon = require('gulp-nodemon');
 
 const scripts = ['server.js', 'gulpfile.js', './lib/*.js', './test/*.js'];
 
@@ -19,15 +19,15 @@ gulp.task('test', () => {
     .pipe(mocha({ reporter: 'nyan' }));
 });
 
-gulp.task('watch', () => {
-  return gulp.watch(scripts, ['lint', 'test']);
-});
+// gulp.task('watch', () => {
+//   return gulp.watch(scripts, ['lint', 'test']);
+// });
 
-gulp.task('start', () => {
-  nodemon({
-    script: 'server.js',
-    ext: 'html js'
-  });
-});
+// gulp.task('start', () => {
+//   nodemon({
+//     script: 'server.js',
+//     ext: 'html js'
+//   });
+// });
 
-gulp.task('default', ['watch', 'lint', 'test', 'start']);
+gulp.task('default', [/*'watch',*/ 'lint', 'test'/*, 'start'*/]);

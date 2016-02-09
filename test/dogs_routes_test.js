@@ -8,10 +8,13 @@ const request = chai.request;
 const mongoose = require('mongoose');
 process.env.MONGOLABL_URI = 'mongodb://localhost/humans_app_test';
 
-const server = require(__dirname + '/../server');
+require(__dirname + '/../server');
 const Dog = require(__dirname + '/../models/dog');
 
 describe('dog API', () => {
+  before((done) => {
+    done();
+  });
 
   after((done) => {
     mongoose.connection.db.dropDatabase(() => {
@@ -21,7 +24,7 @@ describe('dog API', () => {
 
   it('should be able to GET all dogs', (done) => {
     request('localhost:3000')
-      .get('/api/dog/')
+      .get('/api/alldogs/')
       .end((err, res) => {
         expect(err).to.eql(null);
         expect(Array.isArray(res.body)).to.eql(true);
@@ -44,7 +47,7 @@ describe('dog API', () => {
 
     describe('tests that require a dog in db', () => {
       beforeEach((done) => {
-        Dog.create({ authentication: {email: 'test@example.com', password: 'foobar123' }}, (err, data) => {
+        Dog.create({ authentication: { email: 'test@example.com', password: 'foobar123' } }, (err, data) => {
           if (err) return console.log(err);
           this.testDog = data;
           done();

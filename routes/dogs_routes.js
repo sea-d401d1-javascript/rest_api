@@ -14,15 +14,15 @@ dogRouter.use(function login(req, res, next) {
   next();
 });
 
-dogRouter.get('/dog', (req, res) => {
+dogRouter.get('/alldogs', (req, res) => {
   Dog.find({}, (err, data) => {
     if (err) return handleDBError(err, res);
     res.status(200).json(data);
   });
 });
 
-dogRouter.get('/totalDog', (req, res) => {
-  Dog.count({}, (err, data) => {
+dogRouter.get('/myHuman', (req, res) => {
+  Human.count({}, (err, data) => {
     if (err) return handleDBError(err, res);
     res.status(200).json(data);
   });

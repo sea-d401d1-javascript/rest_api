@@ -8,7 +8,7 @@ const request = chai.request;
 const mongoose = require('mongoose');
 process.env.MONGOLABL_URI = 'mongodb://localhost/humans_app_test';
 
-const server = require(__dirname + '/../server');
+require(__dirname + '/../server');
 const Human = require(__dirname + '/../models/human');
 
 describe('human API', () => {
@@ -45,10 +45,10 @@ describe('human API', () => {
         });
     });
 
-    describe('require a human already in db', () => {
+    describe('tests that require a human in db', () => {
       beforeEach((done) => {
-        Human.create({ firstName: 'test human' }, (err, data) => {
-          if (err) throw err;
+        Human.create({ name: 'test human' }, (err, data) => {
+          if (err) return console.log(err);
           this.testHuman = data;
           done();
         });
@@ -57,7 +57,7 @@ describe('human API', () => {
       it('should be able to UPDATE a human', (done) => {
         request('localhost:3000')
           .put('/api/human/' + this.testHuman._id)
-          .send({ firstName: 'new human name' })
+          .send({ name: 'new human name' })
           .end((err, res) => {
             expect(err).to.eql(null);
             expect(res.body.msg).to.eql('Successfully updated human');

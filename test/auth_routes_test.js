@@ -7,7 +7,7 @@ const expect = chai.expect;
 const mongoose = require('mongoose');
 process.env.MONGOLAB_URI = 'mongodb://localhost/dogs_app_test';
 /* eslint-disable no-unused-vars */
-const server = require(__dirname + '/../server');
+require(__dirname + '/../server');
 /* eslint-enable no-unused-vars */
 const Dog = require(__dirname + '/../models/dog');
 

@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 var dogSchema = new mongoose.Schema({
-  name: String,
+  dogName: String,
   favoriteToy: String,
   fixed: Boolean,
   age: Number,
