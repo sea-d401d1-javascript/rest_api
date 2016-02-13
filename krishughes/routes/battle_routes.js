@@ -5,7 +5,7 @@ var handleError = require(__dirname + '/../lib/handle_server_error');
 var battleRouter = module.exports = exports = express.Router();
 var jwtAuth = require(__dirname + '/../lib/jwt_auth');
 
-battleRouter.get('/battle', jwtAuth, function(req, res) {
+battleRouter.get('/battle', function(req, res) {
   var heroTotal;
   var villainTotal;
   //sum hero levels

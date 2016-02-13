@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Heroes and Villains</title>
+</head>
+<body data-ng-app="supersApp" >
+	<main data-ng-controller="supersController">
+		<h1>Heroes and Villains</h1>
+
+		<section>
+		  <h2>Hero List<h2>
+		  <h3>Modify and Delete Heroes</h3>
+      <ul>
+        <li data-ng-repeat="hero in heroes">Name: {{hero.name}}, Level: {{hero.level}}
+          <button data-ng-click="deleteHero(hero)">Delete Hero</button>
+          <button data-ng-click="hero.editting = !hero.editting">Edit Hero</button>
+          <form data-ng-if="hero.editting" data-ng-submit="updateHero(hero)">
+            <input data-ng-model="hero.name" type="text"/>
+            <input data-ng-model="hero.level" type="text"/>
+            <button type="submit">Update</button>
+          </form>
+        </li>
+      </ul>
+
+      <h3>Create A Hero<h3>
+      <form data-ng-submit="createHero(newHero)">
+    	  <h4>Hero Name</h4>
+        <input data-ng-model="newHero.name" type="text"/>
+        <h4>Hero Level<h4>
+        <input data-ng-model="newHero.level" type="text"/>
+        <button type="submit">New Hero</button>
+      </form>
+      <h4>Hero Data</h4>
+      <p>{{heroes}}</p>
+    </section>
+
+	  <section>
+      <h2>Villain List<h2>
+		  <h3>Modify and Delete Villains</h3>
+      <ul>
+        <li data-ng-repeat="villain in villains">Name {{villain.name}}, Level {{villain.level}}
+          <button data-ng-click="deleteVillain(villain)">Delete Villain</button>
+          <button data-ng-click="villain.editting = !villain.editting">Edit Villain</button>
+          <form data-ng-if="villain.editting" data-ng-submit="updateVillain(villain)">
+            <input data-ng-model="villain.name" type="text"/>
+            <input data-ng-model="villain.level" type="text"/>
+            <button type="submit">Update</button>
+          </form>
+        </li>
+      </ul>
+
+      <h3>Create A Villain<h3>
+      <form data-ng-submit="createVillain(newVillain)">
+    	  <h4>Villain Name</h4>
+        <input data-ng-model="newVillain.name" type="text"/>
+        <h4>Villain Level<h4>
+        <input data-ng-model="newVillain.level" type="text"/>
+        <button type="submit">New Villain</button>
+      </form>
+      <h4>Villain Data</h4>
+      <p>{{villains}}</p>
+	  </section>
+	</main>
+
+  <script src="bundle.js"></script>
+</body>
+</html>
