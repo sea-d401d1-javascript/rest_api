@@ -1,0 +1,28 @@
+<section class="container" data-ng-if="loaded" data-ng-init="getKittens()">
+  <h2>Kittens view</h2>
+  <md-list>
+    <md-list-item data-ng-repeat="kitten in kittens">
+      Name: {{kitten.name}}, Eats: {{kitten.eats}}
+      <md-button class="md-md-button md-raised" data-ng-click="kitten.editing = !kitten.editing">Edit</md-button>
+      <md-button class="md-fab md-mini md-warn" data-ng-click="deleteKitten(kitten._id)" aria-label="delete button">
+        <md-icon><i class="material-icons">delete</i></md-icon>
+      </md-button>
+      <form data-ng-if="kitten.editing" data-ng-submit="editKitten(kitten)">
+        <label for="name">Name: </label><input type="text" data-ng-model="kitten.name">
+        <label for="eats">Eats: </label><input type="text" data-ng-model="kitten.eats">
+        <md-button class="md-md-button md-raised md-primary" type="submit">Submit</md-button>
+      </form>
+    </md-list-item>
+  </md-list>
+  <form data-ng-submit="addKitten()">
+    <md-input-container>
+      <label for="name">Name: </label>
+      <input type="text" data-ng-model="newKitten.name">
+    </md-input-container>
+    <md-input-container>
+      <label for="eats">Eats: </label>
+      <input type="text" data-ng-model="newKitten.eats">
+    </md-input-container>
+    <md-button class="md-md-button md-raised md-primary" type="submit">Add</md-button>
+  </form>
+</section>

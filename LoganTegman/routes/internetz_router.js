@@ -16,7 +16,7 @@ internetzRouter.get('/internetz', (req, res) => {
   });
 });
 
-internetzRouter.post('/internetz', jwtAuth, jsonParser, (req, res) => {
+internetzRouter.post('/internetz', jsonParser, (req, res) => {
   const newInternetz = new Internetz(req.body);
   newInternetz.save((err, data) => {
     if (err) return handleDBError(err, res);
@@ -25,7 +25,7 @@ internetzRouter.post('/internetz', jwtAuth, jsonParser, (req, res) => {
   });
 });
 
-internetzRouter.put('/internetz/:id', jwtAuth, jsonParser, (req, res) => {
+internetzRouter.put('/internetz/:id', jsonParser, (req, res) => {
   const kittenData = req.body;
   delete kittenData._id;
 
@@ -36,7 +36,7 @@ internetzRouter.put('/internetz/:id', jwtAuth, jsonParser, (req, res) => {
   });
 });
 
-internetzRouter.delete('/internetz/:id', jwtAuth, (req, res) => {
+internetzRouter.delete('/internetz/:id', (req, res) => {
   Internetz.remove({ _id: req.params.id }, err => {
     if (err) return handleDBError(err, res);
 
