@@ -45,6 +45,16 @@ gulp.task('webpack:dev', function() {
     .pipe(gulp.dest('build/'));
 });
 
+gulp.task('webpack:test', () => {
+  gulp.src(__dirname + '/test/test_entry.js')
+    .pipe(webpack({
+      output: {
+        filename: 'test_bundle.js'
+      }
+    }))
+    .pipe(gulp.dest('test/'));
+});
+
 gulp.task('watch', function() {
   gulp.watch(files, ['lint']);
 });

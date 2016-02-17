@@ -1,1 +1,1 @@
-require(__dirname + '/super_controller_test');
+require(__dirname + '/supers_controller_test');
