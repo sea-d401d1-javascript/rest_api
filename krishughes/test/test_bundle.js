@@ -55,7 +55,7 @@
 	var angular = __webpack_require__(3);
 	__webpack_require__(5);
 
-	describe('supersController controller', () => {
+	describe('SupersController', () => {
 	  var $httpBackend;
 	  var $scope;
 	  var $ControllerConstructor;
@@ -68,11 +68,12 @@
 	  }));
 
 	  it('should be able to make a controller', () => {
-	    var searsController = $ControllerConstructor('SupersController', {$scope});
+	    var supersController = $ControllerConstructor('SupersController', {$scope});
 	    expect(typeof supersController).toBe('object');
 	    expect(Array.isArray($scope.heroes)).toBe(true);
 	    expect(Array.isArray($scope.villains)).toBe(true);
-	    expect(typeof $scope.getAll).toBe('function');
+	    expect(typeof $scope.getAllHeroes).toBe('function');
+	    expect(typeof $scope.getAllVillains).toBe('function');
 	  });
 	  describe('REST requests', () => {
 	    beforeEach(angular.mock.inject(function(_$httpBackend_) {
@@ -87,7 +88,7 @@
 
 	    it('should make a get request to /api/heroes', () => {
 	      $httpBackend.expectGET('http://localhost:3000/api/heroes').respond(200, [{name: 'test hero'}]);
-	      $scope.getAll();
+	      $scope.getAllHeroes();
 	      $httpBackend.flush();
 	      expect($scope.heroes.length).toBe(1);
 	      expect($scope.heroes[0].name).toBe('test hero');
@@ -103,6 +104,27 @@
 	      expect($scope.newHero).toBe(null);
 	      expect($scope.heroes[0].name).toBe('the response hero');
 	    });
+
+	    it('should make an update put request to /api/heroes', () => {
+	      var hero = {_id: 1, name: 'update hero', editting: true};
+	      $scope.heroes = [hero];
+	      $httpBackend.expectPUT('http://localhost:3000/api/heroes/' + hero._id).respond(200);
+	      $scope.updateHero(hero);
+	      $httpBackend.flush();
+	      expect($scope.heroes.length).toBe(1);
+	      expect($scope.heroes[0].name).toBe('update hero');
+	      expect(hero.editting).toBe(false);
+	    });
+
+	    it('should make a delete to /api/heroes', () => {
+	      var hero = {_id: 1, name: 'delete hero'};
+	      $scope.heroes = [hero];
+	      expect($scope.heroes.length).toBe(1);
+	      $httpBackend.expectDELETE('http://localhost:3000/api/heroes/' + hero._id).respond(200);
+	      $scope.deleteHero(hero);
+	      $httpBackend.flush();
+	      expect($scope.heroes.length).toBe(0);
+	    });
 	  });
 	});
 
@@ -115,84 +137,86 @@
 
 	const supersApp = angular.module('supersApp', []);
 
-	supersApp.controller('SupersController', ['$scope', '$http', ($scope, $http) => {
+	supersApp.controller('SupersController', ['$scope', '$http', function($scope, $http) {
 	  $scope.heroes = [];
 	  $scope.villains = [];
 
-	  $http.get('http://localhost:3000/api/heroes')
-	    .then((res) => {
-	      console.log('success!');
-	      $scope.heroes = res.data;
-	    }, (err) => {
-	      console.log(err);
-	    });
+	  $scope.getAllHeroes = function() {
+	    $http.get('http://localhost:3000/api/heroes')
+	      .then(function(res) {
+	        console.log('success!');
+	        $scope.heroes = res.data;
+	      }, function(err) {
+	        console.log(err);
+	      });
+	  };
 
 	  $scope.createHero = function(hero) {
 	    $http.post('http://localhost:3000/api/heroes', hero)
-	      .then((res) => {
+	      .then(function(res) {
 	        $scope.heroes.push(res.data);
 	        $scope.newHero = null;
-	      }, (err) => {
+	      }, function(err) {
 	        console.log(err);
 	      });
-	  }
+	  };
 
 	  $scope.deleteHero = function(hero) {
 	    $http.delete('http://localhost:3000/api/heroes/' + hero._id)
-	      .then((res) => {
-	        $scope.heroes = $scope.heroes.filter((i) => i !== hero);
-	      }, (err) => {
-	        console.log(err)
-	      })
-	  }
+	      .then(function(res) {
+	        $scope.heroes = $scope.heroes.filter(function(i) { i !== hero });
+	      }, function(err) {
+	        console.log(err);
+	      });
+	  };
 
 	  $scope.updateHero = function(hero) {
 	    $http.put('http://localhost:3000/api/heroes/' + hero._id)
-	      .then((res) => {
+	      .then(function(res) {
 	        hero.editting = false;
-	      }, (err) => {
+	      }, function(err) {
 	        console.log(err);
 	        hero.editting = false;
 	      });
-	  }
-
+	  };
+	  $scope.getAllVillains = function() {
 	    $http.get('http://localhost:3000/api/villains')
-	    .then((res) => {
-	      console.log('success!');
-	      $scope.villains = res.data;
-	    }, (err) => {
-	      console.log(err);
-	    });
+	      .then(function(res) {
+	        console.log('success!');
+	        $scope.villains = res.data;
+	      }, function(err) {
+	        console.log(err);
+	      });
+	  };
 
 	  $scope.createVillain = function(villain) {
 	    $http.post('http://localhost:3000/api/villains', villain)
-	      .then((res) => {
+	      .then(function(res) {
 	        $scope.villains.push(res.data);
 	        $scope.newVillain = null;
-	      }, (err) => {
+	      }, function(err) {
 	        console.log(err);
-	      })
-	  }
+	      });
+	  };
 
 	  $scope.deleteVillain = function(villain) {
 	    $http.delete('http://localhost:3000/api/villains/' + villain._id)
-	      .then((res) => {
-	        $scope.villains = $scope.villains.filter((i) => i !== villain);
-	      }, (err) => {
-	        console.log(err)
-	      })
-	  }
+	      .then(function(res) {
+	        $scope.villains = $scope.villains.filter(function(i) { i !== villain });
+	      }, function(err) {
+	        console.log(err);
+	      });
+	  };
 
 	  $scope.updateVillain = function(villain) {
 	    $http.put('http://localhost:3000/api/villains/' + villain._id)
-	      .then((res) => {
+	      .then(function(res) {
 	        villain.editting = false;
-	      }, (err) => {
+	      }, function(err) {
 	        console.log(err);
 	        villain.editting = false;
 	      });
-	  }
-
+	  };
 	}]);
 
 

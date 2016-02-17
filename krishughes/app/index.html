@@ -5,7 +5,7 @@
 	<title>Heroes and Villains</title>
 </head>
 <body data-ng-app="supersApp" >
-	<main data-ng-controller="SupersController">
+	<main data-ng-controller="SupersController" data-ng-init="getAllHeroes(); getAllVillains()">
 		<h1>Heroes and Villains</h1>
 
 		<section>
@@ -39,7 +39,7 @@
       <h2>Villain List<h2>
 		  <h3>Modify and Delete Villains</h3>
       <ul>
-        <li data-ng-repeat="villain in villains">Name {{villain.name}}, Level {{villain.level}}
+        <li data-ng-repeat="villain in villains">Name: {{villain.name}}, Level: {{villain.level}}
           <button data-ng-click="deleteVillain(villain)">Delete Villain</button>
           <button data-ng-click="villain.editting = !villain.editting">Edit Villain</button>
           <form data-ng-if="villain.editting" data-ng-submit="updateVillain(villain)">
