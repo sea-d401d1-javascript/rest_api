@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Document</title>
+		<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+		<link rel="stylesheet" href="css/index.css">
+		<script src="bundle.js"></script>
+	</head>
+	<body data-ng-app="blogApp">
+		<div class="MainController" dat-ng-show="showAll">
+			<ul>
+				<li data-ng-click="showBlog = true">Blog</li>
+				<li data-ng-click="showBlog = false">New Post</li>
+			</ul>
+			
+			<!-- New Blog Controls -->
+			<div data-ng-show="!showBlog || showAll"
+				<section class="post-container" data-ng-controller="PostController">
+					<form data-ng-submit="createNewPost(newPost)">
+						<div class="new-post">
+							<div class="new-post-title">
+								<input class="input" placeholder="Title" data-ng-model="newPost.title">
+								</div>
+								<div class="new-post-content">
+								<textarea class="input" data-ng-model="newPost.content">
+								</textarea>
+								</div>
+								<input type="submit">
+							
+						</div>
+					</form>
+				</section>
+			</div>
+			<!-- Blog Container -->
+			<div data-ng-show="showBlog">
+				<section class="blog-container" data-ng-controller="BlogController" >
+					<div class="blog-inside">
+						
+						<div class="post" ng-repeat="post in allPosts">
+							<h3 class="title">{{post.title}}</h3>
+							<ul>
+								<li data-ng-click="editing = !editing">Edit</li>
+								<li data-ng-click="deletePost($index)">Delete</li>
+							</ul>
+							<section class="edit" data-ng-show="editing">
+								<form data-ng-submit="updatePost(post); editing=false">
+									<input class="input" data-ng-model="post.title">
+									<textarea class="input" data-ng-model="post.content"></textarea>
+									<input type="submit">
+								</form>
+							</section>
+							<p class="content">{{post.content}}</p>
+						</div>
+					</div>
+				</section>
+			</div>
+		</div>
+		<!-- Auth Box -->
+		<section class="auth-container" data-ng-controller="AuthController" ng-show="showAuthBox">
+			<!-- Login -->
+			
+			<section class="auth-box login-box" data-ng-show="login" >
+				<div data-ng-controller="LoginController">
+					<h2>Login</h2>
+					<form class="pure-form pure-form-stacked" data-ng-submit="login(userLoginData)">
+						<fieldset>
+							<input placeholder="email" class="input" type="email" name="email" ng-model="userLoginData.email" />
+							
+							<input placeholder="password" class="input" type="password" name="password" ng-model="userLoginData.password" />
+							
+							<button type="submit" class="pure-button pure-button-primary">Sign in</button>
+						</fieldset>
+					</form>
+				</div>
+				<p class="message" data-ng-click="login = false;">Need an acount? <a href="#" >Register</a></p>
+			</section>
+			
+			<!-- Register -->
+			
+			<section class="auth-box register-box" data-ng-show="!login">
+				<div data-ng-controller="RegisterController">
+					<h2>Register</h2>
+					<form class="pure-form pure-form-stacked" data-ng-submit="register(userRegisterData)">
+						<fieldset>
+							<input placeholder="email" class="input" type="email" name="email" ng-model="userRegisterData.email" />
+							
+							<input placeholder="password" class="input" type="password" name="password" ng-model="userRegisterData.password" />
+							<input placeholder="password, again" class="input" type="password" name="passwordCheck" ng-model="userRegisterData.passwordCheck" />
+							
+							<button type="submit" class="pure-button pure-button-primary">Register</button>
+						</fieldset>
+					</form>
+					
+				</div>
+				<p class="message" data-ng-click="login = true;">Already ahave an account? <a href="#">Login</a></p>
+			</section>
+			<!-- End Auth Box -->
+		</section>
+		<section>
+			
+		</section>
+	</body>
+</html>
