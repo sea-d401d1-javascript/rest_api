@@ -10,13 +10,9 @@ const Comment = require(__dirname + '/../models/blog').Comment;
 
 const userRouter = module.exports = exports = express.Router();
 
-
+// Register User
 userRouter.post('/register', jsonParser, (req, res) => {
-  if ((req.body.name.first || "").length > 2 && (req.body.name.last).length >
-    2) {
     var newUser = new User(req.body);
-    newUser.name.first = req.body.name.first;
-    newUser.name.last = req.body.name.last;
     newUser.authentication.email = req.body.authentication.email;
     newUser.hashPassword(req.body.authentication.password);
 
@@ -34,15 +30,16 @@ userRouter.post('/register', jsonParser, (req, res) => {
 
           res.status(200).json({
             msg: 'User Created',
-            token: newUser.generateToken()
+            token: newUser.generateToken(),
+            user: data
           });
         });
 
       }
     });
-  }
 });
 
+// Log user in
 userRouter.get('/login', basicHTTP, (req, res) => {
   User.findOne({
     "authentication.email": req.basicHTTP.email
@@ -58,20 +55,21 @@ userRouter.get('/login', basicHTTP, (req, res) => {
       });
     }
     res.json({
-      token: user.generateToken()
+      token: user.generateToken(),
+      user: user
     });
   });
 });
 
-userRouter.post('/:id/post', authRequired, jsonParser, (req, res) => {
-  if (req.body.content && req.body.title && req.body.tags) {
-
+// Create New Post
+userRouter.post('/post', authRequired, jsonParser, (req, res) => {
+  if (req.body.content && req.body.title) {
     var newPost = new Post();
     newPost.title = req.body.title;
     newPost.date = new Date();
     newPost.content = req.body.content;
     newPost.tags = req.body.tags;
-    newPost.author_id = req.params.id;
+    newPost.author_id = req.user._id;
 
     newPost.save((err, data) => {
       if (err) return console.log('Error adding post');
@@ -84,32 +82,35 @@ userRouter.post('/:id/post', authRequired, jsonParser, (req, res) => {
   }
 });
 
-
-userRouter.get('/users/post/:id', authRequired, (req, res) => {
+// Get all posts 
+userRouter.get('/all', authRequired, (req, res) => {
   Post.find({
-    author_id: req.params.id
+    author_id: req.user.id
   }, (err, data) => {
-    if (err) {
+    if(err) {
       return res.status(500).json({
-        msg: 'Error loading profile'
-      });
+        msg: 'There was an error'
+      })
     }
-
+    if(!data) {
+       return res.status(300).json({
+        msg: 'User has no posts'
+      })
+    }
     res.status(200).json({
-      msg: 'Profile retreived',
-      data: data
-    });
-
+      posts: data
+    })
   })
-});
+})
 
-userRouter.get('/post/:id', authRequired, (req, res) => {
+// Get post by id
+userRouter.get('/posts/:id', authRequired, (req, res) => {
   Post.findOne({
     _id: req.params.id
   }, (err, data) => {
     if (err) {
       return res.status(500).json({
-        msg: 'Error retreiving post'
+        msg: 'Error updating post'
       });
     }
 
@@ -120,26 +121,67 @@ userRouter.get('/post/:id', authRequired, (req, res) => {
   })
 });
 
-userRouter.post('/post/:id', authRequired, jsonParser, (req, res) => {
-  if (req.body.content && req.body.author_id) {
-    var newComment = new Comment();
-
-    newComment.date = new Date();
-    newComment.vote = req.body.vote;
-    newComment.author_id = req.body.author_id;
-    newComment.post_id = req.params.id;
-
-    newComment.save((err, data) => {
-      if (err) {
-        return res.status(500).json({
-          msg: 'Error creating comment'
-        })
-      }
-
-      res.status(200).json({
-        msg: 'Comment Created',
-        data: data
+// Edit post by id
+userRouter.put('/posts/:id', authRequired, jsonParser, (req, res) => {
+  console.log(req.body);
+  console.log(req.params.id);
+  Post.update({
+    _id: req.params.id
+  }, req.body, (err, data) => {
+    if (err) {
+      return res.status(500).json({
+        msg: 'Error editting post'
       });
+    }
+
+    res.status(200).json({
+      msg: 'Post Edited',
+      data: data
     });
-  }
+  })
 });
+
+
+// Edit post by id
+userRouter.delete('/posts/:id', authRequired, (req, res) => {
+  Post.remove({
+    _id: req.params.id,
+    author_id: req.user._id
+  }, (err, data) => {
+    if (err) {
+      return res.status(500).json({
+        msg: 'Error editting post'
+      });
+    }
+
+    res.status(200).json({
+      msg: 'Post Deleted',
+      data: data
+    });
+  })
+});
+
+
+// userRouter.post('/post/:id', authRequired, jsonParser, (req, res) => {
+//   if (req.body.content && req.body.author_id) {
+//     var newComment = new Comment();
+
+//     newComment.date = new Date();
+//     newComment.vote = req.body.vote;
+//     newComment.author_id = req.body.author_id;
+//     newComment.post_id = req.params.id;
+
+//     newComment.save((err, data) => {
+//       if (err) {
+//         return res.status(500).json({
+//           msg: 'Error creating comment'
+//         })
+//       }
+
+//       res.status(200).json({
+//         msg: 'Comment Created',
+//         data: data
+//       });
+//     });
+//   }
+// });

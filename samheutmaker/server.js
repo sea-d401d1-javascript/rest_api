@@ -6,7 +6,9 @@ const app = express();
 
 const PORT = process.env.PORT || 8080;
 
-mongoose.connect('mongodb://localhost/db/blog');
+mongoose.connect('localhost:27017');
+
+app.use(express.static(__dirname + '/www/build'));
 
 
 const User = require(__dirname + '/models/blog').User;
