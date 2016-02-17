@@ -1,6 +1,6 @@
 'use strict';
 
-export default function($scope, $http) {
+export default ($scope, $http) => {
   $scope.kittens = [];
   $scope.loaded = false;
   $scope.newKitten = {};
@@ -15,10 +15,11 @@ export default function($scope, $http) {
         console.log(err);
       });
   };
-  $scope.addKitten = () => {
-    $http.post('http://localhost:3000/api/kittens', $scope.newKitten)
+  $scope.addKitten = (newKitten) => {
+    $http.post('http://localhost:3000/api/kittens', newKitten)
       .then((res) => {
         $scope.kittens.push(res.data);
+        $scope.newKitten = null;
       })
       .catch((err) => {
         console.log(err);
@@ -42,4 +43,4 @@ export default function($scope, $http) {
         console.log(err);
       });
   };
-}
+};

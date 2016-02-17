@@ -2,3 +2,4 @@
 node_modules
 **/*.log
 build/
+test/client/test_bundle.js

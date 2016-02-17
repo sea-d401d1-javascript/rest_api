@@ -1,6 +1,6 @@
 'use strict';
 
-export default function($scope, $http) {
+export default ($scope, $http) => {
   $scope.internetz = [];
   $scope.loaded = false;
   $scope.newInternet = {};
@@ -13,10 +13,11 @@ export default function($scope, $http) {
       })
       .catch((err) => console.log(err));
   };
-  $scope.addInternet = () => {
-    $http.post('http://localhost:3000/api/internetz', $scope.newInternet)
+  $scope.addInternet = (newInternet) => {
+    $http.post('http://localhost:3000/api/internetz', newInternet)
       .then((res) => {
         $scope.internetz.push(res.data);
+        $scope.newInternet = null;
       })
       .catch((err) => console.log(err));
   };
@@ -35,4 +36,4 @@ export default function($scope, $http) {
       })
       .catch((err) => console.log(err));
   };
-}
+};

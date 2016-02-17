@@ -1,6 +1,6 @@
 'use strict';
 
-export default function($scope, $http) {
+export default ($scope, $http) => {
   $scope.kpi = '';
 
   $scope.getKPI = () => {
@@ -10,4 +10,4 @@ export default function($scope, $http) {
       })
       .catch((err) => console.log(err));
   };
-}
+};

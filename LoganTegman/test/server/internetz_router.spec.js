@@ -5,10 +5,10 @@ const expect = chai.expect;
 const mongoose = require('mongoose');
 process.env.MONGOLAB_URI = 'mongodb://localhost/internetz_app_test';
 /* eslint-disable no-unused-vars */
-const server = require(__dirname + '/../server');
+const server = require(__dirname + '/../../server');
 /* eslint-enable no-unused-vars */
-const Internetz = require(__dirname + '/../models/internetz');
-const User = require(__dirname + '/../models/user');
+const Internetz = require(__dirname + '/../../models/internetz');
+const User = require(__dirname + '/../../models/user');
 chai.use(require('chai-http'));
 
 describe('internetz api', () => {
