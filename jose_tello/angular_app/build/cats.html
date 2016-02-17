@@ -5,7 +5,7 @@
   <title>CATS</title>
 </head>
 <body data-ng-app="catsApp">
-  <main data-ng-controller="catsController">
+  <main data-ng-controller="CatsController" data-ng-init="getAll()">
     <h1>Binder Full of Cats</h1>
     <ul>
       <li data-ng-repeat="cat in cats">{{cat.name}}, {{cat.color}}, {{cat.lives}}

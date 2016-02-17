@@ -4,45 +4,20 @@ const angular = require('angular');
 
 const catsApp = angular.module('catsApp', []);
 
-catsApp.controller('catsController', ['$scope', '$http', ($scope, $http) => {
+catsApp.controller('CatsController', ['$scope', '$http', function($scope, $http) {
   $scope.cats = [];
 
-  $http.get('http://localhost:3000/app/cats')
+  $scope.getAll = function() {
+    $http.get('http://localhost:3000/app/cats')
     .then((res) => {
       console.log('GET request success!');
       $scope.cats = res.data;
     }, (err) => {
       console.log(err);
     });
+  };
 
-  // Create a new user object, /signup with user, then /signin
-  // var user = {
-  //   username: 'test_user',
-  //   authentication: {
-  //     email: 'test@user.com',
-  //     password: 'samplepass'
-  //   }
-  // };
-  //
-  // let token; // Instantiate a token variable to set for later
-  //
-  // $http.post('http://localhost:3000/app/signup', user)
-  //   .then((res) => {
-  //     token = res.body.token;
-  //     console.log(token);
-  //     console.log('Sign Up route accessed.');
-  //   }, (err) => {
-  //     console.log(err);
-  //   });
-  // $http.get('http://localhost:3000/app/signin')
-  //   .then((res) => {
-  //     console.log('Test user signed in successfully.');
-  //   }, (err) => {
-  //     console.log(err);
-  //   });
-  // End /signup & /signin (for authentication)
-
-  $scope.createCat = (cat) => {
+  $scope.createCat = function(cat) {
     // $http.defaults.headers.post.token = token;
     $http.post('http://localhost:3000/app/cats', cat)
       .then((res) => {
@@ -53,7 +28,7 @@ catsApp.controller('catsController', ['$scope', '$http', ($scope, $http) => {
       });
   };
 
-  $scope.deleteCat = (cat) => {
+  $scope.deleteCat = function(cat) {
     $http.delete('http://localhost:3000/app/cats/' + cat._id)
       .then((res) => {
         $scope.cats = $scope.cats.filter((i) => i !== cat);
@@ -62,7 +37,7 @@ catsApp.controller('catsController', ['$scope', '$http', ($scope, $http) => {
       });
   };
 
-  $scope.updateCat = (cat) => {
+  $scope.updateCat = function(cat) {
     $http.put('http://localhost:3000/app/cats/' + cat._id)
       .then((res) => {
         $scope.cats[$scope.cats.indexOf(cat)] = cat;
