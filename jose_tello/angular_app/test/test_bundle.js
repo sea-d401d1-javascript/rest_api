@@ -53,7 +53,7 @@
 
 	__webpack_require__(2);
 	var angular = __webpack_require__(3);
-	__webpack_require__(5);
+	__webpack_require__(8);
 
 	describe('cats controller', () => {
 	  var $httpBackend;
@@ -104,26 +104,23 @@
 	    });
 
 	    it('should update an existing cat', () => {
-	      $scope.cats[0] = { name: 'schrodingers cat', color: 'orange', lives: 9, _id: 1 };
-
-	      $httpBackend.expectPUT('http://localhost:3000/app/cats/', $scope.cats[0]._id).respond(200);
-	      $scope.updateCat($scope.cats[0]);
+	      var testCat = { name: 'schrodingers cat', editing: true, _id: 1 };
+	      $scope.cats.push(testCat);
+	      $httpBackend.expectPUT('http://localhost:3000/app/cats/1', testCat).respond(200);
+	      $scope.updateCat(testCat);
 	      $httpBackend.flush();
-	      expect($scope.cats[0].name).toBe('schrodingers cat');
-	      expect($scope.cats[0].color).toBe('orange');
-	      expect($scope.cats[0]._id).toBe(1);
+	      expect(testCat.editing).toBe(false);
+	      expect($scope.cats[0].editing).toBe(false);
 	    });
 
 	    it('should delete an existing cat', () => {
-	      $scope.cats[0] = { name: 'test cat', color: 'blue', _id: 1 };
-	      $scope.cats[1] = { name: 'another cat', color: 'orange', _id: 2 };
-
+	      var deleteCat = { name: 'deleted cat', color: 'blue', _id: 1 };
+	      $scope.cats.push(deleteCat);
+	      expect($scope.cats.indexOf(deleteCat)).not.toBe(-1);
 	      $httpBackend.expectDELETE('http://localhost:3000/app/cats/1').respond(200);
-	      $scope.deleteCat($scope.cats[0]);
+	      $scope.deleteCat(deleteCat);
 	      $httpBackend.flush();
-	      expect($scope.cats[0].name).toBe('another cat');
-	      expect($scope.cats[0].color).toBe('orange');
-	      expect($scope.cats[0]._id).toBe(2);
+	      expect($scope.cats.indexOf(deleteCat)).toBe(-1);
 	    });
 
 	  });
@@ -138,49 +135,40 @@
 	'use strict';
 
 	const angular = __webpack_require__(3);
-
 	const catsApp = angular.module('catsApp', []);
+	__webpack_require__(5)(catsApp);
 
-	catsApp.controller('CatsController', ['$scope', '$http', function($scope, $http) {
+	catsApp.controller('CatsController', ['$scope', '$http', 'Resource', function($scope, $http, Resource) {
 	  $scope.cats = [];
+	  var catsService = Resource('/cats');
 
 	  $scope.getAll = function() {
-	    $http.get('http://localhost:3000/app/cats')
-	    .then((res) => {
-	      console.log('GET request success!');
-	      $scope.cats = res.data;
-	    }, (err) => {
-	      console.log(err);
+	    catsService.getAll(function(err, res) {
+	      if (err) return console.log(err);
+	      $scope.cats = res;
 	    });
 	  };
 
 	  $scope.createCat = function(cat) {
-	    // $http.defaults.headers.post.token = token;
-	    $http.post('http://localhost:3000/app/cats', cat)
-	      .then((res) => {
-	        $scope.cats.push(res.data);
-	        $scope.newCat = null;
-	      }, (err) => {
-	        console.log(err);
-	      });
+	    catsService.create(cat, function(err, res) {
+	      if (err) return console.log(err);
+	      $scope.cats.push(res);
+	      $scope.newCat = null;
+	    });
 	  };
 
 	  $scope.deleteCat = function(cat) {
-	    $http.delete('http://localhost:3000/app/cats/' + cat._id)
-	      .then((res) => {
-	        $scope.cats = $scope.cats.filter((i) => i !== cat);
-	      }, (err) => {
-	        console.log(err);
-	      });
+	    catsService.delete(cat, function(err, res) {
+	      if (err) return console.log(err);
+	      $scope.cats.splice($scope.cats.indexOf(cat), 1);
+	    });
 	  };
 
 	  $scope.updateCat = function(cat) {
-	    $http.put('http://localhost:3000/app/cats/' + cat._id)
-	      .then((res) => {
-	        $scope.cats[$scope.cats.indexOf(cat)] = cat;
-	      }, (err) => {
-	        console.log(err);
-	      });
+	    catsService.update(cat, function(err, res) {
+	      cat.editing = false;
+	      if (err) return console.log(err);
+	    });
 	  };
 	}]);
 
@@ -30628,6 +30616,68 @@
 
 /***/ },
 /* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	const handleSuccess = __webpack_require__(6);
+	const handleFailure = __webpack_require__(7);
+
+	module.exports = exports = function(app) {
+	  app.factory('Resource', ['$http', function($http) {
+	    var Resource = function(resourceName) {
+	      this.resourceName = resourceName;
+	    };
+
+	    Resource.prototype.getAll = function(cb) {
+	      $http.get('http://localhost:3000/app' + this.resourceName)
+	        .then(handleSuccess(cb), handleFailure(cb));
+	    };
+
+	    Resource.prototype.create = function(data, cb) {
+	      $http.post('http://localhost:3000/app' + this.resourceName, data)
+	        .then(handleSuccess(cb), handleFailure(cb));
+	    };
+
+	    Resource.prototype.update = function(data, cb) {
+	      $http.put('http://localhost:3000/app' + this.resourceName + '/' + data._id, data)
+	        .then(handleSuccess(cb), handleFailure(cb));
+	    };
+
+	    Resource.prototype.delete = function(data, cb) {
+	      $http.delete('http://localhost:3000/app' + this.resourceName + '/' + data._id)
+	        .then(handleSuccess(cb), handleFailure(cb));
+	    };
+
+	    return function(resourceName) {
+	      return new Resource(resourceName);
+	    };
+	  }]);
+	};
+
+
+/***/ },
+/* 6 */
+/***/ function(module, exports) {
+
+	module.exports = exports = function(cb) {
+	  return function(res) {
+	    cb(null, res.data);
+	  };
+	};
+
+
+/***/ },
+/* 7 */
+/***/ function(module, exports) {
+
+	module.exports = exports = function(cb) {
+	  return function(res) {
+	    cb(res);
+	  };
+	};
+
+
+/***/ },
+/* 8 */
 /***/ function(module, exports) {
 
 	/**

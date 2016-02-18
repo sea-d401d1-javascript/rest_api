@@ -10,7 +10,7 @@
     <ul>
       <li data-ng-repeat="cat in cats">{{cat.name}}, {{cat.color}}, {{cat.lives}}
         <button data-ng-click="deleteCat(cat)">DELETE</button>
-        <button data-ng-click="cat.modify = !cat.modify">UPDATE</button>
+        <button data-ng-click="cat.editing = !cat.editing">UPDATE</button>
         <form data-ng-if="cat.modify" data-ng-submit="updateCat(cat)">
           <input data-ng-model="cat.name" type="text">
           <input data-ng-model="cat.color" type="text">
