@@ -45,156 +45,67 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(1);
+	__webpack_require__(7);
+
+	__webpack_require__(8);
+	__webpack_require__(9);
 
 
 /***/ },
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(2);
-	var angular = __webpack_require__(3);
-	__webpack_require__(5);
+	'use strict';
 
-	describe('cats controller', () => {
-	  var $httpBackend;
-	  var $scope;
-	  var $ControllerConstructor;
+	const angular = __webpack_require__(2);
+	const catsApp = angular.module('catsApp', []);
+	__webpack_require__(4)(catsApp);
 
-	  beforeEach(angular.mock.module('catsApp'));
+	catsApp.controller('CatsController', ['$scope', '$http', 'catResource', function($scope, $http, Resource) {
+	  $scope.cats = [];
+	  var catsService = Resource('/cats');
 
-	  beforeEach(angular.mock.inject(function($rootScope, $controller) {
-	    $ControllerConstructor = $controller;
-	    $scope = $rootScope.$new();
-	  }));
-
-	  it('should be able to construct a controller', () => {
-	    var catsController = $ControllerConstructor('CatsController', { $scope });
-	    expect(typeof catsController).toBe('object');
-	    expect(Array.isArray($scope.cats)).toBe(true);
-	    expect(typeof $scope.getAll).toBe('function');
-	  });
-
-	  describe('REST requests', () => {
-	    beforeEach(angular.mock.inject(function(_$httpBackend_) {
-	      $httpBackend = _$httpBackend_;
-	      $ControllerConstructor('CatsController', { $scope });
-	    }));
-
-	    afterEach(() => {
-	      $httpBackend.verifyNoOutstandingExpectation();
-	      $httpBackend.verifyNoOutstandingRequest();
+	  $scope.getAll = function() {
+	    catsService.getAll(function(err, res) {
+	      if (err) return console.log(err);
+	      $scope.cats = res;
 	    });
+	  };
 
-	    it('should make a GET request to /app/cats', () => {
-	      $httpBackend.expectGET('http://localhost:3000/app/cats').respond(200, [{ name: 'test cat' }]);
-	      $scope.getAll();
-	      $httpBackend.flush();
-	      expect($scope.cats.length).toBe(1);
-	      expect($scope.cats[0].name).toBe('test cat');
+	  $scope.createCat = function(cat) {
+	    catsService.create(cat, function(err, res) {
+	      if (err) return console.log(err);
+	      $scope.cats.push(res);
+	      $scope.newCat = null;
 	    });
+	  };
 
-	    it('should make a POST request to /app/cats', () => {
-	      $httpBackend.expectPOST('http://localhost:3000/app/cats', { name: 'post cat' }).respond(200, { name: 'response cat' });
-	      $scope.newCat = { name: 'new cat' };
-	      $scope.createCat({ name: 'post cat' });
-	      $httpBackend.flush();
-	      expect($scope.cats.length).toBe(1);
-	      expect($scope.newCat).toBe(null);
-	      expect($scope.cats[0].name).toBe('response cat');
+	  $scope.deleteCat = function(cat) {
+	    catsService.delete(cat, function(err, res) {
+	      if (err) return console.log(err);
+	      $scope.cats.splice($scope.cats.indexOf(cat), 1);
 	    });
+	  };
 
-	    it('should update an existing cat', () => {
-	      $scope.cats[0] = { name: 'schrodingers cat', color: 'orange', lives: 9, _id: 1 };
-
-	      $httpBackend.expectPUT('http://localhost:3000/app/cats/', $scope.cats[0]._id).respond(200);
-	      $scope.updateCat($scope.cats[0]);
-	      $httpBackend.flush();
-	      expect($scope.cats[0].name).toBe('schrodingers cat');
-	      expect($scope.cats[0].color).toBe('orange');
-	      expect($scope.cats[0]._id).toBe(1);
+	  $scope.updateCat = function(cat) {
+	    catsService.update(cat, function(err, res) {
+	      cat.editing = false;
+	      if (err) return console.log(err);
 	    });
-
-	    it('should delete an existing cat', () => {
-	      $scope.cats[0] = { name: 'test cat', color: 'blue', _id: 1 };
-	      $scope.cats[1] = { name: 'another cat', color: 'orange', _id: 2 };
-
-	      $httpBackend.expectDELETE('http://localhost:3000/app/cats/1').respond(200);
-	      $scope.deleteCat($scope.cats[0]);
-	      $httpBackend.flush();
-	      expect($scope.cats[0].name).toBe('another cat');
-	      expect($scope.cats[0].color).toBe('orange');
-	      expect($scope.cats[0]._id).toBe(2);
-	    });
-
-	  });
-
-	});
+	  };
+	}]);
 
 
 /***/ },
 /* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	const angular = __webpack_require__(3);
-
-	const catsApp = angular.module('catsApp', []);
-
-	catsApp.controller('CatsController', ['$scope', '$http', function($scope, $http) {
-	  $scope.cats = [];
-
-	  $scope.getAll = function() {
-	    $http.get('http://localhost:3000/app/cats')
-	    .then((res) => {
-	      console.log('GET request success!');
-	      $scope.cats = res.data;
-	    }, (err) => {
-	      console.log(err);
-	    });
-	  };
-
-	  $scope.createCat = function(cat) {
-	    // $http.defaults.headers.post.token = token;
-	    $http.post('http://localhost:3000/app/cats', cat)
-	      .then((res) => {
-	        $scope.cats.push(res.data);
-	        $scope.newCat = null;
-	      }, (err) => {
-	        console.log(err);
-	      });
-	  };
-
-	  $scope.deleteCat = function(cat) {
-	    $http.delete('http://localhost:3000/app/cats/' + cat._id)
-	      .then((res) => {
-	        $scope.cats = $scope.cats.filter((i) => i !== cat);
-	      }, (err) => {
-	        console.log(err);
-	      });
-	  };
-
-	  $scope.updateCat = function(cat) {
-	    $http.put('http://localhost:3000/app/cats/' + cat._id)
-	      .then((res) => {
-	        $scope.cats[$scope.cats.indexOf(cat)] = cat;
-	      }, (err) => {
-	        console.log(err);
-	      });
-	  };
-	}]);
-
-
-/***/ },
-/* 3 */
-/***/ function(module, exports, __webpack_require__) {
-
-	__webpack_require__(4);
+	__webpack_require__(3);
 	module.exports = angular;
 
 
 /***/ },
-/* 4 */
+/* 3 */
 /***/ function(module, exports) {
 
 	/**
@@ -30627,7 +30538,69 @@
 	!window.angular.$$csp().noInlineStyle && window.angular.element(document.head).prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>');
 
 /***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	const handleSuccess = __webpack_require__(5);
+	const handleFailure = __webpack_require__(6);
+
+	module.exports = exports = function(app) {
+	  app.factory('catResource', ['$http', function($http) {
+	    var Resource = function(resourceName) {
+	      this.resourceName = resourceName;
+	    };
+
+	    Resource.prototype.getAll = function(cb) {
+	      $http.get('http://localhost:3000/app' + this.resourceName)
+	        .then(handleSuccess(cb), handleFailure(cb));
+	    };
+
+	    Resource.prototype.create = function(data, cb) {
+	      $http.post('http://localhost:3000/app' + this.resourceName, data)
+	        .then(handleSuccess(cb), handleFailure(cb));
+	    };
+
+	    Resource.prototype.update = function(data, cb) {
+	      $http.put('http://localhost:3000/app' + this.resourceName + '/' + data._id, data)
+	        .then(handleSuccess(cb), handleFailure(cb));
+	    };
+
+	    Resource.prototype.delete = function(data, cb) {
+	      $http.delete('http://localhost:3000/app' + this.resourceName + '/' + data._id)
+	        .then(handleSuccess(cb), handleFailure(cb));
+	    };
+
+	    return function(resourceName) {
+	      return new Resource(resourceName);
+	    };
+	  }]);
+	};
+
+
+/***/ },
 /* 5 */
+/***/ function(module, exports) {
+
+	module.exports = exports = function(cb) {
+	  return function(res) {
+	    cb(null, res.data);
+	  };
+	};
+
+
+/***/ },
+/* 6 */
+/***/ function(module, exports) {
+
+	module.exports = exports = function(cb) {
+	  return function(res) {
+	    cb(res);
+	  };
+	};
+
+
+/***/ },
+/* 7 */
 /***/ function(module, exports) {
 
 	/**
@@ -33472,6 +33445,130 @@
 
 
 	})(window, window.angular);
+
+
+/***/ },
+/* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var angular = __webpack_require__(2);
+
+	describe('resource service', () => {
+	  beforeEach(angular.mock.module('catsApp'));
+
+	  var $httpBackend;
+	  var Resource;
+
+	  beforeEach(angular.mock.inject(function(_$httpBackend_, catResource) {
+	    $httpBackend = _$httpBackend_;
+	    Resource = catResource;
+	  }));
+
+	  it('should be a service', () => {
+	    expect(typeof Resource).toBe('function');
+	  });
+
+	  it('should make a successful GET request via the service', () => {
+	    var res = new Resource('/cats');
+	    $httpBackend.expectGET('http://localhost:3000/app/cats').respond(200, { name: 'the GET bear', _id: 1 });
+	    res.getAll(function(err, res) {
+	      expect(res.name).toBe('the GET bear');
+	    });
+	    $httpBackend.flush();
+	  });
+
+	  it('should make a successful POST request via the service', () => {
+	    var res = new Resource('/cats');
+	    $httpBackend.expectPOST({ name: 'the POST bear', _id: 2 }, 'http://localhost:3000/app/cats').respond(200, { name: 'the response bear', _id: 3 });
+	    res.create(function(err, res) {
+	      expect(res.name).toBe('the response bear');
+	      expect(err).toBe(null);
+	    });
+	    $httpBackend.flush();
+	  });
+
+	});
+
+
+/***/ },
+/* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(1);
+	var angular = __webpack_require__(2);
+	__webpack_require__(7);
+
+	describe('cats controller', () => {
+	  var $httpBackend;
+	  var $scope;
+	  var $ControllerConstructor;
+
+	  beforeEach(angular.mock.module('catsApp'));
+
+	  beforeEach(angular.mock.inject(function($rootScope, $controller) {
+	    $ControllerConstructor = $controller;
+	    $scope = $rootScope.$new();
+	  }));
+
+	  it('should be able to construct a controller', () => {
+	    var catsController = $ControllerConstructor('CatsController', { $scope });
+	    expect(typeof catsController).toBe('object');
+	    expect(Array.isArray($scope.cats)).toBe(true);
+	    expect(typeof $scope.getAll).toBe('function');
+	  });
+
+	  describe('REST requests', () => {
+	    beforeEach(angular.mock.inject(function(_$httpBackend_) {
+	      $httpBackend = _$httpBackend_;
+	      $ControllerConstructor('CatsController', { $scope });
+	    }));
+
+	    afterEach(() => {
+	      $httpBackend.verifyNoOutstandingExpectation();
+	      $httpBackend.verifyNoOutstandingRequest();
+	    });
+
+	    it('should make a GET request to /app/cats', () => {
+	      $httpBackend.expectGET('http://localhost:3000/app/cats').respond(200, [{ name: 'test cat' }]);
+	      $scope.getAll();
+	      $httpBackend.flush();
+	      expect($scope.cats.length).toBe(1);
+	      expect($scope.cats[0].name).toBe('test cat');
+	    });
+
+	    it('should make a POST request to /app/cats', () => {
+	      $httpBackend.expectPOST('http://localhost:3000/app/cats', { name: 'post cat' }).respond(200, { name: 'response cat' });
+	      $scope.newCat = { name: 'new cat' };
+	      $scope.createCat({ name: 'post cat' });
+	      $httpBackend.flush();
+	      expect($scope.cats.length).toBe(1);
+	      expect($scope.newCat).toBe(null);
+	      expect($scope.cats[0].name).toBe('response cat');
+	    });
+
+	    it('should update an existing cat', () => {
+	      var testCat = { name: 'schrodingers cat', editing: true, _id: 1 };
+	      $scope.cats.push(testCat);
+	      $httpBackend.expectPUT('http://localhost:3000/app/cats/1', testCat).respond(200);
+	      $scope.updateCat(testCat);
+	      $httpBackend.flush();
+	      expect(testCat.editing).toBe(false);
+	      expect($scope.cats[0].editing).toBe(false);
+	    });
+
+	    it('should delete an existing cat', () => {
+	      var deleteCat = { name: 'deleted cat', color: 'blue', _id: 1 };
+	      $scope.cats.push(deleteCat);
+	      expect($scope.cats.indexOf(deleteCat)).not.toBe(-1);
+	      $httpBackend.expectDELETE('http://localhost:3000/app/cats/1').respond(200);
+	      $scope.deleteCat(deleteCat);
+	      $httpBackend.flush();
+	      expect($scope.cats.indexOf(deleteCat)).toBe(-1);
+	    });
+
+	  });
+
+	});
 
 
 /***/ }

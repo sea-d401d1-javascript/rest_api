@@ -51,26 +51,23 @@ describe('cats controller', () => {
     });
 
     it('should update an existing cat', () => {
-      $scope.cats[0] = { name: 'schrodingers cat', color: 'orange', lives: 9, _id: 1 };
-
-      $httpBackend.expectPUT('http://localhost:3000/app/cats/', $scope.cats[0]._id).respond(200);
-      $scope.updateCat($scope.cats[0]);
+      var testCat = { name: 'schrodingers cat', editing: true, _id: 1 };
+      $scope.cats.push(testCat);
+      $httpBackend.expectPUT('http://localhost:3000/app/cats/1', testCat).respond(200);
+      $scope.updateCat(testCat);
       $httpBackend.flush();
-      expect($scope.cats[0].name).toBe('schrodingers cat');
-      expect($scope.cats[0].color).toBe('orange');
-      expect($scope.cats[0]._id).toBe(1);
+      expect(testCat.editing).toBe(false);
+      expect($scope.cats[0].editing).toBe(false);
     });
 
     it('should delete an existing cat', () => {
-      $scope.cats[0] = { name: 'test cat', color: 'blue', _id: 1 };
-      $scope.cats[1] = { name: 'another cat', color: 'orange', _id: 2 };
-
+      var deleteCat = { name: 'deleted cat', color: 'blue', _id: 1 };
+      $scope.cats.push(deleteCat);
+      expect($scope.cats.indexOf(deleteCat)).not.toBe(-1);
       $httpBackend.expectDELETE('http://localhost:3000/app/cats/1').respond(200);
-      $scope.deleteCat($scope.cats[0]);
+      $scope.deleteCat(deleteCat);
       $httpBackend.flush();
-      expect($scope.cats[0].name).toBe('another cat');
-      expect($scope.cats[0].color).toBe('orange');
-      expect($scope.cats[0]._id).toBe(2);
+      expect($scope.cats.indexOf(deleteCat)).toBe(-1);
     });
 
   });
