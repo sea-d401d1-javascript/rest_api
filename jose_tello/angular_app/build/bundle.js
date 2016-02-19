@@ -50,7 +50,7 @@
 	const catsApp = angular.module('catsApp', []);
 	__webpack_require__(3)(catsApp);
 
-	catsApp.controller('CatsController', ['$scope', '$http', 'Resource', function($scope, $http, Resource) {
+	catsApp.controller('CatsController', ['$scope', '$http', 'catResource', function($scope, $http, Resource) {
 	  $scope.cats = [];
 	  var catsService = Resource('/cats');
 
@@ -30534,7 +30534,7 @@
 	const handleFailure = __webpack_require__(5);
 
 	module.exports = exports = function(app) {
-	  app.factory('Resource', ['$http', function($http) {
+	  app.factory('catResource', ['$http', function($http) {
 	    var Resource = function(resourceName) {
 	      this.resourceName = resourceName;
 	    };

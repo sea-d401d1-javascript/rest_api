@@ -2,7 +2,7 @@ const handleSuccess = require(__dirname + '/handle_success');
 const handleFailure = require(__dirname + '/handle_failure');
 
 module.exports = exports = function(app) {
-  app.factory('Resource', ['$http', function($http) {
+  app.factory('catResource', ['$http', function($http) {
     var Resource = function(resourceName) {
       this.resourceName = resourceName;
     };

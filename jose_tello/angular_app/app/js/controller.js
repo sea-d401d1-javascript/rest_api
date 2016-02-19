@@ -4,7 +4,7 @@ const angular = require('angular');
 const catsApp = angular.module('catsApp', []);
 require('./services/resource_service')(catsApp);
 
-catsApp.controller('CatsController', ['$scope', '$http', 'Resource', function($scope, $http, Resource) {
+catsApp.controller('CatsController', ['$scope', '$http', 'catResource', function($scope, $http, Resource) {
   $scope.cats = [];
   var catsService = Resource('/cats');
 
