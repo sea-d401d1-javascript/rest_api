@@ -14,8 +14,8 @@
       <ul>
         <li data-ng-repeat="hero in heroes">Name: {{hero.name}}, Level: {{hero.level}}
           <button data-ng-click="deleteHero(hero)">Delete Hero</button>
-          <button data-ng-click="hero.editting = !hero.editting">Edit Hero</button>
-          <form data-ng-if="hero.editting" data-ng-submit="updateHero(hero)">
+          <button data-ng-click="hero.editing = !hero.editing">Edit Hero</button>
+          <form data-ng-if="hero.editing" data-ng-submit="updateHero(hero)">
             <input data-ng-model="hero.name" type="text"/>
             <input data-ng-model="hero.level" type="text"/>
             <button type="submit">Update</button>
@@ -41,8 +41,8 @@
       <ul>
         <li data-ng-repeat="villain in villains">Name: {{villain.name}}, Level: {{villain.level}}
           <button data-ng-click="deleteVillain(villain)">Delete Villain</button>
-          <button data-ng-click="villain.editting = !villain.editting">Edit Villain</button>
-          <form data-ng-if="villain.editting" data-ng-submit="updateVillain(villain)">
+          <button data-ng-click="villain.editing = !villain.editing">Edit Villain</button>
+          <form data-ng-if="villain.editing" data-ng-submit="updateVillain(villain)">
             <input data-ng-model="villain.name" type="text"/>
             <input data-ng-model="villain.level" type="text"/>
             <button type="submit">Update</button>

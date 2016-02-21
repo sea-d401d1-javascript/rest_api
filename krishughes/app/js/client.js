@@ -1,85 +1,72 @@
 const angular = require('angular');
-
 const supersApp = angular.module('supersApp', []);
+require(__dirname + '/services/resource_service')(supersApp);
+require(__dirname + '/services/cf_store')(supersApp);
 
-supersApp.controller('SupersController', ['$scope', '$http', function($scope, $http) {
+supersApp.controller('SupersController', ['$scope', '$http', 'cfResource', 'cfStore',
+  function($scope, $http, Resource, cfStore) {
+
+  cfStore.set('greeting', 'hello world');
   $scope.heroes = [];
   $scope.villains = [];
+  var heroService = Resource('/heroes');
+  var villainService = Resource('/villains');
 
   $scope.getAllHeroes = function() {
-    $http.get('http://localhost:3000/api/heroes')
-      .then(function(res) {
-        console.log('success!');
-        $scope.heroes = res.data;
-      }, function(err) {
-        console.log(err);
-      });
+    heroService.getAll(function(err, res) {
+      if (err) return console.log(err);
+      $scope.heroes = res;
+    });
   };
 
   $scope.createHero = function(hero) {
-    $http.post('http://localhost:3000/api/heroes', hero)
-      .then(function(res) {
-        $scope.heroes.push(res.data);
-        $scope.newHero = null;
-      }, function(err) {
-        console.log(err);
-      });
+    heroService.create(hero, function(err, res) {
+      if (err) return console.log(err);
+      $scope.heroes.push(res);
+      $scope.newHero = null;
+    });
   };
 
   $scope.deleteHero = function(hero) {
-    $http.delete('http://localhost:3000/api/heroes/' + hero._id)
-      .then(function(res) {
-        $scope.heroes = $scope.heroes.filter(function(i) { i !== hero });
-      }, function(err) {
-        console.log(err);
-      });
+    heroService.delete(hero, function(err, res) {
+      if (err) return console.log(err);
+      $scope.heroes.splice($scope.heroes.indexOf(hero), 1);
+    });
   };
 
   $scope.updateHero = function(hero) {
-    $http.put('http://localhost:3000/api/heroes/' + hero._id)
-      .then(function(res) {
-        hero.editting = false;
-      }, function(err) {
-        console.log(err);
-        hero.editting = false;
-      });
+    heroService.update(hero, function(err, res) {
+      hero.editing = false;
+      if (err) return console.log(err);
+    });
   };
+
   $scope.getAllVillains = function() {
-    $http.get('http://localhost:3000/api/villains')
-      .then(function(res) {
-        console.log('success!');
-        $scope.villains = res.data;
-      }, function(err) {
-        console.log(err);
-      });
+    villainService.getAll(function(err, res) {
+      if (err) return console.log(err);
+      $scope.villains = res;
+    });
   };
 
   $scope.createVillain = function(villain) {
-    $http.post('http://localhost:3000/api/villains', villain)
-      .then(function(res) {
-        $scope.villains.push(res.data);
-        $scope.newVillain = null;
-      }, function(err) {
-        console.log(err);
-      });
+    villainService.create(villain, function(err, res) {
+      if (err) return console.log(err);
+      $scope.villains.push(res);
+      $scope.newVillain = null;
+    });
   };
 
   $scope.deleteVillain = function(villain) {
-    $http.delete('http://localhost:3000/api/villains/' + villain._id)
-      .then(function(res) {
-        $scope.villains = $scope.villains.filter(function(i) { i !== villain });
-      }, function(err) {
-        console.log(err);
-      });
+    villainService.delete(villain, function(err, res) {
+      if (err) return console.log(err);
+      $scope.villains.splice($scope.villains.indexOf(villain), 1);
+    });
   };
 
   $scope.updateVillain = function(villain) {
-    $http.put('http://localhost:3000/api/villains/' + villain._id)
-      .then(function(res) {
-        villain.editting = false;
-      }, function(err) {
-        console.log(err);
-        villain.editting = false;
-      });
+    villainService.update(villain, function(err, res) {
+      villain.editing = false;
+      if (err) return console.log(err);
+    });
   };
 }]);
