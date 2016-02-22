@@ -1,46 +1,36 @@
 'use strict';
 
-export default ($scope, $http) => {
+export default ($scope, $http, Resource) => {
   $scope.kittens = [];
   $scope.loaded = false;
   $scope.newKitten = {};
 
+  const kittenService = new Resource('/kittens');
+
   $scope.getKittens = () => {
-    $http.get('http://localhost:3000/api/kittens')
-      .then((res) => {
-        $scope.kittens = res.data;
-        $scope.loaded = true;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    kittenService.getAll((err, data) => {
+      if (err) return console.log(err);
+      $scope.kittens = data;
+      $scope.loaded = true;
+    });
   };
-  $scope.addKitten = (newKitten) => {
-    $http.post('http://localhost:3000/api/kittens', newKitten)
-      .then((res) => {
-        $scope.kittens.push(res.data);
-        $scope.newKitten = null;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  $scope.addKitten = (kitten) => {
+    kittenService.create(kitten, (err, data) => {
+      if (err) return console.log(err);
+      $scope.kittens.push(data);
+      $scope.newKitten = null;
+    });
   };
-  $scope.deleteKitten = (_id) => {
-    $http.delete('http://localhost:3000/api/kittens/' + _id)
-      .then(() => {
-        $scope.kittens = $scope.kittens.filter((kitten) => kitten._id !== _id);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  $scope.deleteKitten = (kitten) => {
+    kittenService.delete(kitten, (err) => {
+      if (err) return console.log(err);
+      $scope.kittens = $scope.kittens.filter((curr) => curr._id !== kitten._id);
+    });
   };
   $scope.editKitten = (kitten) => {
-    $http.put('http://localhost:3000/api/kittens/' + kitten._id, kitten)
-      .then(() => {
-        kitten.editing = false;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    kittenService.update(kitten, (err) => {
+      if (err) return console.log(err);
+      kitten.editing = false;
+    });
   };
 };

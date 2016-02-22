@@ -2,8 +2,6 @@
 
 /* eslint-env jasmine */
 
-import '../../app/index';
-import 'angular-mocks';
 import kittensCtrl from '../../app/partials/kittens/controller';
 const { angular } = window;
 
@@ -78,9 +76,8 @@ describe('kittens controller', () => {
     it('should be able to delete a kitten', () => {
       $httpBackend.expectDELETE('http://localhost:3000/api/kittens/test')
         .respond(200, { msg: 'success' });
-      const id = 'test';
       $scope.kittens = [{ _id: 'test' }, { _id: 'not test' }];
-      $scope.deleteKitten(id);
+      $scope.deleteKitten({ _id: 'test' });
       $httpBackend.flush();
       expect($scope.kittens.length).toBe(1);
       expect($scope.kittens[0]._id).toBe('not test');
