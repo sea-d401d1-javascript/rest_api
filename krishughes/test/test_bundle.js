@@ -45,10 +45,10 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(1);
-	__webpack_require__(6);
+	__webpack_require__(5);
 
+	__webpack_require__(6);
 	__webpack_require__(7);
-	__webpack_require__(8);
 
 
 /***/ },
@@ -58,12 +58,10 @@
 	const angular = __webpack_require__(2);
 	const supersApp = angular.module('supersApp', []);
 	__webpack_require__(4)(supersApp);
-	__webpack_require__(5)(supersApp);
 
-	supersApp.controller('SupersController', ['$scope', '$http', 'cfResource', 'cfStore',
-	  function($scope, $http, Resource, cfStore) {
+	supersApp.controller('SupersController', ['$scope', '$http', 'cfResource',
+	  function($scope, $http, Resource) {
 
-	  //cfStore.set('greeting', 'hello world');
 	  $scope.heroes = [];
 	  $scope.villains = [];
 	  var heroService = Resource('/heroes');
@@ -30614,7 +30612,6 @@
 	        .then(handleSuccess(callback), handleFailure(callback));
 	    };
 
-
 		  return function(resourceName) {
 				return new Resource(resourceName);
 			};
@@ -30624,26 +30621,6 @@
 
 /***/ },
 /* 5 */
-/***/ function(module, exports) {
-
-	module.exports = function(app) {
-	  app.factory('cfStore', function() {
-	    var data = {};
-	    return {
-	      get: function(key) {
-	        return data[key];
-	      },
-	      set: function(key, value) {
-	        data[key] = value;
-	        return value
-	      }
-	    };
-	  });
-	};
-
-
-/***/ },
-/* 6 */
 /***/ function(module, exports) {
 
 	/**
@@ -33491,7 +33468,7 @@
 
 
 /***/ },
-/* 7 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var angular = __webpack_require__(2);
@@ -33625,7 +33602,7 @@
 
 
 /***/ },
-/* 8 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var angular = __webpack_require__(2);
@@ -33697,7 +33674,7 @@
 	    $httpBackend.flush();
 	  });
 
-	  it('should err', () => {
+	  it('should error', () => {
 	    $httpBackend.expectGET('http://localhost:3000/api/heroes')
 	      .respond(404);
 	    var resource = Resource('/heroes');

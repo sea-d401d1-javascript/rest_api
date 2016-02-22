@@ -1,12 +1,10 @@
 const angular = require('angular');
 const supersApp = angular.module('supersApp', []);
 require(__dirname + '/services/resource_service')(supersApp);
-require(__dirname + '/services/cf_store')(supersApp);
 
-supersApp.controller('SupersController', ['$scope', '$http', 'cfResource', 'cfStore',
-  function($scope, $http, Resource, cfStore) {
+supersApp.controller('SupersController', ['$scope', '$http', 'cfResource',
+  function($scope, $http, Resource) {
 
-  //cfStore.set('greeting', 'hello world');
   $scope.heroes = [];
   $scope.villains = [];
   var heroService = Resource('/heroes');
