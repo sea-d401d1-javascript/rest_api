@@ -6,7 +6,7 @@ require(__dirname + '/services/cf_store')(supersApp);
 supersApp.controller('SupersController', ['$scope', '$http', 'cfResource', 'cfStore',
   function($scope, $http, Resource, cfStore) {
 
-  cfStore.set('greeting', 'hello world');
+  //cfStore.set('greeting', 'hello world');
   $scope.heroes = [];
   $scope.villains = [];
   var heroService = Resource('/heroes');

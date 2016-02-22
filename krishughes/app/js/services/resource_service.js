@@ -38,7 +38,6 @@ module.exports = exports = function(app) {
         .then(handleSuccess(callback), handleFailure(callback));
     };
 
-
 	  return function(resourceName) {
 			return new Resource(resourceName);
 		};
