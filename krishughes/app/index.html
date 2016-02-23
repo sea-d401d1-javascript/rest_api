@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/base.css">
 	<meta charset="UTF-8">
 	<title>Heroes and Villains</title>
 </head>
 <body data-ng-app="supersApp" >
-	<main data-ng-controller="SupersController" data-ng-init="getAllHeroes(); getAllVillains()">
+	<main>
 		<h1>Heroes and Villains</h1>
 
-		<section>
+		<section data-ng-controller="HeroesController" data-ng-init="getAllHeroes()">
 		  <h2>Hero List<h2>
 		  <h3>Modify and Delete Heroes</h3>
       <ul>
@@ -35,7 +37,7 @@
       <p>{{heroes}}</p>
     </section>
 
-	  <section>
+	  <section data-ng-controller="VillainsController" data-ng-init="getAllVillains()">
       <h2>Villain List<h2>
 		  <h3>Modify and Delete Villains</h3>
       <ul>

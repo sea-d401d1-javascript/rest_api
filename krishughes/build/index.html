@@ -1,21 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/base.css">
 	<meta charset="UTF-8">
 	<title>Heroes and Villains</title>
 </head>
 <body data-ng-app="supersApp" >
-	<main data-ng-controller="SupersController" data-ng-init="getAllHeroes(); getAllVillains()">
+	<main>
 		<h1>Heroes and Villains</h1>
 
-		<section>
+		<section data-ng-controller="HeroesController" data-ng-init="getAllHeroes()">
 		  <h2>Hero List<h2>
 		  <h3>Modify and Delete Heroes</h3>
       <ul>
         <li data-ng-repeat="hero in heroes">Name: {{hero.name}}, Level: {{hero.level}}
           <button data-ng-click="deleteHero(hero)">Delete Hero</button>
-          <button data-ng-click="hero.editting = !hero.editting">Edit Hero</button>
-          <form data-ng-if="hero.editting" data-ng-submit="updateHero(hero)">
+          <button data-ng-click="hero.editing = !hero.editing">Edit Hero</button>
+          <form data-ng-if="hero.editing" data-ng-submit="updateHero(hero)">
             <input data-ng-model="hero.name" type="text"/>
             <input data-ng-model="hero.level" type="text"/>
             <button type="submit">Update</button>
@@ -35,14 +37,14 @@
       <p>{{heroes}}</p>
     </section>
 
-	  <section>
+	  <section data-ng-controller="VillainsController" data-ng-init="getAllVillains()">
       <h2>Villain List<h2>
 		  <h3>Modify and Delete Villains</h3>
       <ul>
         <li data-ng-repeat="villain in villains">Name: {{villain.name}}, Level: {{villain.level}}
           <button data-ng-click="deleteVillain(villain)">Delete Villain</button>
-          <button data-ng-click="villain.editting = !villain.editting">Edit Villain</button>
-          <form data-ng-if="villain.editting" data-ng-submit="updateVillain(villain)">
+          <button data-ng-click="villain.editing = !villain.editing">Edit Villain</button>
+          <form data-ng-if="villain.editing" data-ng-submit="updateVillain(villain)">
             <input data-ng-model="villain.name" type="text"/>
             <input data-ng-model="villain.level" type="text"/>
             <button type="submit">Update</button>
