@@ -1,26 +1,3 @@
-@font-face {
-  font-family: "clean";
-  src: url(fonts/clean.woff); }
-
-html, body {
-  height: 100%;
-  padding: 0px;
-  margin: 0px;
-  font-family: clean !important; }
-
-ul {
-  list-style: none;
-  position: relative;
-  float: right;
-  top: 0px; }
-  ul li {
-    float: left;
-    margin: 10px;
-    color: black; }
-    ul li:hover {
-      cursor: pointer;
-      color: #1a1a1a; }
-
 .input {
   position: relative;
   width: 100%;
