@@ -9,7 +9,7 @@ const Server = require('karma').Server;
 const scripts = ['index.js', 'bin/*.js', 'lib/*.js', 'test/**/*.js',
   'app/**/*.js', '!test/client/test_bundle.js'];
 const clientScripts = ['app/**/*.js'];
-const staticFiles = ['app/**/*.html'];
+const staticFiles = ['app/**/*.html', 'app/**/*.css'];
 const clientTests = ['test/client/*.js', '!test/client/test_bundle.js'];
 
 gulp.task('static:dev', () => {
