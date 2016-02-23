@@ -1,7 +1,8 @@
 const gulp = require('gulp'),
       eslint = require('gulp-eslint'),
       mocha = require('gulp-mocha'),
-      files = ['test/*.js', '!node_modules//**',__dirname + '/../lib/*.js'];
+      files = ['test/*.js', '!node_modules//**',__dirname + '/../lib/*.js'],
+      webpack = require('webpack-stream');
 
 gulp.task('lint', function() {
   return gulp.src(files)
@@ -29,8 +30,38 @@ gulp.task('mocha', function() {
     .pipe(mocha({ reporter: 'nyan' }));
 });
 
+gulp.task('html:dev', function() {
+  gulp.src(__dirname + '/app/**/*.html')
+    .pipe(gulp.dest(__dirname + '/build'));
+});
+
+gulp.task('webpack:dev', function() {
+  gulp.src(__dirname + '/app/js/*.js')
+    .pipe(webpack({
+      output: {
+        filename: 'bundle.js'
+      }
+    }))
+    .pipe(gulp.dest('build/'));
+});
+
+gulp.task('webpack:test', () => {
+  gulp.src(__dirname + '/test/test_entry.js')
+    .pipe(webpack({
+      output: {
+        filename: 'test_bundle.js'
+      }
+    }))
+    .pipe(gulp.dest('test/'));
+});
+
 gulp.task('watch', function() {
   gulp.watch(files, ['lint']);
 });
 
-gulp.task('default', ['mocha', 'lint', 'watch']);
+gulp.task('build:dev', ['webpack:dev', 'html:dev']);
+gulp.task('default', ['build:dev']);
+
+//gulp.task('default', ['mocha', 'lint', 'watch','build:dev']);
+
+
