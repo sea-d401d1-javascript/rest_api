@@ -1,0 +1,29 @@
+@font-face {
+    font-family: "clean";
+    src: url(fonts/clean.woff);
+}
+
+html, body {
+    height: 100%;
+    padding: 0px;
+    margin: 0px;
+    font-family: clean !important;
+}
+
+ul {
+    list-style: none;
+    position: relative;
+    float: right;
+    top: 0px;
+
+    li {
+        float: left;
+        margin: 10px;
+        color: black;
+
+        &:hover {
+            cursor: pointer;
+            color: lighten(black, 10%);
+        }
+    }
+}
