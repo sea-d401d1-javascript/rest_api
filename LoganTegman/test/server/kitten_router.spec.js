@@ -5,9 +5,9 @@ const expect = chai.expect;
 const mongoose = require('mongoose');
 process.env.MONGOLAB_URI = 'mongodb://localhost/kittens_app_test';
 /* eslint-disable no-unused-vars */
-const server = require(__dirname + '/../server');
+const server = require(__dirname + '/../../server');
 /* eslint-enable no-unused-vars */
-const Kitten = require(__dirname + '/../models/kitten');
+const Kitten = require(__dirname + '/../../models/kitten');
 chai.use(require('chai-http'));
 
 describe('kittens api', () => {
