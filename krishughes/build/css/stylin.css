@@ -55,26 +55,36 @@ h2 {
 .battle {
   float: left;
   width: 150px;
-  height: 500px;
+  height: 498px;
   text-align:center;
   background-color: #f44336;
   color: white;
   margin-left: 5px;
   margin-right: 5px;
   margin-top: 0;
-  background-image: url("http://40.media.tumblr.com/da6edb11d90aefb2a8cb6dcfe1ad573d/tumblr_n386n2wrNh1qz4zhao5_1280.jpg");
+  background-color: #f44336; /*Red*/
+  /*background-image: url("http://40.media.tumblr.com/da6edb11d90aefb2a8cb6dcfe1ad573d/tumblr_n386n2wrNh1qz4zhao5_1280.jpg");*/
 }
 
 .heroes {
   float: left;
   width: 500px;
   margin-top: 0;
+  overflow: auto;
+  height: 498px;
 }
 
 .villains {
   float: left;
   width: 500px;
   margin-top: 0;
+  overflow: auto;
+  height: 498px;
+}
+
+.mod {
+  padding-left: 4px;
+  width: 496px;
 }
 
 .create {
@@ -119,13 +129,21 @@ aside {
   margin-left: 0;
   margin-right: 0;
   margin-top: 0;
-  background-color: #f44336; /*Red*/
+  background-color: #008CBA; /*Blue*/
 }
 
 .foot {
-  background-color: #f44336; /*Red*/
-  position:absolute;
-  bottom:0;
+  clear: both;
   width:100%;
-  height:200px;
+  height:100px;
+  padding-top: 8px;
+  position: absolute;
+  bottom: 0;
+  background-color: #008CBA; /*Blue*/
+}
+
+.wrapper {
+  width: 1268px;
+  height: 650px;
+  position: relative;
 }

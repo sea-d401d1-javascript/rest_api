@@ -8,7 +8,7 @@
 	<title>Heroes and Villains</title>
 </head>
 <body data-ng-app="supersApp" >
-
+<section class="wrapper">
   <header>
     <h1>Heroes vs Villains</h1>
   </header>
@@ -59,7 +59,8 @@
 
     <section class="villains" data-ng-controller="VillainsController" data-ng-init="getAllVillains()">
       <h2 class="titles">Villain List</h2>
-		  <h3>Modify and Delete Villains</h3>
+		  <section class="mod">
+      <h3>Modify and Delete Villains</h3>
       <ul>
         <li data-ng-repeat="villain in villains">Name: {{villain.name}}, Level: {{villain.level}}
           <button class="deleteButton" data-ng-click="deleteVillain(villain)">
@@ -90,10 +91,12 @@
         <h5>Villain Data</h5>
         <p>{{villains}}</p>
       </footer>
+    </section>
 	  </section>
 	</main>
   <aside class="right"></aside>
   <footer class="foot"></footer>
+</section>
   <script src="bundle.js"></script>
 </body>
 </html>
