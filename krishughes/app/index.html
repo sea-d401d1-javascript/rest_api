@@ -8,9 +8,11 @@
 	<title>Heroes and Villains</title>
 </head>
 <body data-ng-app="supersApp" >
-	<header>
+
+  <header>
     <h1>Heroes vs Villains</h1>
   </header>
+  <aside class="left"></aside>
   <main>
     <section class="heroes" data-ng-controller="HeroesController" data-ng-init="getAllHeroes()">
 		  <h2 class="titles">Hero List</h2>
@@ -45,13 +47,15 @@
       </form>
       <footer>
         <h5>Hero Data</h5>
-        <p>Hero List- {{heroes}}</p>
+        <p>{{heroes}}</p>
       </footer>
     </section>
+
 
     <section class="battle">
       <h2>Battle Box</h2>
     </section>
+
 
     <section class="villains" data-ng-controller="VillainsController" data-ng-init="getAllVillains()">
       <h2 class="titles">Villain List</h2>
@@ -84,10 +88,12 @@
       </form>
       <footer>
         <h5>Villain Data</h5>
-        <p>Villain List- {{villains}}</p>
+        <p>{{villains}}</p>
       </footer>
 	  </section>
 	</main>
+  <aside class="right"></aside>
+  <footer class="foot"></footer>
   <script src="bundle.js"></script>
 </body>
 </html>

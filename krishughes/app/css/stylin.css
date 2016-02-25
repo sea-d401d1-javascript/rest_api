@@ -26,6 +26,7 @@ button {
 
 header {
   height: 40px;
+  width: 100%;
   color: white;
   background-color: #008CBA;
   margin: 0;
@@ -48,18 +49,20 @@ h2 {
   background-color: grey;
   color: white;
   margin-bottom: 20px;
+  text-align: center;
 }
 
 .battle {
   float: left;
   width: 150px;
-  height: 350px;
+  height: 500px;
   text-align:center;
   background-color: #f44336;
   color: white;
   margin-left: 5px;
   margin-right: 5px;
   margin-top: 0;
+  background-image: url("http://40.media.tumblr.com/da6edb11d90aefb2a8cb6dcfe1ad573d/tumblr_n386n2wrNh1qz4zhao5_1280.jpg");
 }
 
 .heroes {
@@ -74,10 +77,6 @@ h2 {
   margin-top: 0;
 }
 
-main {
-  margin-top: 0;
-}
-
 .create {
   border: solid 2px #4CAF50;
 }
@@ -86,13 +85,47 @@ main {
   display: block;
 }
 
-footer {
+footer p {
   overflow: scroll;
-  margin-top: 20px;
   border: solid 2px #008CBA;
+}
+
+footer {
+  margin-top: 20px;
 }
 
 ul {
   margin-bottom: 20px;
   border: solid 2px #f44336;
+}
+
+.heroes h3, .heroes ul, .heroes footer, .heroes form {
+  margin-left: 4px;
+}
+
+.left {
+  float: left;
+  margin-top: 2px;
+  margin-right: 4px;
+}
+
+.right {
+  float: right;
+}
+
+aside {
+  width: 50px;
+  height: 500px;
+  margin-left: 0;
+  margin-right: 0;
+  margin-top: 0;
+  background-color: #f44336; /*Red*/
+}
+
+.foot {
+  background-color: #f44336; /*Red*/
+  position:absolute;
+  bottom:0;
+  width:100%;
+  height:200px;
 }
