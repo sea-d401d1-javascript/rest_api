@@ -22,15 +22,12 @@
           <button class="deleteButton" data-ng-click="deleteHero(hero)">
             Delete
           </button>
-          <button class="editButton" data-ng-click="hero.editing = !hero.editing">
-            Edit
-          </button>
+          <button class="editButton" data-ng-if="!hero.editing" data-ng-click="toggleEdit(hero)">Edit</button>
           <form data-ng-if="hero.editing" data-ng-submit="updateHero(hero)">
             <input data-ng-model="hero.name" type="text"/>
             <input data-ng-model="hero.level" type="text"/>
-            <button class="editButton"type="submit">
-              Update
-            </button>
+            <button class="editButton" type="submit">Save</button>
+            <button class="deleteButton" type="button" data-ng-click="toggleEdit(hero)">Cancel</button>
           </form>
         </li>
       </ul>
@@ -66,13 +63,14 @@
           <button class="deleteButton" data-ng-click="deleteVillain(villain)">
             Delete
           </button>
-          <button class="editButton" data-ng-click="villain.editing = !villain.editing">
+          <button class="editButton" data-ng-if="!villain.editing" data-ng-click="toggleEdit(villain)">
             Edit
           </button>
           <form data-ng-if="villain.editing" data-ng-submit="updateVillain(villain)">
             <input data-ng-model="villain.name" type="text"/>
             <input data-ng-model="villain.level" type="text"/>
             <button class="editButton" type="submit">Update</button>
+            <button class="deleteButton" type="button" data-ng-click="toggleEdit(villain)">Cancel</button>
           </form>
         </li>
       </ul>

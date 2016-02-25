@@ -30566,7 +30566,9 @@
 
 /***/ },
 /* 6 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
+
+	var angular = __webpack_require__(1);
 
 	module.exports = function(app) {
 	  app.controller('HeroesController', ['$scope', '$http', 'cfResource',
@@ -30574,6 +30576,16 @@
 
 	      $scope.heroes = [];
 	      var heroService = Resource('/heroes');
+
+	      $scope.toggleEdit = function(hero) {
+	        if (hero.backup) {
+	          var temp = hero.backup;
+	          $scope.heroes.splice($scope.heroes.indexOf(hero), 1, temp);
+	        } else {
+	          hero.backup = angular.copy(hero);
+	          hero.editing = true;
+	        }
+	      };
 
 	      $scope.getAllHeroes = function() {
 	        heroService.getAll(function(err, res) {
@@ -30600,6 +30612,7 @@
 	      $scope.updateHero = function(hero) {
 	        heroService.update(hero, function(err, res) {
 	          hero.editing = false;
+	          hero.backup = null;
 	          if (err) return console.log(err);
 	        });
 	      };
@@ -30618,7 +30631,9 @@
 
 /***/ },
 /* 8 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
+
+	var angular = __webpack_require__(1);
 
 	module.exports = function(app) {
 	  app.controller('VillainsController', ['$scope', '$http', 'cfResource',
@@ -30626,6 +30641,16 @@
 
 	      $scope.villains = [];
 	      var villainService = Resource('/villains');
+
+	      $scope.toggleEdit = function(villain) {
+	        if (villain.backup) {
+	          var temp = villain.backup;
+	          $scope.villains.splice($scope.villains.indexOf(villain), 1, temp);
+	        } else {
+	          villain.backup = angular.copy(villain);
+	          villain.editing = true;
+	        }
+	      };
 
 	      $scope.getAllVillains = function() {
 	        villainService.getAll(function(err, res) {
@@ -30652,6 +30677,7 @@
 	      $scope.updateVillain = function(villain) {
 	        villainService.update(villain, function(err, res) {
 	          villain.editing = false;
+	          villain.backup = null;
 	          if (err) return console.log(err);
 	        });
 	      };
