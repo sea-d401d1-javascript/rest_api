@@ -1,0 +1,34 @@
+button {
+  color: white;
+  text-align: center;
+  border: none;
+  font-size: 14px;
+  border-radius: 6px;
+  width: 100px;
+}
+
+.deleteButton {
+  background-color: #f44336; /*Red*/
+}
+
+.editButton {
+  background-color: #008CBA; /*Blue*/
+}
+
+.submitButton {
+  background-color: #4CAF50; /*Green*/
+}
+
+.inline input, .inline h4  {
+  display: inline-block;
+}
+
+h1 {
+	font-size: 30px;
+	height: 35px;
+}
+
+h2 {
+	font-size: 20px;
+}
+

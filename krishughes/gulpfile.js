@@ -35,6 +35,11 @@ gulp.task('html:dev', function() {
     .pipe(gulp.dest(__dirname + '/build'));
 });
 
+gulp.task('css:dev', () => {
+  gulp.src(__dirname + '/app/**/*.css')
+    .pipe(gulp.dest(__dirname + '/build'));
+});
+
 gulp.task('webpack:dev', function() {
   gulp.src(__dirname + '/app/js/*.js')
     .pipe(webpack({
@@ -59,7 +64,7 @@ gulp.task('watch', function() {
   gulp.watch(files, ['lint']);
 });
 
-gulp.task('build:dev', ['webpack:dev', 'html:dev']);
+gulp.task('build:dev', ['webpack:dev', 'html:dev', 'css:dev']);
 gulp.task('default', ['build:dev']);
 
 //gulp.task('default', ['mocha', 'lint', 'watch','build:dev']);

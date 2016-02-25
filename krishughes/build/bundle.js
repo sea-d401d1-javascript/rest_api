@@ -45,90 +45,13 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	const angular = __webpack_require__(1);
-
 	const supersApp = angular.module('supersApp', []);
+	__webpack_require__(3)(supersApp);
 
-	supersApp.controller('SupersController', ['$scope', '$http', function($scope, $http) {
-	  $scope.heroes = [];
-	  $scope.villains = [];
+	__webpack_require__(4)(supersApp);
 
-	  $scope.getAllHeroes = function() {
-	    $http.get('http://localhost:3000/api/heroes')
-	      .then(function(res) {
-	        console.log('success!');
-	        $scope.heroes = res.data;
-	      }, function(err) {
-	        console.log(err);
-	      });
-	  };
-
-	  $scope.createHero = function(hero) {
-	    $http.post('http://localhost:3000/api/heroes', hero)
-	      .then(function(res) {
-	        $scope.heroes.push(res.data);
-	        $scope.newHero = null;
-	      }, function(err) {
-	        console.log(err);
-	      });
-	  };
-
-	  $scope.deleteHero = function(hero) {
-	    $http.delete('http://localhost:3000/api/heroes/' + hero._id)
-	      .then(function(res) {
-	        $scope.heroes = $scope.heroes.filter(function(i) { i !== hero });
-	      }, function(err) {
-	        console.log(err);
-	      });
-	  };
-
-	  $scope.updateHero = function(hero) {
-	    $http.put('http://localhost:3000/api/heroes/' + hero._id)
-	      .then(function(res) {
-	        hero.editting = false;
-	      }, function(err) {
-	        console.log(err);
-	        hero.editting = false;
-	      });
-	  };
-	  $scope.getAllVillains = function() {
-	    $http.get('http://localhost:3000/api/villains')
-	      .then(function(res) {
-	        console.log('success!');
-	        $scope.villains = res.data;
-	      }, function(err) {
-	        console.log(err);
-	      });
-	  };
-
-	  $scope.createVillain = function(villain) {
-	    $http.post('http://localhost:3000/api/villains', villain)
-	      .then(function(res) {
-	        $scope.villains.push(res.data);
-	        $scope.newVillain = null;
-	      }, function(err) {
-	        console.log(err);
-	      });
-	  };
-
-	  $scope.deleteVillain = function(villain) {
-	    $http.delete('http://localhost:3000/api/villains/' + villain._id)
-	      .then(function(res) {
-	        $scope.villains = $scope.villains.filter(function(i) { i !== villain });
-	      }, function(err) {
-	        console.log(err);
-	      });
-	  };
-
-	  $scope.updateVillain = function(villain) {
-	    $http.put('http://localhost:3000/api/villains/' + villain._id)
-	      .then(function(res) {
-	        villain.editting = false;
-	      }, function(err) {
-	        console.log(err);
-	        villain.editting = false;
-	      });
-	  };
-	}]);
+	__webpack_require__(5)(supersApp);
+	__webpack_require__(7)(supersApp);
 
 
 /***/ },
@@ -30571,6 +30494,170 @@
 	})(window, document);
 
 	!window.angular.$$csp().noInlineStyle && window.angular.element(document.head).prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>');
+
+/***/ },
+/* 3 */
+/***/ function(module, exports) {
+
+	var handleSuccess = function(callback) {
+		return function(res) {
+			callback(null, res.data);
+		}
+	};
+
+	var handleFailure = function(callback) {
+		return function(res) {
+	    callback(res);
+		}
+	};
+
+	module.exports = exports = function(app) {
+		app.factory('cfResource', ['$http', function($http) {
+			var Resource = function(resourceName) {
+				this.resourceName = resourceName;
+			};
+
+	    Resource.prototype.getAll = function(callback) {
+	      $http.get('http://localhost:3000/api' + this.resourceName)
+	        .then(handleSuccess(callback), handleFailure(callback));
+	    };
+
+
+	    Resource.prototype.create = function(postData, callback) {
+	      $http.post('http://localhost:3000/api' + this.resourceName, postData)
+	        .then(handleSuccess(callback), handleFailure(callback));
+	    };
+
+	    Resource.prototype.delete = function(postData, callback) {
+	      $http.delete('http://localhost:3000/api' + this.resourceName + '/' + postData._id)
+	        .then(handleSuccess(callback), handleFailure(callback));
+	    };
+
+
+	    Resource.prototype.update = function(postData, callback) {
+	      $http.put('http://localhost:3000/api' + this.resourceName + '/' + postData._id, postData)
+	        .then(handleSuccess(callback), handleFailure(callback));
+	    };
+
+		  return function(resourceName) {
+				return new Resource(resourceName);
+			};
+		}]);
+	};
+
+
+/***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = function(app) {
+		__webpack_require__(3)(app);
+	};
+
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = function(app) {
+		__webpack_require__(6)(app);
+	};
+
+
+/***/ },
+/* 6 */
+/***/ function(module, exports) {
+
+	module.exports = function(app) {
+	  app.controller('HeroesController', ['$scope', '$http', 'cfResource',
+	    function($scope, $http, Resource) {
+
+	      $scope.heroes = [];
+	      var heroService = Resource('/heroes');
+
+	      $scope.getAllHeroes = function() {
+	        heroService.getAll(function(err, res) {
+	          if (err) return console.log(err);
+	          $scope.heroes = res;
+	        });
+	      };
+
+	      $scope.createHero = function(hero) {
+	        heroService.create(hero, function(err, res) {
+	          if (err) return console.log(err);
+	          $scope.heroes.push(res);
+	          $scope.newHero = null;
+	        });
+	      };
+
+	      $scope.deleteHero = function(hero) {
+	        heroService.delete(hero, function(err, res) {
+	          if (err) return console.log(err);
+	          $scope.heroes.splice($scope.heroes.indexOf(hero), 1);
+	        });
+	      };
+
+	      $scope.updateHero = function(hero) {
+	        heroService.update(hero, function(err, res) {
+	          hero.editing = false;
+	          if (err) return console.log(err);
+	        });
+	      };
+	  }]);
+	}
+
+
+/***/ },
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = function(app) {
+		__webpack_require__(8)(app);
+	};
+
+
+/***/ },
+/* 8 */
+/***/ function(module, exports) {
+
+	module.exports = function(app) {
+	  app.controller('VillainsController', ['$scope', '$http', 'cfResource',
+	    function($scope, $http, Resource) {
+
+	      $scope.villains = [];
+	      var villainService = Resource('/villains');
+
+	      $scope.getAllVillains = function() {
+	        villainService.getAll(function(err, res) {
+	          if (err) return console.log(err);
+	          $scope.villains = res;
+	        });
+	      };
+
+	      $scope.createVillain = function(villain) {
+	        villainService.create(villain, function(err, res) {
+	          if (err) return console.log(err);
+	          $scope.villains.push(res);
+	          $scope.newVillain = null;
+	        });
+	      };
+
+	      $scope.deleteVillain = function(villain) {
+	        villainService.delete(villain, function(err, res) {
+	          if (err) return console.log(err);
+	          $scope.villains.splice($scope.villains.indexOf(villain), 1);
+	        });
+	      };
+
+	      $scope.updateVillain = function(villain) {
+	        villainService.update(villain, function(err, res) {
+	          villain.editing = false;
+	          if (err) return console.log(err);
+	        });
+	      };
+	  }]);
+	}
+
 
 /***/ }
 /******/ ]);

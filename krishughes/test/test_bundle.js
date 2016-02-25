@@ -45,191 +45,37 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(1);
+	__webpack_require__(10);
+
+	__webpack_require__(11);
+	__webpack_require__(12);
+	__webpack_require__(13);
 
 
 /***/ },
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(2);
-	var angular = __webpack_require__(3);
-	__webpack_require__(5);
+	const angular = __webpack_require__(2);
+	const supersApp = angular.module('supersApp', []);
+	__webpack_require__(4)(supersApp);
 
-	describe('SupersController', () => {
-	  var $httpBackend;
-	  var $scope;
-	  var $ControllerConstructor;
+	__webpack_require__(5)(supersApp);
 
-	  beforeEach(angular.mock.module('supersApp'));
-
-	  beforeEach(angular.mock.inject(function($rootScope, $controller) {
-	    $ControllerConstructor = $controller;
-	    $scope = $rootScope.$new();
-	  }));
-
-	  it('should be able to make a controller', () => {
-	    var supersController = $ControllerConstructor('SupersController', {$scope});
-	    expect(typeof supersController).toBe('object');
-	    expect(Array.isArray($scope.heroes)).toBe(true);
-	    expect(Array.isArray($scope.villains)).toBe(true);
-	    expect(typeof $scope.getAllHeroes).toBe('function');
-	    expect(typeof $scope.getAllVillains).toBe('function');
-	  });
-	  describe('REST requests', () => {
-	    beforeEach(angular.mock.inject(function(_$httpBackend_) {
-	      $httpBackend = _$httpBackend_;
-	      $ControllerConstructor('SupersController', {$scope});
-	    }));
-
-	    afterEach(() => {
-	      $httpBackend.verifyNoOutstandingExpectation();
-	      $httpBackend.verifyNoOutstandingRequest();
-	    });
-
-	    it('should make a get request to /api/heroes', () => {
-	      $httpBackend.expectGET('http://localhost:3000/api/heroes').respond(200, [{name: 'test hero'}]);
-	      $scope.getAllHeroes();
-	      $httpBackend.flush();
-	      expect($scope.heroes.length).toBe(1);
-	      expect($scope.heroes[0].name).toBe('test hero');
-	    });
-
-	    it('should create a new hero', () => {
-	      $httpBackend.expectPOST('http://localhost:3000/api/heroes', {name: 'the sent hero'}).respond(200,
-	      	{name: 'the response hero'});
-	      $scope.newHero = {name: 'the new hero'};
-	      $scope.createHero({name: 'the sent hero'});
-	      $httpBackend.flush();
-	      expect($scope.heroes.length).toBe(1);
-	      expect($scope.newHero).toBe(null);
-	      expect($scope.heroes[0].name).toBe('the response hero');
-	    });
-
-	    it('should make an update put request to /api/heroes', () => {
-	      var hero = {_id: 1, name: 'update hero', editting: true};
-	      $scope.heroes = [hero];
-	      $httpBackend.expectPUT('http://localhost:3000/api/heroes/' + hero._id).respond(200);
-	      $scope.updateHero(hero);
-	      $httpBackend.flush();
-	      expect($scope.heroes.length).toBe(1);
-	      expect($scope.heroes[0].name).toBe('update hero');
-	      expect(hero.editting).toBe(false);
-	    });
-
-	    it('should make a delete to /api/heroes', () => {
-	      var hero = {_id: 1, name: 'delete hero'};
-	      $scope.heroes = [hero];
-	      expect($scope.heroes.length).toBe(1);
-	      $httpBackend.expectDELETE('http://localhost:3000/api/heroes/' + hero._id).respond(200);
-	      $scope.deleteHero(hero);
-	      $httpBackend.flush();
-	      expect($scope.heroes.length).toBe(0);
-	    });
-	  });
-	});
+	__webpack_require__(6)(supersApp);
+	__webpack_require__(8)(supersApp);
 
 
 /***/ },
 /* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
-	const angular = __webpack_require__(3);
-
-	const supersApp = angular.module('supersApp', []);
-
-	supersApp.controller('SupersController', ['$scope', '$http', function($scope, $http) {
-	  $scope.heroes = [];
-	  $scope.villains = [];
-
-	  $scope.getAllHeroes = function() {
-	    $http.get('http://localhost:3000/api/heroes')
-	      .then(function(res) {
-	        console.log('success!');
-	        $scope.heroes = res.data;
-	      }, function(err) {
-	        console.log(err);
-	      });
-	  };
-
-	  $scope.createHero = function(hero) {
-	    $http.post('http://localhost:3000/api/heroes', hero)
-	      .then(function(res) {
-	        $scope.heroes.push(res.data);
-	        $scope.newHero = null;
-	      }, function(err) {
-	        console.log(err);
-	      });
-	  };
-
-	  $scope.deleteHero = function(hero) {
-	    $http.delete('http://localhost:3000/api/heroes/' + hero._id)
-	      .then(function(res) {
-	        $scope.heroes = $scope.heroes.filter(function(i) { i !== hero });
-	      }, function(err) {
-	        console.log(err);
-	      });
-	  };
-
-	  $scope.updateHero = function(hero) {
-	    $http.put('http://localhost:3000/api/heroes/' + hero._id)
-	      .then(function(res) {
-	        hero.editting = false;
-	      }, function(err) {
-	        console.log(err);
-	        hero.editting = false;
-	      });
-	  };
-	  $scope.getAllVillains = function() {
-	    $http.get('http://localhost:3000/api/villains')
-	      .then(function(res) {
-	        console.log('success!');
-	        $scope.villains = res.data;
-	      }, function(err) {
-	        console.log(err);
-	      });
-	  };
-
-	  $scope.createVillain = function(villain) {
-	    $http.post('http://localhost:3000/api/villains', villain)
-	      .then(function(res) {
-	        $scope.villains.push(res.data);
-	        $scope.newVillain = null;
-	      }, function(err) {
-	        console.log(err);
-	      });
-	  };
-
-	  $scope.deleteVillain = function(villain) {
-	    $http.delete('http://localhost:3000/api/villains/' + villain._id)
-	      .then(function(res) {
-	        $scope.villains = $scope.villains.filter(function(i) { i !== villain });
-	      }, function(err) {
-	        console.log(err);
-	      });
-	  };
-
-	  $scope.updateVillain = function(villain) {
-	    $http.put('http://localhost:3000/api/villains/' + villain._id)
-	      .then(function(res) {
-	        villain.editting = false;
-	      }, function(err) {
-	        console.log(err);
-	        villain.editting = false;
-	      });
-	  };
-	}]);
-
-
-/***/ },
-/* 3 */
-/***/ function(module, exports, __webpack_require__) {
-
-	__webpack_require__(4);
+	__webpack_require__(3);
 	module.exports = angular;
 
 
 /***/ },
-/* 4 */
+/* 3 */
 /***/ function(module, exports) {
 
 	/**
@@ -30662,7 +30508,171 @@
 	!window.angular.$$csp().noInlineStyle && window.angular.element(document.head).prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>');
 
 /***/ },
+/* 4 */
+/***/ function(module, exports) {
+
+	var handleSuccess = function(callback) {
+		return function(res) {
+			callback(null, res.data);
+		}
+	};
+
+	var handleFailure = function(callback) {
+		return function(res) {
+	    callback(res);
+		}
+	};
+
+	module.exports = exports = function(app) {
+		app.factory('cfResource', ['$http', function($http) {
+			var Resource = function(resourceName) {
+				this.resourceName = resourceName;
+			};
+
+	    Resource.prototype.getAll = function(callback) {
+	      $http.get('http://localhost:3000/api' + this.resourceName)
+	        .then(handleSuccess(callback), handleFailure(callback));
+	    };
+
+
+	    Resource.prototype.create = function(postData, callback) {
+	      $http.post('http://localhost:3000/api' + this.resourceName, postData)
+	        .then(handleSuccess(callback), handleFailure(callback));
+	    };
+
+	    Resource.prototype.delete = function(postData, callback) {
+	      $http.delete('http://localhost:3000/api' + this.resourceName + '/' + postData._id)
+	        .then(handleSuccess(callback), handleFailure(callback));
+	    };
+
+
+	    Resource.prototype.update = function(postData, callback) {
+	      $http.put('http://localhost:3000/api' + this.resourceName + '/' + postData._id, postData)
+	        .then(handleSuccess(callback), handleFailure(callback));
+	    };
+
+		  return function(resourceName) {
+				return new Resource(resourceName);
+			};
+		}]);
+	};
+
+
+/***/ },
 /* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = function(app) {
+		__webpack_require__(4)(app);
+	};
+
+
+/***/ },
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = function(app) {
+		__webpack_require__(7)(app);
+	};
+
+
+/***/ },
+/* 7 */
+/***/ function(module, exports) {
+
+	module.exports = function(app) {
+	  app.controller('HeroesController', ['$scope', '$http', 'cfResource',
+	    function($scope, $http, Resource) {
+
+	      $scope.heroes = [];
+	      var heroService = Resource('/heroes');
+
+	      $scope.getAllHeroes = function() {
+	        heroService.getAll(function(err, res) {
+	          if (err) return console.log(err);
+	          $scope.heroes = res;
+	        });
+	      };
+
+	      $scope.createHero = function(hero) {
+	        heroService.create(hero, function(err, res) {
+	          if (err) return console.log(err);
+	          $scope.heroes.push(res);
+	          $scope.newHero = null;
+	        });
+	      };
+
+	      $scope.deleteHero = function(hero) {
+	        heroService.delete(hero, function(err, res) {
+	          if (err) return console.log(err);
+	          $scope.heroes.splice($scope.heroes.indexOf(hero), 1);
+	        });
+	      };
+
+	      $scope.updateHero = function(hero) {
+	        heroService.update(hero, function(err, res) {
+	          hero.editing = false;
+	          if (err) return console.log(err);
+	        });
+	      };
+	  }]);
+	}
+
+
+/***/ },
+/* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = function(app) {
+		__webpack_require__(9)(app);
+	};
+
+
+/***/ },
+/* 9 */
+/***/ function(module, exports) {
+
+	module.exports = function(app) {
+	  app.controller('VillainsController', ['$scope', '$http', 'cfResource',
+	    function($scope, $http, Resource) {
+
+	      $scope.villains = [];
+	      var villainService = Resource('/villains');
+
+	      $scope.getAllVillains = function() {
+	        villainService.getAll(function(err, res) {
+	          if (err) return console.log(err);
+	          $scope.villains = res;
+	        });
+	      };
+
+	      $scope.createVillain = function(villain) {
+	        villainService.create(villain, function(err, res) {
+	          if (err) return console.log(err);
+	          $scope.villains.push(res);
+	          $scope.newVillain = null;
+	        });
+	      };
+
+	      $scope.deleteVillain = function(villain) {
+	        villainService.delete(villain, function(err, res) {
+	          if (err) return console.log(err);
+	          $scope.villains.splice($scope.villains.indexOf(villain), 1);
+	        });
+	      };
+
+	      $scope.updateVillain = function(villain) {
+	        villainService.update(villain, function(err, res) {
+	          villain.editing = false;
+	          if (err) return console.log(err);
+	        });
+	      };
+	  }]);
+	}
+
+
+/***/ },
+/* 10 */
 /***/ function(module, exports) {
 
 	/**
@@ -33507,6 +33517,264 @@
 
 
 	})(window, window.angular);
+
+
+/***/ },
+/* 11 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var angular = __webpack_require__(2);
+
+	describe('HeroesController', () => {
+	  var $httpBackend;
+	  var $scope;
+	  var $ControllerConstructor;
+
+	  beforeEach(angular.mock.module('supersApp'));
+
+	  beforeEach(angular.mock.inject(function($rootScope, $controller) {
+	    $ControllerConstructor = $controller;
+	    $scope = $rootScope.$new();
+	  }));
+
+	  it('should be able to make a controller', () => {
+	    var heroesController = $ControllerConstructor('HeroesController', {$scope});
+	    expect(typeof heroesController).toBe('object');
+	    expect(Array.isArray($scope.heroes)).toBe(true);
+	    expect(typeof $scope.getAllHeroes).toBe('function');
+	  });
+
+	  describe('REST requests', () => {
+	    beforeEach(angular.mock.inject(function(_$httpBackend_) {
+	      $httpBackend = _$httpBackend_;
+	      $ControllerConstructor('HeroesController', {$scope});
+	    }));
+
+	    afterEach(() => {
+	      $httpBackend.verifyNoOutstandingExpectation();
+	      $httpBackend.verifyNoOutstandingRequest();
+	    });
+
+	    //Hero Get
+	    it('should make a get request to /api/heroes', () => {
+	      $httpBackend.expectGET('http://localhost:3000/api/heroes').respond(200, [{name: 'test hero'}]);
+	      $scope.getAllHeroes();
+	      $httpBackend.flush();
+	      expect($scope.heroes.length).toBe(1);
+	      expect($scope.heroes[0].name).toBe('test hero');
+	    });
+
+	    //Hero Post
+	    it('should create a new hero', () => {
+	      $httpBackend.expectPOST('http://localhost:3000/api/heroes', {name: 'the sent hero'}).respond(200,
+	      	{name: 'the response hero'});
+	      $scope.newHero = {name: 'the new hero'};
+	      $scope.createHero({name: 'the sent hero'});
+	      $httpBackend.flush();
+	      expect($scope.heroes.length).toBe(1);
+	      expect($scope.newHero).toBe(null);
+	      expect($scope.heroes[0].name).toBe('the response hero');
+	    });
+
+	    //Hero Put
+	    it('should make an update put request to /api/heroes', () => {
+	      var hero = {_id: 1, name: 'update hero', editing: true};
+	      $scope.heroes.push(hero);
+	      expect($scope.heroes.indexOf(hero)).not.toBe(-1);
+	      $httpBackend.expectPUT('http://localhost:3000/api/heroes/1', hero).respond(200);
+	      $scope.updateHero(hero);
+	      $httpBackend.flush();
+	      expect($scope.heroes.length).toBe(1);
+	      expect($scope.heroes[0].editing).toBe(false);
+	      expect(hero.editing).toBe(false);
+	    });
+
+	    //Hero Delete
+	    it('should make a delete to /api/heroes', () => {
+	      var hero = {_id: 1, name: 'delete hero'};
+	      $scope.heroes.push(hero);
+	      expect($scope.heroes.length).toBe(1);
+	      expect($scope.heroes.indexOf(hero)).not.toBe(-1);
+	      $httpBackend.expectDELETE('http://localhost:3000/api/heroes/1').respond(200);
+	      $scope.deleteHero(hero);
+	      $httpBackend.flush();
+	      expect($scope.heroes.length).toBe(0);
+	      expect($scope.heroes.indexOf(hero)).toBe(-1);
+	    });
+	  });
+	});
+
+
+/***/ },
+/* 12 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var angular = __webpack_require__(2);
+
+	describe('VillainsController', () => {
+	  var $httpBackend;
+	  var $scope;
+	  var $ControllerConstructor;
+
+	  beforeEach(angular.mock.module('supersApp'));
+
+	  beforeEach(angular.mock.inject(function($rootScope, $controller) {
+	    $ControllerConstructor = $controller;
+	    $scope = $rootScope.$new();
+	  }));
+
+	  it('should be able to make a controller', () => {
+	    var villainsController = $ControllerConstructor('VillainsController', {$scope});
+	    expect(typeof villainsController).toBe('object');
+	    expect(Array.isArray($scope.villains)).toBe(true);
+	    expect(typeof $scope.getAllVillains).toBe('function');
+	  });
+
+	  describe('REST requests', () => {
+	    beforeEach(angular.mock.inject(function(_$httpBackend_) {
+	      $httpBackend = _$httpBackend_;
+	      $ControllerConstructor('VillainsController', {$scope});
+	    }));
+
+	    afterEach(() => {
+	      $httpBackend.verifyNoOutstandingExpectation();
+	      $httpBackend.verifyNoOutstandingRequest();
+	    });
+
+	    //Villain Get
+	    it('should make a get request to /api/villains', () => {
+	      $httpBackend.expectGET('http://localhost:3000/api/villains').respond(200, [{name: 'test villain'}]);
+	      $scope.getAllVillains();
+	      $httpBackend.flush();
+	      expect($scope.villains.length).toBe(1);
+	      expect($scope.villains[0].name).toBe('test villain');
+	    });
+
+	    //Villain Post
+	    it('should create a new villain', () => {
+	      $httpBackend.expectPOST('http://localhost:3000/api/villains', {name: 'the sent villain'})
+	        .respond(200, {name: 'the response villain'});
+	      $scope.newVillain = {name: 'the new villain'};
+	      $scope.createVillain({name: 'the sent villain'});
+	      $httpBackend.flush();
+	      expect($scope.villains.length).toBe(1);
+	      expect($scope.newVillain).toBe(null);
+	      expect($scope.villains[0].name).toBe('the response villain');
+	    });
+
+	    //Villain Put
+	    it('should make an update put request to /api/villains', () => {
+	      var villain = {_id: 1, name: 'update villain', editing: true};
+	      $scope.villains.push(villain);
+	      expect($scope.villains.indexOf(villain)).not.toBe(-1);
+	      $httpBackend.expectPUT('http://localhost:3000/api/villains/1', villain).respond(200);
+	      $scope.updateVillain(villain);
+	      $httpBackend.flush();
+	      expect($scope.villains.length).toBe(1);
+	      expect($scope.villains[0].editing).toBe(false);
+	      expect(villain.editing).toBe(false);
+	    });
+
+	    //Villain Delete
+	    it('should make a delete to /api/villains', () => {
+	      var villain = {_id: 1, name: 'delete villain'};
+	      $scope.villains.push(villain);
+	      expect($scope.villains.length).toBe(1);
+	      expect($scope.villains.indexOf(villain)).not.toBe(-1);
+	      $httpBackend.expectDELETE('http://localhost:3000/api/villains/1').respond(200);
+	      $scope.deleteVillain(villain);
+	      $httpBackend.flush();
+	      expect($scope.villains.length).toBe(0);
+	      expect($scope.villains.indexOf(villain)).toBe(-1);
+	    });
+	  });
+	});
+
+
+/***/ },
+/* 13 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var angular = __webpack_require__(2);
+
+	describe('resource service', () => {
+	  beforeEach(angular.mock.module('supersApp'));
+
+	  var $httpBackend;
+	  var Resource;
+	  var testResource;
+
+	  beforeEach(angular.mock.inject(function(_$httpBackend_, cfResource) {
+	    $httpBackend = _$httpBackend_;
+	    Resource = cfResource;
+	  }));
+
+	  afterEach(() => {
+	    $httpBackend.verifyNoOutstandingExpectation();
+	    $httpBackend.verifyNoOutstandingRequest();
+	  });
+
+	  it('should be a service', () => {
+	    expect(typeof Resource).toBe('function');
+	  });
+
+	  it('should assign something to the resource', () => {
+	    expect(Resource('/test').resourceName).toBe('/test');
+	  });
+
+	  it('should make a GET request', () => {
+	    $httpBackend.expectGET('http://localhost:3000/api/heroes')
+	      .respond(200, {name: 'test hero'});
+	    var resource = Resource('/heroes');
+	    resource.getAll(function(err, res){
+	      expect(res.name).toBe('test hero');
+	    });
+	    $httpBackend.flush();
+	  });
+
+	  it('should make a POST request', () => {
+	    var sentHero = {name: 'the sent hero'};
+	    $httpBackend.expectPOST('http://localhost:3000/api/heroes', sentHero)
+	      .respond(200, {name: 'the response hero'});
+	    var resource = Resource('/heroes');
+	    resource.create(sentHero, function(err, res) {
+	      expect(res.name).toBe('the response hero');
+	    });
+	    $httpBackend.flush();
+	  });
+
+	  it('should make a PUT request', () => {
+	    var hero = {_id: 1, name: 'update hero', editing: true};
+	    $httpBackend.expectPUT('http://localhost:3000/api/heroes/1', hero)
+	      .respond(200);
+	    var resource = Resource('/heroes');
+	    resource.update(hero, function(err, res) {
+	      expect(err).toBe(null);
+	    });
+	    $httpBackend.flush();
+	  });
+
+	  it('should make a DELETE request', () => {
+	    var hero = {_id: 1, name: 'delete hero'};
+	    $httpBackend.expectDELETE('http://localhost:3000/api/heroes/1').respond(200);
+	    var resource = Resource('/heroes');
+	    resource.delete(hero, function(err, res) {
+	      expect(err).toBe(null);
+	    });
+	    $httpBackend.flush();
+	  });
+
+	  it('should error', () => {
+	    $httpBackend.expectGET('http://localhost:3000/api/heroes')
+	      .respond(404);
+	    var resource = Resource('/heroes');
+	    resource.getAll(function(err, res){
+	      expect(typeof(err)).toBe('object');
+	      expect(typeof(res)).toBe('undefined');
+	    });
+	    $httpBackend.flush();
+	  });
+	});
 
 
 /***/ }
