@@ -8,11 +8,14 @@
 	<title>Heroes and Villains</title>
 </head>
 <body data-ng-app="supersApp" >
-	<main>
-		<h1>Heroes and Villains</h1>
 
-		<section data-ng-controller="HeroesController" data-ng-init="getAllHeroes()">
-		  <h2>Hero List</h2>
+  <header>
+    <h1>Heroes vs Villains</h1>
+  </header>
+  <aside class="left"></aside>
+  <main>
+    <section class="heroes" data-ng-controller="HeroesController" data-ng-init="getAllHeroes()">
+		  <h2 class="titles">Hero List</h2>
 		  <h3>Modify and Delete Heroes</h3>
       <ul>
         <li data-ng-repeat="hero in heroes">Name: {{hero.name}}, Level: {{hero.level}}
@@ -33,19 +36,29 @@
       </ul>
 
       <h3>Create A Hero</h3>
-      <form class="inline" data-ng-submit="createHero(newHero)">
-        <h4>Hero Name :</h4>
-        <input data-ng-model="newHero.name" type="text"/>
-        <h4>Hero Level: </h4>
-        <input data-ng-model="newHero.level" type="text"/>
+      <form class="create" data-ng-submit="createHero(newHero)">
+        <label class="name">
+          Hero Name: <input id="name" data-ng-model="newHero.name" type="text">
+        </label>
+        <label class="level">
+          Hero Level: <input id="level" data-ng-model="newHero.level" type="text">
+        </label>
         <button class="submitButton" type="submit">Submit</button>
       </form>
-      <h4>Hero Data</h4>
-      <p>Hero List- {{heroes}}</p>
+      <footer>
+        <h5>Hero Data</h5>
+        <p>{{heroes}}</p>
+      </footer>
     </section>
 
-	  <section data-ng-controller="VillainsController" data-ng-init="getAllVillains()">
-      <h2>Villain List</h2>
+
+    <section class="battle">
+      <h2>Battle Box</h2>
+    </section>
+
+
+    <section class="villains" data-ng-controller="VillainsController" data-ng-init="getAllVillains()">
+      <h2 class="titles">Villain List</h2>
 		  <h3>Modify and Delete Villains</h3>
       <ul>
         <li data-ng-repeat="villain in villains">Name: {{villain.name}}, Level: {{villain.level}}
@@ -64,17 +77,23 @@
       </ul>
 
       <h3>Create A Villain</h3>
-      <form class="inline" data-ng-submit="createVillain(newVillain)">
-        <h4>Villain Name: </h4>
-        <input data-ng-model="newVillain.name" type="text"/>
-        <h4>Villain Level: </h4>
-        <input data-ng-model="newVillain.level" type="text"/>
+      <form class="create" data-ng-submit="createVillain(newVillain)">
+        <label class="name">
+          Villain Name: <input id="name" data-ng-model="newVillain.name" type="text">
+        </label>
+        <label class="level">
+          Villain Level: <input id="level" data-ng-model="newVillain.level" type="text">
+        </label>
         <button class="submitButton" type="submit">Submit</button>
       </form>
-      <h4>Villain Data</h4>
-      <p>Villain List- {{villains}}</p>
+      <footer>
+        <h5>Villain Data</h5>
+        <p>{{villains}}</p>
+      </footer>
 	  </section>
 	</main>
+  <aside class="right"></aside>
+  <footer class="foot"></footer>
   <script src="bundle.js"></script>
 </body>
 </html>
