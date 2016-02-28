@@ -45,11 +45,12 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(1);
-	__webpack_require__(10);
-
 	__webpack_require__(11);
+
 	__webpack_require__(12);
 	__webpack_require__(13);
+	__webpack_require__(14);
+	__webpack_require__(15);
 
 
 /***/ },
@@ -64,6 +65,7 @@
 
 	__webpack_require__(6)(supersApp);
 	__webpack_require__(8)(supersApp);
+	__webpack_require__(10)(supersApp);
 
 
 /***/ },
@@ -30578,7 +30580,9 @@
 
 /***/ },
 /* 7 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
+
+	var angular = __webpack_require__(2);
 
 	module.exports = function(app) {
 	  app.controller('HeroesController', ['$scope', '$http', 'cfResource',
@@ -30586,6 +30590,16 @@
 
 	      $scope.heroes = [];
 	      var heroService = Resource('/heroes');
+
+	      $scope.toggleEdit = function(hero) {
+	        if (hero.backup) {
+	          var temp = hero.backup;
+	          $scope.heroes.splice($scope.heroes.indexOf(hero), 1, temp);
+	        } else {
+	          hero.backup = angular.copy(hero);
+	          hero.editing = true;
+	        }
+	      };
 
 	      $scope.getAllHeroes = function() {
 	        heroService.getAll(function(err, res) {
@@ -30598,7 +30612,7 @@
 	        heroService.create(hero, function(err, res) {
 	          if (err) return console.log(err);
 	          $scope.heroes.push(res);
-	          $scope.newHero = null;
+	          $scope.super = null;
 	        });
 	      };
 
@@ -30612,6 +30626,7 @@
 	      $scope.updateHero = function(hero) {
 	        heroService.update(hero, function(err, res) {
 	          hero.editing = false;
+	          hero.backup = null;
 	          if (err) return console.log(err);
 	        });
 	      };
@@ -30630,7 +30645,9 @@
 
 /***/ },
 /* 9 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
+
+	var angular = __webpack_require__(2);
 
 	module.exports = function(app) {
 	  app.controller('VillainsController', ['$scope', '$http', 'cfResource',
@@ -30638,6 +30655,16 @@
 
 	      $scope.villains = [];
 	      var villainService = Resource('/villains');
+
+	      $scope.toggleEdit = function(villain) {
+	        if (villain.backup) {
+	          var temp = villain.backup;
+	          $scope.villains.splice($scope.villains.indexOf(villain), 1, temp);
+	        } else {
+	          villain.backup = angular.copy(villain);
+	          villain.editing = true;
+	        }
+	      };
 
 	      $scope.getAllVillains = function() {
 	        villainService.getAll(function(err, res) {
@@ -30650,7 +30677,7 @@
 	        villainService.create(villain, function(err, res) {
 	          if (err) return console.log(err);
 	          $scope.villains.push(res);
-	          $scope.newVillain = null;
+	          $scope.super = null;
 	        });
 	      };
 
@@ -30664,6 +30691,7 @@
 	      $scope.updateVillain = function(villain) {
 	        villainService.update(villain, function(err, res) {
 	          villain.editing = false;
+	          villain.backup = null;
 	          if (err) return console.log(err);
 	        });
 	      };
@@ -30673,6 +30701,30 @@
 
 /***/ },
 /* 10 */
+/***/ function(module, exports) {
+
+	module.exports = function(app) {
+	  app.directive('supersForm', function() {
+	    return {
+	    	restrict: 'EAC',
+	      replace: true,
+	      transclude: true,
+	      templateUrl: '/templates/supers/directives/form_directive.html',
+	      scope: {
+	    	  buttonText: '@',
+	    	  super: '=',
+	    	  save: '&'
+	    	}
+	      // controller: function($scope) {
+	      //   $scope.hero = $scope.hero || {};
+	      // }
+	    };
+	  });
+	};
+
+
+/***/ },
+/* 11 */
 /***/ function(module, exports) {
 
 	/**
@@ -33520,7 +33572,7 @@
 
 
 /***/ },
-/* 11 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var angular = __webpack_require__(2);
@@ -33572,7 +33624,7 @@
 	      $scope.createHero({name: 'the sent hero'});
 	      $httpBackend.flush();
 	      expect($scope.heroes.length).toBe(1);
-	      expect($scope.newHero).toBe(null);
+	      //expect($scope.newHero).toBe(null);
 	      expect($scope.heroes[0].name).toBe('the response hero');
 	    });
 
@@ -33606,7 +33658,7 @@
 
 
 /***/ },
-/* 12 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var angular = __webpack_require__(2);
@@ -33658,7 +33710,7 @@
 	      $scope.createVillain({name: 'the sent villain'});
 	      $httpBackend.flush();
 	      expect($scope.villains.length).toBe(1);
-	      expect($scope.newVillain).toBe(null);
+	      //expect($scope.newVillain).toBe(null);
 	      expect($scope.villains[0].name).toBe('the response villain');
 	    });
 
@@ -33692,7 +33744,7 @@
 
 
 /***/ },
-/* 13 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var angular = __webpack_require__(2);
@@ -33776,6 +33828,64 @@
 	  });
 	});
 
+
+/***/ },
+/* 15 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var angular = __webpack_require__(2);
+	var template = __webpack_require__(16);
+
+	describe('form directive', () => {
+	  var $compile;
+	  var $rootScope;
+	  var $httpBackend;
+
+	  beforeEach(angular.mock.module('supersApp'));
+
+	  beforeEach(angular.mock.inject(function(_$compile_, _$rootScope_, _$httpBackend_) {
+	    $compile = _$compile_;
+	    $rootScope = _$rootScope_;
+	    $httpBackend = _$httpBackend_;
+	  }));
+
+	  it('should load the directive', () => {
+	    $httpBackend.when('GET', '/templates/supers/directives/form_directive.html').respond(200, template);
+
+	    var element = $compile('<supers-form data-hero="{}" data-button-text="test button"></supers-form>')($rootScope);
+	    $httpBackend.flush();
+	    $rootScope.$digest();
+	    expect(element.html()).toContain('test button');
+	  });
+
+	  it('should be able to call a passed save function', () => {
+	    var scope = $rootScope.$new();
+	    $httpBackend.when('GET', '/templates/supers/directives/form_directive.html').respond(200, template);
+	    var called = false;
+	    scope.super = {name: 'inside scope'};
+
+	    scope.testSave = function(input) {
+	      expect(input.name).toBe('from directive');
+	      scope.super = input;
+	      called = true;
+	    };
+
+	    var element = $compile('<supers-form data-super="{name: \'inside directive\'}" data-save=testSave></supers-form>')(scope);
+	    $httpBackend.flush();
+	    $rootScope.$digest();
+
+	    element.isolateScope().save(scope)({name: 'from directive'});
+	    expect(called).toBe(true);
+	    expect(scope.super.name).toBe('from directive');
+	  });
+	});
+
+
+/***/ },
+/* 16 */
+/***/ function(module, exports) {
+
+	module.exports = "<form data-ng-submit=\"save(super)\">\n\t<input type=\"text\" name=\"name\" placeholder=\"Name\" data-ng-model=\"super.name\">\n\n\t<input type=\"text\" placeholder=\"Level\" data-ng-model=\"super.level\">\n\n\t<ng-transclude></ng-transclude>\n\t<button class=\"submitButton\" type=\"submit\">{{buttonText}}</button>\n</form>\n";
 
 /***/ }
 /******/ ]);

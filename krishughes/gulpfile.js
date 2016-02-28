@@ -2,7 +2,8 @@ const gulp = require('gulp'),
       eslint = require('gulp-eslint'),
       mocha = require('gulp-mocha'),
       files = ['test/*.js', '!node_modules//**',__dirname + '/../lib/*.js'],
-      webpack = require('webpack-stream');
+      webpack = require('webpack-stream'),
+      html = require('html-loader');
 
 gulp.task('lint', function() {
   return gulp.src(files)
@@ -53,6 +54,14 @@ gulp.task('webpack:dev', function() {
 gulp.task('webpack:test', () => {
   gulp.src(__dirname + '/test/test_entry.js')
     .pipe(webpack({
+      module: {
+        loaders: [
+          {
+            test: /\.html$/,
+            loader: 'html'
+          }
+        ]
+      },
       output: {
         filename: 'test_bundle.js'
       }

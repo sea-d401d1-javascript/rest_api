@@ -28,7 +28,7 @@ module.exports = function(app) {
         heroService.create(hero, function(err, res) {
           if (err) return console.log(err);
           $scope.heroes.push(res);
-          $scope.newHero = null;
+          $scope.super = null;
         });
       };
 

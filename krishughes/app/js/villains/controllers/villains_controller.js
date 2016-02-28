@@ -28,7 +28,7 @@ module.exports = function(app) {
         villainService.create(villain, function(err, res) {
           if (err) return console.log(err);
           $scope.villains.push(res);
-          $scope.newVillain = null;
+          $scope.super = null;
         });
       };
 

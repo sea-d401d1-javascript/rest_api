@@ -47,7 +47,7 @@ describe('VillainsController', () => {
       $scope.createVillain({name: 'the sent villain'});
       $httpBackend.flush();
       expect($scope.villains.length).toBe(1);
-      expect($scope.newVillain).toBe(null);
+      //expect($scope.newVillain).toBe(null);
       expect($scope.villains[0].name).toBe('the response villain');
     });
 

@@ -11,6 +11,10 @@ button {
   background-color: #f44336; /*Red*/
 }
 
+.cancelButton {
+  background-color: #f44336; /*Red*/
+}
+
 .editButton {
   background-color: #008CBA; /*Blue*/
 }
@@ -63,7 +67,6 @@ h2 {
   margin-right: 5px;
   margin-top: 0;
   background-color: #f44336; /*Red*/
-  /*background-image: url("http://40.media.tumblr.com/da6edb11d90aefb2a8cb6dcfe1ad573d/tumblr_n386n2wrNh1qz4zhao5_1280.jpg");*/
 }
 
 .heroes {
@@ -147,3 +150,4 @@ aside {
   height: 650px;
   position: relative;
 }
+

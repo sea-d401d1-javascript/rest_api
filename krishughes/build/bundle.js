@@ -52,6 +52,7 @@
 
 	__webpack_require__(5)(supersApp);
 	__webpack_require__(7)(supersApp);
+	__webpack_require__(9)(supersApp);
 
 
 /***/ },
@@ -30598,7 +30599,7 @@
 	        heroService.create(hero, function(err, res) {
 	          if (err) return console.log(err);
 	          $scope.heroes.push(res);
-	          $scope.newHero = null;
+	          $scope.super = null;
 	        });
 	      };
 
@@ -30663,7 +30664,7 @@
 	        villainService.create(villain, function(err, res) {
 	          if (err) return console.log(err);
 	          $scope.villains.push(res);
-	          $scope.newVillain = null;
+	          $scope.super = null;
 	        });
 	      };
 
@@ -30683,6 +30684,30 @@
 	      };
 	  }]);
 	}
+
+
+/***/ },
+/* 9 */
+/***/ function(module, exports) {
+
+	module.exports = function(app) {
+	  app.directive('supersForm', function() {
+	    return {
+	    	restrict: 'EAC',
+	      replace: true,
+	      transclude: true,
+	      templateUrl: '/templates/supers/directives/form_directive.html',
+	      scope: {
+	    	  buttonText: '@',
+	    	  super: '=',
+	    	  save: '&'
+	    	}
+	      // controller: function($scope) {
+	      //   $scope.hero = $scope.hero || {};
+	      // }
+	    };
+	  });
+	};
 
 
 /***/ }
