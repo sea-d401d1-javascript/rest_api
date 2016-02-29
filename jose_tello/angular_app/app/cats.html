@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CATS</title>
+</head>
+<body data-ng-app="catsApp">
+  <main data-ng-controller="CatsController" data-ng-init="getAll()">
+    <h1>Binder Full of Cats</h1>
+    <ul>
+      <li data-ng-repeat="cat in cats">{{cat.name}}, {{cat.color}}, {{cat.lives}}
+        <button data-ng-click="deleteCat(cat)">DELETE</button>
+        <button data-ng-click="cat.editing = !cat.editing">UPDATE</button>
+        <form data-ng-if="cat.modify" data-ng-submit="updateCat(cat)">
+          <input data-ng-model="cat.name" type="text">
+          <input data-ng-model="cat.color" type="text">
+          <input data-ng-model="cat.lives" type="text">
+          <button type="submit">SUBMIT</button>
+        </form>
+      </li>
+    </ul>
+    <br>
+    <form data-ng-submit="createCat(newCat)">
+      <input data-ng-model="newCat.name" type="text">
+      <input data-ng-model="newCat.color" type="text">
+      <input data-ng-model="newCat.lives" type="text">
+      <button type="submit">NEW CAT</button>
+    </form>
+    <br>
+    <h5>{{cats}}</h5>
+  </main>
+  <script src="bundle.js"></script>
+</body>
+</html>
