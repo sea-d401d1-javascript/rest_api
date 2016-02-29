@@ -5,12 +5,13 @@ import material from 'angular-material';
 import aria from 'angular-aria';
 import uiRouter from 'angular-ui-router';
 import combinedCtrl from './partials/combined/controller';
-import kittensCtrl from './partials/kittens/controller';
 import internetzCtrl from './partials/internetz/controller';
 import resourceService from './services/resource_service';
+import crudDirective from './directives/crud';
 
 const restApp = angular.module('restApp', [material, aria, uiRouter]);
 resourceService(restApp);
+crudDirective(restApp);
 
 restApp.config(['$stateProvider', '$urlRouterProvider',
   ($stateProvider, $urlRouterProvider) => {
@@ -24,8 +25,7 @@ restApp.config(['$stateProvider', '$urlRouterProvider',
       })
       .state('kittens', {
         url: '/kittens',
-        templateUrl: 'partials/kittens/template.html',
-        controller: kittensCtrl
+        template: '<crud-directive resource-name="kittens"></crud-directive>'
       })
       .state('internetz', {
         url: '/internetz',

@@ -1,0 +1,28 @@
+<section class="container" ng-show="loaded" data-ng-init="getAll()">
+  <h2>{{$scope.resourceName}} view</h2>
+  <md-list>
+    <md-list-item data-ng-repeat="item in items">
+      <span ng-repeat="(key, value) in filterMongoFields(item)"><strong>{{key}}: </strong>{{value}}&nbsp;</span>
+      <md-button class="md-md-button md-raised" data-ng-click="item.editing = !item.editing">Edit</md-button>
+      <md-button class="md-fab md-mini md-warn" data-ng-click="delete(item._id)" aria-label="delete button">
+        <md-icon><i class="material-icons">delete</i></md-icon>
+      </md-button>
+      <form data-ng-if="item.editing" data-ng-submit="edit(item)">
+        <label for="name">Name: </label><input type="text" data-ng-model="item.name">
+        <label for="eats">Eats: </label><input type="text" data-ng-model="item.eats">
+        <md-button class="md-md-button md-raised md-primary" type="submit">Submit</md-button>
+      </form>
+    </md-list-item>
+  </md-list>
+  <form data-ng-submit="add($scope.newItem)">
+    <md-input-container>
+      <label for="name">Name: </label>
+      <input type="text" data-ng-model="newItem.name">
+    </md-input-container>
+    <md-input-container>
+      <label for="eats">Eats: </label>
+      <input type="text" data-ng-model="newItem.eats">
+    </md-input-container>
+    <md-button class="md-md-button md-raised md-primary" type="submit">Add</md-button>
+  </form>
+</section>
