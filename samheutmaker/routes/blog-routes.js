@@ -83,7 +83,26 @@ userRouter.post('/post', authRequired, jsonParser, (req, res) => {
 });
 
 // Get all posts 
-userRouter.get('/all', authRequired, (req, res) => {
+userRouter.get('/all', (req, res) => {
+  Post.find({}, (err, data) => {
+    if(err) {
+      return res.status(500).json({
+        msg: 'There was an error'
+      })
+    }
+    if(!data) {
+       return res.status(300).json({
+        msg: 'User has no posts'
+      })
+    }
+    res.status(200).json({
+      posts: data
+    })
+  })
+});
+
+// Get user posts 
+userRouter.get('/posts', authRequired, (req, res) => {
   Post.find({
     author_id: req.user.id
   }, (err, data) => {
@@ -101,7 +120,7 @@ userRouter.get('/all', authRequired, (req, res) => {
       posts: data
     })
   })
-})
+});
 
 // Get post by id
 userRouter.get('/posts/:id', authRequired, (req, res) => {

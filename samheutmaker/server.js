@@ -6,7 +6,9 @@ const app = express();
 
 const PORT = process.env.PORT || 8080;
 
-mongoose.connect('localhost:27017');
+const dbString = process.env.MONGO_URI || 'localhost:27017';
+
+mongoose.connect(dbString);
 
 app.use(express.static(__dirname + '/www/build'));
 

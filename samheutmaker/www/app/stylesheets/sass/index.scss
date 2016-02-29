@@ -1,47 +1,21 @@
-@font-face {
-    font-family: "clean";
-    src: url(fonts/clean.woff);
-}
 
-html, body {
-    height: 100%;
-    padding: 0px;
-    margin: 0px;
-    font-family: clean !important;
-}
-
-ul {
-    list-style: none;
-    position: relative;
-    float: right;
-    top: 0px;
-
-    li {
-        float: left;
-        margin: 10px;
-        color: black;
-
-        &:hover {
-            cursor: pointer;
-            color: lighten(black, 10%);
-        }
-    }
-}
 
 .input {
             position: relative;
-            width: 100%;
+            width: 90%;
             color: black;
             margin-bottom: 10px;
+            margin-left: 10px;
         }
+
+
+.text-area{
+    height: 300px;
+}
 
 .container {
     height: calc(100% - 60px);
-    top: 60px;
     position: relative;
-    width: 100%;
-    margin: 0 auto;
-    border-top: 1px solid rgba(0,0,0,0.4);
 }
 
 .post-container {
@@ -49,7 +23,6 @@ ul {
 
     .new-post{
         position: relative;
-        width: 900px;
         margin: 0 auto;
 
         .new-post-title{
@@ -63,17 +36,18 @@ ul {
 
     .blog-inside {
         position: relative;
-        width: 906px;
         margin: 0 auto;
 
         .post {
             position: relative;
-            width: 300px;
-            height: 400px;
-            border: 1px solid rgba(0,0,0,0.4);
+            width: 45%;
+            height: 300px;
+            border: 1px inset rgba(0,0,0,0.4);
             background-color: lightgrey;
             color: black;
+            margin: 3px;
             float: left;
+            overflow: scroll;
 
             .edit{
                 position: absolute;
@@ -112,20 +86,15 @@ ul {
     }
 }
 
-.controls {
-    position: absolute;
-    width: 300px;
-    height: 95%;
-    top: 2.5%;
-    background-color: rgba(173, 191, 204, 0.8);
-    left: 2.5%;
-    z-index: 9999999999;
-}
 
-.leaflet-container {
-    position: absolute;
-    height: 100%;
-    top: 0px;
-    width: 100%;
-    display: block;
+footer{
+    position: relative;
+    max-width: 100%;
+    margin-top: 60px;
+    background-color: lightgrey;
+    font-size: 26px;
+    height: 300px;
+    border-top: 1px solid black;
+    padding: 10px;
+
 }
