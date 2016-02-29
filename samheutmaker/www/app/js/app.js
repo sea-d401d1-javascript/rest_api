@@ -16,11 +16,11 @@ blogApp
 
 
 //Main Controller
-blogApp.controller('PostController', ['$scope', 'EE', '$window', 'Post',
-  function($scope, EE, $window, Post) {
+blogApp.controller('MainController', ['$scope', 'EE', '$window', 'Post', 'Blog',
+  function($scope, EE, $window, Post, Blog) {
 
     // User Authenticated
-    $scope.$on('USER_AUTHENT`ICATED', (id) => {
+    $scope.$on('USER_AUTHENTICATED', (id) => {
       // Show blogs
       $scope.showAll = true;
       Blog.getAllPosts().then(function(res) {
