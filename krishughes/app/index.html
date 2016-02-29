@@ -7,7 +7,7 @@
 	<meta charset="UTF-8">
 	<title>Heroes and Villains</title>
 </head>
-<body data-ng-app="supersApp" >
+<body data-ng-app="supersApp" ng-cloak>
   <section class="wrapper">
     <header>
       <h1>Heroes vs Villains</h1>
@@ -41,8 +41,8 @@
         <h3>Create A Hero</h3>
         <supers-form
           class="create"
-          data-super="hero"
-          data-save="createHero(hero)"
+          data-super="super"
+          data-save="createHero(super)"
           data-button-text="Create Hero">
         </supers-form>
         <footer>
@@ -57,7 +57,7 @@
 
       <section class="villains" data-ng-controller="VillainsController" data-ng-init="getAllVillains()">
         <h2 class="titles">Villain List</h2>
-		    <section class="mod">
+		    <section class="padding">
           <h3>Modify and Delete Villains</h3>
           <ul>
             <li data-ng-repeat="villain in villains">Name: {{villain.name}}, Level: {{villain.level}}
@@ -88,8 +88,8 @@
           <h3>Create A Villain</h3>
           <supers-form
             class="create"
-            data-super="villain"
-            data-save="createVillain(villain)"
+            data-super="super"
+            data-save="createVillain(super)"
             data-button-text="Create Villain">
           </supers-form>
           <footer>

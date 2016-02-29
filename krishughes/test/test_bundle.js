@@ -33620,11 +33620,11 @@
 	    it('should create a new hero', () => {
 	      $httpBackend.expectPOST('http://localhost:3000/api/heroes', {name: 'the sent hero'}).respond(200,
 	      	{name: 'the response hero'});
-	      $scope.newHero = {name: 'the new hero'};
+	      $scope.super = {name: 'the new hero'};
 	      $scope.createHero({name: 'the sent hero'});
 	      $httpBackend.flush();
 	      expect($scope.heroes.length).toBe(1);
-	      //expect($scope.newHero).toBe(null);
+	      expect($scope.super).toBe(null);
 	      expect($scope.heroes[0].name).toBe('the response hero');
 	    });
 
@@ -33706,11 +33706,11 @@
 	    it('should create a new villain', () => {
 	      $httpBackend.expectPOST('http://localhost:3000/api/villains', {name: 'the sent villain'})
 	        .respond(200, {name: 'the response villain'});
-	      $scope.newVillain = {name: 'the new villain'};
+	      $scope.super = {name: 'the new villain'};
 	      $scope.createVillain({name: 'the sent villain'});
 	      $httpBackend.flush();
 	      expect($scope.villains.length).toBe(1);
-	      //expect($scope.newVillain).toBe(null);
+	      expect($scope.super).toBe(null);
 	      expect($scope.villains[0].name).toBe('the response villain');
 	    });
 

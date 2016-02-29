@@ -5,6 +5,16 @@ button {
   font-size: 14px;
   border-radius: 6px;
   width: 100px;
+  margin-left: 2px;
+}
+
+input {
+  margin-left: 2px;
+  width: 175px;
+}
+
+li {
+  margin-left: 2px;
 }
 
 .deleteButton {
@@ -81,13 +91,15 @@ h2 {
   float: left;
   width: 500px;
   margin-top: 0;
-  overflow: auto;
+  /*overflow: auto;*/
   height: 498px;
 }
 
-.mod {
+.padding {
   padding-left: 4px;
   width: 496px;
+  height: 453px;
+  overflow: auto;
 }
 
 .create {
@@ -151,3 +163,6 @@ aside {
   position: relative;
 }
 
+[ng\:cloak], [ng-cloak], .ng-cloak {
+  display: none !important;
+}
