@@ -12,10 +12,10 @@
   height: calc(100% - 60px);
   position: relative; }
 
-.post-container .new-post {
+.post-container .create-post {
   position: relative;
   margin: 0 auto; }
-  .post-container .new-post .new-post-title {
+  .post-container .create-post .new-post-title {
     width: 300px; }
 
 .blog-container .blog-inside {

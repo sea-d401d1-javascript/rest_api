@@ -45,9 +45,10 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var angular = __webpack_require__(1);
-
-
 	var blogApp = angular.module('blogApp', []);
+
+	__webpack_require__(3)(blogApp);
+	__webpack_require__(6)(blogApp);
 
 	blogApp
 	// Add Token Middleware
@@ -62,8 +63,8 @@
 
 
 	//Main Controller
-	blogApp.controller('MainController', ['$scope', 'EE', '$window', 'Post', 'Blog',
-	  function($scope, EE, $window, Post, Blog) {
+	blogApp.controller('MainController', ['$scope', 'EE', '$window', 'Blog',
+	  function($scope, EE, $window, Blog) {
 
 	    // User Authenticated
 	    $scope.$on('USER_AUTHENTICATED', (id) => {
@@ -75,92 +76,7 @@
 	    });
 	  }
 	]);
-	//Post Functionality
-	blogApp.controller('PostController', ['$scope', 'EE', '$window', 'Post',
-	  function($scope, EE, $window, Post) {
 
-	    $scope.showNewPost = true;
-
-	    $scope.createNewPost = function(post) {
-	      Post.createNewPost(post).then(function(res) {
-	        EE.emit('EVENTS_UPDATED', res);
-	        console.log(res);
-	      });
-	    }
-	  }
-	]);
-
-	// Blog Functionality
-	blogApp.controller('AllPostsController', ['$scope', 'EE', '$window', 'Blog',
-	  function($scope, EE, $window, Blog) {
-
-	    // Vars
-	    $scope.allPosts = {};
-	    $scope.showBlogs = false;
-
-	    $scope.$on('EVENTS_UPDATED', function() {
-	      $scope.getAllPosts();
-	    });
-
-	    // User Authenticated
-	    $scope.$on('USER_AUTHENTICATED', (id) => {
-	      // Show blogs
-	      $scope.showBlogs = true;
-	      $scope.getAllPosts();
-	    });
-
-	    $scope.getAllPosts = function() {
-	      Blog.getAllPosts().then(function(res) {
-	        $scope.allPosts = res.data.posts;
-	      });
-	    }
-	  }
-	]);
-
-	// Blog Functionality
-	blogApp.controller('BlogController', ['$scope', 'EE', '$window', 'Blog',
-	  function($scope, EE, $window, Blog) {
-
-	    // Vars
-	    $scope.allPosts = {};
-	    $scope.showBlogs = false;
-
-	    //Update Post
-	    $scope.updatePost = function(post) {
-	      console.log($scope.allPosts[$scope.allPosts.indexOf(post)]);
-	      Blog.updatePost(post).then(function(data) {
-	        console.log(data);
-	      });
-	    };
-
-	    //Delete Post
-	    $scope.deletePost = function(index) {
-	      var toRemove = $scope.allPosts.splice(index, 1);
-	      Blog.deletePost(toRemove[0]._id).then(function(res) {
-	        console.log(res);
-	      });
-	    };
-
-	    // Get users posts
-	    $scope.getUserPosts = function() {
-	      Blog.getUserPosts().then(function(res) {
-	        $scope.allPosts = res.data.posts;
-	      });
-	    };
-	    
-	    // User posts on new post
-	    $scope.$on('EVENTS_UPDATED', function() {
-	      $scope.getUserPosts();
-	    });
-
-	    // User Authenticated
-	    $scope.$on('USER_AUTHENTICATED', (id) => {
-	      // Show blogs
-	      $scope.showBlogs = true;
-	      $scope.getUserPosts();
-	    });
-	  }
-	]);
 
 	blogApp
 	// Auth Container Controller
@@ -233,95 +149,6 @@
 	    };
 	  }
 	])
-
-	// Factories
-	blogApp
-
-	.factory('Post', function($http) {
-	  return {
-	    baseUrl: 'http://localhost:8080/user',
-	    createNewPost: function(post) {
-	      return $http.post(this.baseUrl + '/post', post);
-	    }
-	  }
-	})
-
-	.factory('Blog', function($http) {
-	  return {
-	    baseUrl: 'http://localhost:8080/user',
-	    getAllPosts: function() {
-	      return $http.get(this.baseUrl + '/all')
-	    },
-	    getUserPosts: function() {
-	      return $http.get(this.baseUrl + '/posts')
-	    },
-	    updatePost: function(post) {
-	      return $http.put(this.baseUrl + '/posts/' + post._id, post);
-	    },
-	    deletePost: function(id) {
-	      return $http.delete(this.baseUrl + '/posts/' + id);
-	    }
-	  }
-	})
-
-	.factory('User', function($http) {
-	  return {
-	    baseUrl: 'http://localhost:8080/user',
-	    login: function(data) {
-
-	      var headerData = data.email + ':' + data.password;
-	      var headerData = btoa(headerData);
-
-	      return $http({
-	        method: 'GET',
-	        url: this.baseUrl + '/login',
-	        headers: {
-	          authorization: 'Basic ' + headerData
-	        }
-	      });
-	    },
-	    register: function(data) {
-	      var toSend = {
-	        authentication: {
-	          email: data.email,
-	          password: data.password
-	        }
-	      };
-
-	      return $http({
-	        method: 'POST',
-	        url: this.baseUrl + '/register',
-	        data: toSend
-	      });
-	    }
-	  }
-	})
-	// Attaches token to evey request
-	.factory('authInterceptor', function($rootScope, $q, $window) {
-	  return {
-	    request: function(req) {
-	      req.headers = req.headers || {};
-	      if ($window.sessionStorage.token) {
-	        // retrieve token from session storage if it exists; store in config object
-	        req.headers.token = $window.sessionStorage.token;
-	      }
-	      return req;
-	    },
-	    response: function(response) {
-	      if (response.status === 401) {
-	        // handle the case where the user is not authenticated
-	      }
-	      return response || $q.when(response);
-	    }
-	  };
-	})
-	  .factory('EE', function($rootScope) {
-	    return {
-	      emit: function(event, data) {
-	        $rootScope.$broadcast(event, data);
-	      }
-	    }
-	  })
 
 /***/ },
 /* 1 */
@@ -30763,6 +30590,206 @@
 	})(window, document);
 
 	!window.angular.$$csp().noInlineStyle && window.angular.element(document.head).prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>');
+
+/***/ },
+/* 3 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = function(app) {
+		__webpack_require__(4)(app);
+		__webpack_require__(5)(app);
+	};
+
+/***/ },
+/* 4 */
+/***/ function(module, exports) {
+
+	module.exports = function(app) {
+	  app.directive('blogPosts', function() {
+	    return {
+	      restrict: 'AEC',
+	      templateUrl: '/templates/blog/posts.html',
+	      replace: true,
+	      controller: function($scope, EE, $window, Blog) {
+	        // Vars
+	        $scope.allPosts = {};
+	        $scope.showBlogs = false;
+	        //Update Post
+	        $scope.updatePost = function(post) {
+	          Blog.updatePost(post).then(function(data) {
+	          });
+	        };
+	        //Delete Post
+	        $scope.deletePost = function(index) {
+	          var toRemove = $scope.allPosts.splice(index, 1);
+	          Blog.deletePost(toRemove[0]._id).then(function(res) {
+	          });
+	        };
+	        // Get users posts
+	        $scope.getUserPosts = function() {
+	          Blog.getUserPosts().then(function(res) {
+	            $scope.allPosts = res.data.posts;
+	          });
+	        };
+	        // User posts on new post
+	        $scope.$on('EVENTS_UPDATED', function() {
+	          $scope.getUserPosts();
+	        });
+	        // User Authenticated
+	        $scope.$on('USER_AUTHENTICATED', (id) => {
+	          // Show blogs
+	          $scope.showBlogs = true;
+	          $scope.getUserPosts();
+	        });
+	      }
+	    }
+	  });
+	}
+
+/***/ },
+/* 5 */
+/***/ function(module, exports) {
+
+	module.exports = function(app) {
+	  app.directive('newPost', function() {
+	    return {
+	      restrict: 'AEC',
+	      replace: true,
+	      templateUrl: '/templates/blog/new-post.html',
+	      controller: function($scope, EE, $window, Blog) {
+
+	        $scope.showNewPost = true;
+
+	        $scope.createNewPost = function(post) {
+	          Blog.newPost(post).then(function(res) {
+	            EE.emit('EVENTS_UPDATED', res);
+	            console.log(res);
+	          });
+	        }
+	      }
+	    }
+	  })
+	}
+
+
+/***/ },
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = function(app) {
+	  __webpack_require__(7)(app);
+	  __webpack_require__(8)(app);
+	  __webpack_require__(9)(app);
+	  __webpack_require__(10)(app);
+	}
+
+/***/ },
+/* 7 */
+/***/ function(module, exports) {
+
+	// Blog Service
+	module.exports = function(app) {
+	  app.factory('Blog', function($http) {
+	    return {
+	      baseUrl: 'http://localhost:8080/user',
+	      newPost: function(post) {
+	      	return $http.post(this.baseUrl + '/post', post);
+	      },
+	      getAllPosts: function() {
+	        return $http.get(this.baseUrl + '/all')
+	      },
+	      getUserPosts: function() {
+	        return $http.get(this.baseUrl + '/posts')
+	      },
+	      updatePost: function(post) {
+	        return $http.put(this.baseUrl + '/posts/' + post._id, post);
+	      },
+	      deletePost: function(id) {
+	        return $http.delete(this.baseUrl + '/posts/' + id);
+	      }
+	    }
+	  });
+	}
+
+/***/ },
+/* 8 */
+/***/ function(module, exports) {
+
+	// Event Emitter Service
+	module.exports = function(app) {
+	  app.factory('EE', function($rootScope) {
+	    return {
+	      emit: function(event, data) {
+	        $rootScope.$broadcast(event, data);
+	      }
+	    }
+	  });
+	}
+
+/***/ },
+/* 9 */
+/***/ function(module, exports) {
+
+	module.exports = function(app) {
+	  app.factory('User', function($http) {
+	    return {
+	      baseUrl: 'http://localhost:8080/user',
+	      login: function(data) {
+
+	        var headerData = data.email + ':' + data.password;
+	        var headerData = btoa(headerData);
+
+	        return $http({
+	          method: 'GET',
+	          url: this.baseUrl + '/login',
+	          headers: {
+	            authorization: 'Basic ' + headerData
+	          }
+	        });
+	      },
+	      register: function(data) {
+	        var toSend = {
+	          authentication: {
+	            email: data.email,
+	            password: data.password
+	          }
+	        };
+
+	        return $http({
+	          method: 'POST',
+	          url: this.baseUrl + '/register',
+	          data: toSend
+	        });
+	      }
+	    }
+	  })
+	}
+
+/***/ },
+/* 10 */
+/***/ function(module, exports) {
+
+	// Attaches tokent to every request
+	module.exports = function(app) {
+	  app.factory('authInterceptor', function($rootScope, $q, $window) {
+	    return {
+	      request: function(req) {
+	        req.headers = req.headers || {};
+	        if ($window.sessionStorage.token) {
+	          // retrieve token from session storage if it exists; store in config object
+	          req.headers.token = $window.sessionStorage.token;
+	        }
+	        return req;
+	      },
+	      response: function(response) {
+	        if (response.status === 401) {
+	          // handle the case where the user is not authenticated
+	        }
+	        return response || $q.when(response);
+	      }
+	    };
+	  });
+	}
 
 /***/ }
 /******/ ]);
