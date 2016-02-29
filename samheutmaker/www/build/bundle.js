@@ -91,6 +91,33 @@
 	]);
 
 	// Blog Functionality
+	blogApp.controller('AllPostsController', ['$scope', 'EE', '$window', 'Blog',
+	  function($scope, EE, $window, Blog) {
+
+	    // Vars
+	    $scope.allPosts = {};
+	    $scope.showBlogs = false;
+
+	    $scope.$on('EVENTS_UPDATED', function() {
+	      $scope.getAllPosts();
+	    });
+
+	    // User Authenticated
+	    $scope.$on('USER_AUTHENTICATED', (id) => {
+	      // Show blogs
+	      $scope.showBlogs = true;
+	      $scope.getAllPosts();
+	    });
+
+	    $scope.getAllPosts = function() {
+	      Blog.getAllPosts().then(function(res) {
+	        $scope.allPosts = res.data.posts;
+	      });
+	    }
+	  }
+	]);
+
+	// Blog Functionality
 	blogApp.controller('BlogController', ['$scope', 'EE', '$window', 'Blog',
 	  function($scope, EE, $window, Blog) {
 
@@ -114,13 +141,23 @@
 	      });
 	    };
 
+	    // Get users posts
+	    $scope.getUserPosts = function() {
+	      Blog.getUserPosts().then(function(res) {
+	        $scope.allPosts = res.data.posts;
+	      });
+	    };
+	    
+	    // User posts on new post
+	    $scope.$on('EVENTS_UPDATED', function() {
+	      $scope.getUserPosts();
+	    });
+
 	    // User Authenticated
 	    $scope.$on('USER_AUTHENTICATED', (id) => {
 	      // Show blogs
 	      $scope.showBlogs = true;
-	      Blog.getAllPosts().then(function(res) {
-	        $scope.allPosts = res.data.posts;
-	      });
+	      $scope.getUserPosts();
 	    });
 	  }
 	]);
@@ -214,6 +251,9 @@
 	    baseUrl: 'http://localhost:8080/user',
 	    getAllPosts: function() {
 	      return $http.get(this.baseUrl + '/all')
+	    },
+	    getUserPosts: function() {
+	      return $http.get(this.baseUrl + '/posts')
 	    },
 	    updatePost: function(post) {
 	      return $http.put(this.baseUrl + '/posts/' + post._id, post);

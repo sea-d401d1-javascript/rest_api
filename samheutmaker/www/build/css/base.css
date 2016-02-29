@@ -9,6 +9,13 @@ html, body {
   margin: 0px;
   font-family: clean !important; }
 
+h1 {
+  text-decoration: underline;
+  padding: 0px; }
+
+h3 {
+  text-decoration: underline; }
+
 ul {
   list-style: none;
   position: relative;

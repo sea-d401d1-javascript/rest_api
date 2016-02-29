@@ -1,14 +1,16 @@
 .input {
   position: relative;
-  width: 100%;
+  width: 90%;
   color: black;
-  margin-bottom: 10px; }
+  margin-bottom: 10px;
+  margin-left: 10px; }
+
+.text-area {
+  height: 300px; }
 
 .container, .post-container, .blog-container {
   height: calc(100% - 60px);
-  top: 60px;
-  position: relative;
-  border: 1px solid black; }
+  position: relative; }
 
 .post-container .new-post {
   position: relative;
@@ -57,18 +59,12 @@
       font-size: 18px;
       color: black; }
 
-.controls {
-  position: absolute;
-  width: 300px;
-  height: 95%;
-  top: 2.5%;
-  background-color: rgba(173, 191, 204, 0.8);
-  left: 2.5%;
-  z-index: 9999999999; }
-
-.leaflet-container {
-  position: absolute;
-  height: 100%;
-  top: 0px;
-  width: 100%;
-  display: block; }
+footer {
+  position: relative;
+  max-width: 100%;
+  margin-top: 60px;
+  background-color: lightgrey;
+  font-size: 26px;
+  height: 300px;
+  border-top: 1px solid black;
+  padding: 10px; }
