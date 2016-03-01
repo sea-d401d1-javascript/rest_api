@@ -25,6 +25,26 @@ gulp.task('webpack:dev', () => {
 });
 
 
+// Test
+gulp.task('webpack:test', () => {
+  gulp.src(__dirname + '/test/client/test-entry.js')
+    .pipe(webpack({
+      module: {
+        loaders: [
+          {
+            test:/\.html$/,
+            loader: 'html'
+          }
+        ]
+      },
+      output: {
+        filename: 'test-bundle.js'
+      }
+    }))
+    .pipe(gulp.dest(__dirname + '/test/client/'));
+});
+
+
 // Sass
 gulp.task('sass:all', function() {
   return gulp.src(__dirname + '/www/app/stylesheets/sass/*.scss')

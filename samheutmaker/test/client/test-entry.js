@@ -1,4 +1,4 @@
-require(__dirname + '/../../www/app/js/app.js');
+require('../../www/app/js/app');
 require('angular-mocks');
 
-require(__dirname + '/')
+require(__dirname + '/blog-service-test');
