@@ -1,0 +1,19 @@
+<section class="container" ng-show="loaded" data-ng-init="getAll()">
+  <h2>{{resourceName}} view</h2>
+  <md-list>
+    <md-list-item data-ng-repeat="item in items">
+      <span ng-repeat="(key, value) in filterMongoFields(item)"><strong>{{key}}: </strong>{{value}}&nbsp;</span>
+      <md-button class="md-md-button md-raised" data-ng-click="showEdit($event, item, $index)">Edit</md-button>
+      <md-button class="md-fab md-mini md-warn" data-ng-click="delete(item)" aria-label="delete button">
+        <md-icon><i class="material-icons">delete</i></md-icon>
+      </md-button>
+    </md-list-item>
+  </md-list>
+  <form data-ng-submit="add($scope.newItem)">
+    <md-input-container data-ng-repeat="(key, value) in filterMongoFields(items[0])">
+      <label for="{{key}}">{{key}}: </label>
+      <input name="{{key}}" type="text" data-ng-model="newItem[key]">
+    </md-input-container>
+    <md-button class="md-md-button md-raised md-primary" type="submit">Add</md-button>
+  </form>
+</section>
