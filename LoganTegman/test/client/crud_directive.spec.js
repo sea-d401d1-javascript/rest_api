@@ -2,10 +2,10 @@
 
 /* eslint-env jasmine */
 
-import kittensCtrl from '../../app/partials/kittens/controller';
+import crudCtrl from '../../app/directives/crud/controller';
 const { angular } = window;
 
-describe('kittens controller', () => {
+describe('crud controller', () => {
   let $httpBackend;
   let $scope;
   let $controller;
@@ -15,28 +15,29 @@ describe('kittens controller', () => {
   beforeEach(angular.mock.inject(($rootScope, _$controller_) => {
     $controller = _$controller_;
     $scope = $rootScope.$new();
+    $scope.resourceName = 'kittens';
   }));
 
   it('should be able to make a controller', () => {
-    const kittensController = $controller(kittensCtrl, { $scope });
-    expect(typeof kittensController).toBe('object');
-    expect(Array.isArray($scope.kittens)).toBe(true);
-    expect(typeof $scope.getKittens).toBe('function');
+    const crudController = $controller(crudCtrl, { $scope });
+    expect(typeof crudController).toBe('object');
+    expect(Array.isArray($scope.items)).toBe(true);
+    expect(typeof $scope.getAll).toBe('function');
   });
 
   describe('rest requests', () => {
     beforeEach(angular.mock.inject((_$httpBackend_) => {
       $httpBackend = _$httpBackend_;
-      $controller(kittensCtrl, { $scope });
+      $controller(crudCtrl, { $scope });
     }));
 
     it('should make a get request to /api/kittens', () => {
       $httpBackend.expectGET('http://localhost:3000/api/kittens')
         .respond(200, [{ name: 'test kitten' }]);
-      $scope.getKittens();
+      $scope.getAll();
       $httpBackend.flush();
-      expect($scope.kittens.length).toBe(1);
-      expect($scope.kittens[0].name).toBe('test kitten');
+      expect($scope.items.length).toBe(1);
+      expect($scope.items[0].name).toBe('test kitten');
       expect($scope.loaded).toBe(true);
     });
 
@@ -46,41 +47,38 @@ describe('kittens controller', () => {
       })
       .respond(200, { name: 'res kitten' });
 
-      $scope.newKitten = { name: 'new kitten' };
-      $scope.addKitten({ name: 'post kitten' });
+      $scope.newItem = { name: 'new kitten' };
+      $scope.add({ name: 'post kitten' });
       $httpBackend.flush();
-      expect($scope.kittens.length).toBe(1);
-      expect($scope.kittens[0].name).toBe('res kitten');
-      expect($scope.newKitten).toBe(null);
+      expect($scope.items.length).toBe(1);
+      expect($scope.items[0].name).toBe('res kitten');
+      expect($scope.newItem).toBe(null);
     });
 
     it('should be able to edit a kitten', () => {
       $httpBackend.expectPUT('http://localhost:3000/api/kittens/test', {
         _id: 'test',
-        name: 'put kitten',
-        editing: true
+        name: 'put kitten'
       })
       .respond(200, { msg: 'success' });
 
       const kitten = {
         _id: 'test',
-        name: 'put kitten',
-        editing: true
+        name: 'put kitten'
       };
 
-      $scope.editKitten(kitten);
+      $scope.edit(kitten);
       $httpBackend.flush();
-      expect(kitten.editing).toBe(false);
     });
 
     it('should be able to delete a kitten', () => {
       $httpBackend.expectDELETE('http://localhost:3000/api/kittens/test')
         .respond(200, { msg: 'success' });
-      $scope.kittens = [{ _id: 'test' }, { _id: 'not test' }];
-      $scope.deleteKitten({ _id: 'test' });
+      $scope.items = [{ _id: 'test' }, { _id: 'not test' }];
+      $scope.delete({ _id: 'test' });
       $httpBackend.flush();
-      expect($scope.kittens.length).toBe(1);
-      expect($scope.kittens[0]._id).toBe('not test');
+      expect($scope.items.length).toBe(1);
+      expect($scope.items[0]._id).toBe('not test');
     });
 
     afterEach(() => {

@@ -1,0 +1,23 @@
+<md-dialog aria-label="List dialog">
+  <form data-ng-submit="submitEdit(item, index)">
+    <md-dialog-content>
+      <div>
+        <md-input-container data-ng-repeat="(key, value) in filterMongoFields(item)">
+          <label for="{{key}}">{{key}}: </label>
+          <input name="{{key}}" type="text" data-ng-model="item[key]" md-autofocus="$first">
+        </md-input-container>
+      </div>
+    </md-dialog-content>
+    <md-dialog-actions data-layout-gt-xs="row">
+      <md-button
+        class="md-button md-raised md-warning"
+        type="button"
+        data-ng-click="hideEdit()">Cancel
+      </md-button>
+      <md-button
+        class="md-button md-raised md-primary"
+        type="submit">Submit
+      </md-button>
+    </md-dialog-actions>
+  </form>
+</md-dialog>

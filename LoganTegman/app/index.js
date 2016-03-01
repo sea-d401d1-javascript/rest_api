@@ -4,8 +4,7 @@ import angular from 'angular';
 import material from 'angular-material';
 import aria from 'angular-aria';
 import uiRouter from 'angular-ui-router';
-import combinedCtrl from './partials/combined/controller';
-import internetzCtrl from './partials/internetz/controller';
+import combinedCtrl from './views/combined/controller';
 import resourceService from './services/resource_service';
 import crudDirective from './directives/crud';
 
@@ -20,7 +19,7 @@ restApp.config(['$stateProvider', '$urlRouterProvider',
     $stateProvider
       .state('combined', {
         url: '/',
-        templateUrl: 'partials/combined/template.html',
+        templateUrl: 'views/combined/template.html',
         controller: combinedCtrl
       })
       .state('kittens', {
@@ -29,7 +28,6 @@ restApp.config(['$stateProvider', '$urlRouterProvider',
       })
       .state('internetz', {
         url: '/internetz',
-        templateUrl: 'partials/internetz/template.html',
-        controller: internetzCtrl
+        template: '<crud-directive resource-name="internetz"></crud-directive>'
       });
   }]);

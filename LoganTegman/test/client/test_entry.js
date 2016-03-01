@@ -2,5 +2,5 @@
 
 import '../../app/index';
 import 'angular-mocks';
-import './kittens_controller_test';
-import './resource_service_test';
+import './resource_service.spec';
+import './crud_directive.spec';
