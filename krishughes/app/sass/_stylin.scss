@@ -1,3 +1,7 @@
+$red: #f44336;
+$blue: #008CBA;
+$green: #4CAF50;
+
 .wrapper {
   width: 1268px;
   height: 650px;
@@ -46,20 +50,20 @@ button {
 }
 
 .deleteButton, .cancelButton {
-  background-color: #f44336; /*Red*/
+  background-color: $red;
 }
 
 .editButton {
-  background-color: #008CBA; /*Blue*/
+  background-color: $blue;
 }
 
 .submitButton {
-  background-color: #4CAF50; /*Green*/
+  background-color: $green;
 }
 
 ul {
   margin-bottom: 20px;
-  border: solid 2px #f44336;
+  border: solid 2px $red;
 }
 
 li {
@@ -76,7 +80,7 @@ input {
 }
 
 .create {
-  border: solid 2px #4CAF50;
+  border: solid 2px $green;
 }
 
 .heroes {
@@ -95,12 +99,11 @@ input {
   width: 150px;
   height: 498px;
   text-align: center;
-  background-color: #f44336;
+  background-color: $red;
   color: white;
   margin-left: 5px;
   margin-right: 5px;
   margin-top: 0;
-  background-color: #f44336; /*Red*/
 }
 
 .villains {
@@ -123,7 +126,7 @@ aside {
   margin-left: 0;
   margin-right: 0;
   margin-top: 0;
-  background-color: #008CBA; /*Blue*/
+  background-color: $blue;
 }
 
 .left {
@@ -140,7 +143,7 @@ footer {
   margin-top: 20px;
   p {
     overflow: scroll;
-    border: solid 2px #008CBA;
+    border: solid 2px $blue;
   }
 }
 
@@ -151,6 +154,6 @@ footer {
   padding-top: 8px;
   position: absolute;
   bottom: 0;
-  background-color: #008CBA; /*Blue*/
+  background-color: $blue;
 }
 
