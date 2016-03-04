@@ -4,6 +4,9 @@ const gulp = require('gulp');
 const eslint = require('gulp-eslint');
 const mocha = require('gulp-mocha');
 const webpack = require('webpack-stream');
+const sass = require('gulp-sass');
+const maps = require('gulp-sourcemaps');
+const minCSS = require('gulp-minify-css');
 const Server = require('karma').Server;
 
 const scripts = ['index.js', 'bin/*.js', 'lib/*.js', 'test/**/*.js',
@@ -15,6 +18,18 @@ const clientTests = ['test/client/*.js', '!test/client/test_bundle.js'];
 gulp.task('static:dev', () => {
   gulp.src(staticFiles, { 'base': 'app' })
     .pipe(gulp.dest('build/'));
+});
+
+gulp.task('sass:dev', () => {
+  gulp.src('app/sass/application.sass')
+    .pipe(maps.init())
+    .pipe(sass({
+      includePaths: require('node-bourbon').includePaths
+        .concat(require('node-neat').includePaths)
+    }).on('error', sass.logError))
+    .pipe(minCSS())
+    .pipe(maps.write('./'))
+    .pipe(gulp.dest('./build'));
 });
 
 gulp.task('build:dev', () => {
@@ -79,9 +94,10 @@ gulp.task('watch', () => {
   gulp.watch(scripts, ['lint', 'test']);
   gulp.watch(clientScripts, ['build:dev']);
   gulp.watch(staticFiles, ['static:dev']);
-  gulp.watch([clientTests], ['test:client']);
+  gulp.watch(clientTests, ['test:client']);
+  gulp.watch('app/sass/*.sass', ['sass:dev']);
 });
 
-gulp.task('dev', ['lint', 'test', 'static:dev', 'build:dev']);
+gulp.task('dev', ['lint', 'test', 'static:dev', 'build:dev', 'sass:dev']);
 
 gulp.task('default', ['watch', 'dev']);
