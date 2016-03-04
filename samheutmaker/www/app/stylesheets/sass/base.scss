@@ -1,9 +1,12 @@
+$main_color: #11aff1;
+$second_color: #68ccfa;
+
 @font-face {
     font-family: "clean";
     src: url(fonts/clean.woff);
 }
 html, body {
-    background-color: lightblue;
+    background-color: $main_color;
     height: 100%;
     padding: 0px;
     margin: 0px;
@@ -32,7 +35,7 @@ ul {
 
         &:hover {
             cursor: pointer;
-            color: lighten(black, 10%);
+            color: lighten($second_color, 10%);
         }
     }
 }
