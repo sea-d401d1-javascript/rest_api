@@ -6,8 +6,9 @@ const jwt = require('jsonwebtoken');
 module.exports = exports = (req, res, next) => {
   let decoded;
   try {
+    let token = req.headers.Authentication.split(' ')[1];
     decoded =
-      jwt.verify(req.headers.token, process.env.APP_SECRET || 'changethis');
+      jwt.verify(token, process.env.APP_SECRET || 'changethis');
   } catch (e) {
     return res.status(401).json({ msg: 'could not authenticat' });
   }

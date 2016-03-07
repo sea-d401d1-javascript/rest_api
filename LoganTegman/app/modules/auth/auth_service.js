@@ -17,15 +17,17 @@ export default (app) => {
       saveToken(token) {
         this.token = token;
         $window.localStorage.jwtToken = token;
+        this.username = this.parseJWT(this.token).username;
       }
 
       getToken() {
         return this.token || $window.localStorage.jwtToken;
       }
 
-      logout() {
+      logout(cb) {
         this.token = null;
         $window.localStorage.removeItem('jwtToken');
+        cb();
       }
     }
 

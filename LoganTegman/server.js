@@ -14,7 +14,7 @@ const authRouter = require(__dirname + '/routes/auth_router');
 
 app.use((req, res, next) => {
   res.set('Access-Control-Allow-Origin', '*');
-  res.set('Access-Control-Allow-Headers', 'Content-Type');
+  res.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   res.set('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
   next();
 });
@@ -22,7 +22,7 @@ app.use((req, res, next) => {
 app.use('/api', kittenRouter);
 app.use('/api', internetzRouter);
 app.use('/api', kpiRouter);
-app.use(authRouter);
+app.use('/api', authRouter);
 
 app.server = app.listen(3000, () => console.log('listening on port: ' + 3000));
 

@@ -3,12 +3,14 @@
 
 'use strict';
 
-import service from './service';
+import authSvc from './auth_service';
 import interceptor from './interceptor';
 import directive from './directive';
+import userSvc from './user_service';
 
 export default (app, API) => {
-  service(app);
+  authSvc(app);
+  userSvc(app);
   interceptor(app, API);
   directive(app);
 };

@@ -21,5 +21,8 @@ export default (app, API) => {
         return res;
       }
     };
-  }]);
+  }])
+  .config(($httpProvider) => {
+    $httpProvider.interceptors.push('authInterceptor');
+  });
 };
