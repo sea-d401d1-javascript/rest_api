@@ -1,0 +1,8 @@
+<form data-ng-submit="save(super)">
+	<input type="text" name="name" placeholder="Name" data-ng-model="super.name">
+
+	<input type="text" placeholder="Level" data-ng-model="super.level">
+
+	<ng-transclude></ng-transclude>
+	<button class="submitButton" type="submit">{{buttonText}}</button>
+</form>
