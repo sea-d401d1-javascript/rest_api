@@ -1,0 +1,35 @@
+<div>
+  <section data-ng-if="!loggedIn">
+    <md-button
+      class="md-button md-raised md-primary"
+      data-ng-click="toggleSignup()">Sign Up</md-button>
+    <md-button
+      class="md-button md-raised md-primary"
+      data-ng-click="toggleSignin()">Sign In</md-button>
+    <form data-ng-submit="submitForm(form)" data-ng-if="signup || signin">
+      <md-input-container data-ng-if="signup">
+        <label for="username">Username</label>
+        <input type="text" name="username" data-ng-model="form.username">
+      </md-input-container>
+      <md-input-container>
+        <label for="email">Email</label>
+        <input type="text" name="email" data-ng-model="form.email">
+      </md-input-container>
+      <md-input-container>
+        <label for="password">Password</label>
+        <input type="password" name="password" data-ng-model="form.password">
+      </md-input-container>
+      <md-button
+        class="md-button md-raised md-primary"
+        type="submit">Submit
+      </md-button>
+    </form>
+  </section>
+  <section data-ng-if="loggedIn">
+    Hello, {{auth.username}}!
+    <md-button
+      class="md-button md-raised md-primary"
+      data-ng-click="logout()">logout
+    </md-button>
+  </section>
+</div>

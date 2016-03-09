@@ -5,11 +5,13 @@ import material from 'angular-material';
 import aria from 'angular-aria';
 import uiRouter from 'angular-ui-router';
 import combinedCtrl from './views/combined/controller';
-import resourceService from './services/resource_service';
+import resourceService from './services/resource';
+import authModule from './modules/auth';
 import crudDirective from './directives/crud';
 
 const restApp = angular.module('restApp', [material, aria, uiRouter]);
 resourceService(restApp);
+authModule(restApp, 'localhost:3000/api');
 crudDirective(restApp);
 
 restApp.config(['$stateProvider', '$urlRouterProvider',
